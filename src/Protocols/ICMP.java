@@ -1,5 +1,4 @@
 package Protocols;
 
-public class IPv4 {
-
+public class ICMP {
 }

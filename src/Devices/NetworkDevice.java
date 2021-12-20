@@ -1,4 +1,4 @@
 package Devices;
 
-public class NetworkDevice {
+public class NetworkDevice extends Thread{
 }
