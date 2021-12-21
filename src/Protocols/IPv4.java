@@ -65,4 +65,13 @@ public class IPv4 {
         return ip_address_string;
     }
 
+    //create default IPv4 packet
+    public static IPv4Packet create_packet(){
+        return new IPv4Packet();
+    }
+
+    //create IPv4 packet
+    public static IPv4Packet create_packet(long source_address, long destination_address, int time_to_live, Data data){
+        return new IPv4Packet(source_address, destination_address, time_to_live, data);
+    }
 }

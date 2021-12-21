@@ -27,15 +27,15 @@ public class IPv4Packet implements Packet{
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    //constructor
-    public IPv4Packet(long source_address, long destination_address, int time_to_live, Data data) {
+    //default constructor
+    public IPv4Packet() {
         //ip addresses
-        this.source_address = source_address;
-        this.destination_address = destination_address;
+        this.source_address = 0;
+        this.destination_address = 1;
         //ttl value
-        this.time_to_live = time_to_live;
+        this.time_to_live = 255;
         //data
-        this.data = data;
+        this.data = new ICMPPacket();
         //default values
         this.version = 4;
         this.ihl = 0;
@@ -49,15 +49,16 @@ public class IPv4Packet implements Packet{
         this.header_checksum = 0;
         this.option = 0;
     }
-    //default constructor
-    public IPv4Packet() {
+
+    //constructor
+    public IPv4Packet(long source_address, long destination_address, int time_to_live, Data data) {
         //ip addresses
-        this.source_address = 0;
-        this.destination_address = 0;
+        this.source_address = source_address;
+        this.destination_address = destination_address;
         //ttl value
-        this.time_to_live = 255;
+        this.time_to_live = time_to_live;
         //data
-        this.data = new ICMPPacket();
+        this.data = data;
         //default values
         this.version = 4;
         this.ihl = 0;
