@@ -6,20 +6,21 @@ public class Link extends Thread{
     /////////////////////////////////////////////////////////
 
     // ends of link
-    private NetworkInterface end_1;
-    private NetworkInterface end_2;
+    private final NetworkInterface end_1;
+    private final NetworkInterface end_2;
 
     // delay in ms
-    final private int delay = 200;
+    private final int delay;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
     // constructor
-    Link(NetworkInterface end_1, NetworkInterface end_2){
+    public Link(NetworkInterface end_1, NetworkInterface end_2){
         this.end_1 = end_1;
         this.end_2 = end_2;
+        this.delay = 200;
         start();
     }
 

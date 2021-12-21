@@ -19,10 +19,10 @@ public class NetworkInterface {
     private boolean activated;
 
     // out buffer for outgoing traffic
-    private ArrayDeque<Frame> out_buffer;
+    private final ArrayDeque<Frame> out_buffer;
 
     // buffer for incoming traffic, reference to net card buffer
-    private ArrayDeque<Frame> buffer;
+    private final ArrayDeque<Frame> buffer;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -31,6 +31,7 @@ public class NetworkInterface {
     // constructor
     NetworkInterface(ArrayDeque<Frame> buffer){
         this.buffer = buffer;
+        out_buffer = new ArrayDeque<>();
     }
 
     // turn on the port
