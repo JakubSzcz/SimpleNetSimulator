@@ -20,8 +20,8 @@ public class RoutingTable {
     }
 
     // add route to routing table list
-    public void add_route(RouteCode code, int distance, long net, long mask, long gateway, int int_number){
-        Route new_route = new Route(code, distance, net, mask, gateway, int_number);
+    public void add_route(RouteCode code, int distance, int metric, long net, long mask, long gateway, int int_number){
+        Route new_route = new Route(code, distance, metric, net, mask, gateway, int_number);
         if (routes.isEmpty()){
             routes.add(new_route);
         }else{
