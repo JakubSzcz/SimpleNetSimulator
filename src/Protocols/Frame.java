@@ -1,4 +1,11 @@
 package Protocols;
 
 public interface Frame {
+    /////////////////////////////////////////////////////////
+    //                     functions                       //
+    /////////////////////////////////////////////////////////
+
+    //print frame
+    public String to_string();
+
 }
