@@ -9,8 +9,19 @@ public class Router extends NetworkDevice{
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    // constructor
-    Router(String name){
-        super(name);
+    // normal case constructor
+    public Router(String name, int int_number){
+        super(name, int_number);
     }
+
+    // test case constructor
+    public Router(String name, int int_number, boolean test){
+        super(name, int_number, test);
+    }
+
+    // actions taken after receiving a frame
+    void handle_frame(){
+
+    }
+
 }

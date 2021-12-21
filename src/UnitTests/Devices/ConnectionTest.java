@@ -1,13 +1,14 @@
-package UnitTests;
+package UnitTests.Devices;
 
 import Devices.Link;
 import Devices.NetworkCard;
+import Devices.Router;
 import Protocols.SimpleP2PFrame;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DevicesTest {
+class ConnectionTest {
     // test cards
     NetworkCard network_card1 = new NetworkCard(2);
     NetworkCard network_card2 = new NetworkCard(1);
@@ -113,5 +114,47 @@ class DevicesTest {
         assertFalse(network_card1.is_buffer_empty());
         assertFalse(network_card2.is_buffer_empty());
         assertEquals(frame2, network_card2.get_frame_from_buffer());
+    }
+
+    // test Routers
+    Router r1 = new Router("R1",2, true);
+    Router r2 = new Router("R2",1, true);
+    Router r3 = new Router("R3",1, true);
+
+    // link between R1 and R2
+    Link link3 = new Link(r1.get_interface(0), r2.get_interface(0));
+
+    // link between R1 and R3
+    Link link4 = new Link(r1.get_interface(1), r3.get_interface(0));
+
+    // test of connection between routers
+    // tested functions:
+    // Router:
+    @Test
+    public void connection_between_routers(){
+        // check if buffers are clear before test
+        assertTrue(r1.is_buffer_empty());
+        assertTrue(r2.is_buffer_empty());
+        assertTrue(r3.is_buffer_empty());
+
+        // R1 sends frame1 to R2
+        r1.add_out_traffic(frame1, 0);
+
+        // R1 sends frame2 to R3
+        r1.add_out_traffic(frame2, 1);
+
+        // R2 sends frame3 to R1
+        r2.add_out_traffic(frame3, 0);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // check if sth was sent
+        assertFalse(r1.is_buffer_empty());
+        assertFalse(r2.is_buffer_empty());
+        assertFalse(r3.is_buffer_empty());
     }
 }

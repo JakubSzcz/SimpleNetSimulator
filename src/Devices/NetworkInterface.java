@@ -49,13 +49,15 @@ public class NetworkInterface {
     }
 
     // configure ip address on the port
-    public void set_ip_address(long address){
+    public void set_ip_address(long address, long mask){
         this.address = address;
+        this.mask = mask;
     }
 
     // delete ip address from port
     public void delete_ip_address(){
         this.address = -1;
+        this.mask = -1;
     }
 
     // add frame to the out_buffer
