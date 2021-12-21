@@ -10,10 +10,10 @@ public class NetworkInterface {
     /////////////////////////////////////////////////////////
 
     // ip address
-    private int address;
+    private long address;
 
     // mask
-    private int mask;
+    private long mask;
 
     // if interface is up - true
     private boolean activated;
@@ -32,36 +32,44 @@ public class NetworkInterface {
     NetworkInterface(ArrayDeque<Frame> buffer){
         this.buffer = buffer;
         out_buffer = new ArrayDeque<>();
+        this.activated = false;
+        address = -1;
+        mask = -1;
     }
 
     // turn on the port
     public void up(){
-
+        this.activated = true;
     }
 
     // turn off the port
     public void down(){
-
+        this.activated = false;
+        out_buffer.clear();
     }
 
     // configure ip address on the port
-    public void set_ip_address(){
-
+    public void set_ip_address(long address){
+        this.address = address;
     }
 
     // delete ip address from port
     public void delete_ip_address(){
-
+        this.address = -1;
     }
 
     // add frame to the out_buffer
     public void add_frame(Frame frame){
-        out_buffer.addLast(frame);
+        if (activated){
+            out_buffer.addLast(frame);
+        }
     }
 
     // add frame to the buffer
     public void handle_frame(Frame frame){
-        buffer.addLast(frame);
+        if (activated) {
+            buffer.addLast(frame);
+        }
     }
 
     // check if out buffer is empty
@@ -71,6 +79,6 @@ public class NetworkInterface {
 
     // delete and return frame form out buffer
     public Frame get_frame(){
-        return out_buffer.pollFirst();
+            return out_buffer.pollFirst();
     }
 }

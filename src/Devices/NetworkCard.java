@@ -48,4 +48,14 @@ public class NetworkCard {
     public Frame get_frame_from_buffer(){
         return buffer.pollFirst();
     }
+
+    // turn of interface
+    public void down_interface(int int_number){
+        interfaces.get(int_number).down();
+    }
+
+    // turn up interface
+    public void up_interface(int int_number){
+        interfaces.get(int_number).up();
+    }
 }

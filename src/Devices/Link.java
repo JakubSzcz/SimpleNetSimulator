@@ -18,9 +18,18 @@ public class Link extends Thread{
 
     // constructor
     public Link(NetworkInterface end_1, NetworkInterface end_2){
+        // port1
         this.end_1 = end_1;
+        end_1.up();
+
+        // port2
         this.end_2 = end_2;
+        end_2.up();
+
+        // delay
         this.delay = 200;
+
+        // Thread start
         start();
     }
 
