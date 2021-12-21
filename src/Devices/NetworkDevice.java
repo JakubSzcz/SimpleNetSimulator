@@ -24,7 +24,7 @@ public abstract class NetworkDevice extends Thread{
     /////////////////////////////////////////////////////////
 
     // normal case constructor
-    NetworkDevice(String name, int int_number){
+    public NetworkDevice(String name, int int_number){
         constructor(name,int_number, false);
     }
 
