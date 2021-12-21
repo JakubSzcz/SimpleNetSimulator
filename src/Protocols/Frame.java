@@ -5,7 +5,7 @@ public interface Frame {
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    //print frame
+    //parse frame
     public String to_string();
 
 }

@@ -1,4 +1,10 @@
 package Protocols;
 
 public interface Packet {
+    /////////////////////////////////////////////////////////
+    //                     functions                       //
+    /////////////////////////////////////////////////////////
+
+    //parse packet
+    public String to_string();
 }
