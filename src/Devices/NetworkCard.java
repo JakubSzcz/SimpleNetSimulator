@@ -21,7 +21,7 @@ public class NetworkCard {
     /////////////////////////////////////////////////////////
 
     // constructor
-    NetworkCard(int int_number){
+    public NetworkCard(int int_number){
         interfaces = new ArrayList<>();
         for (int i=0; i<int_number; i++){
             interfaces.add(new NetworkInterface(buffer));
@@ -30,6 +30,6 @@ public class NetworkCard {
 
     // add outgoing traffic to an interface
     public void add_out_traffic(Frame frame, int int_number){
-        // interfaces.get(int_number).out_buffer.addLast(frame);
+        interfaces.get(int_number).add_frame(frame);
     }
 }
