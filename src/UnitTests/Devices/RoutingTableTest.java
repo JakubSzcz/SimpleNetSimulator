@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RouterTest {
+class RoutingTableTest {
 
     // check to_string function from Route
     @Test
@@ -189,6 +189,5 @@ class RouterTest {
 
         best_route_index = routing_table.find_best_route(IPv4.parse_to_long("192.168.0.190"));
         assertEquals(6, best_route_index);
-
     }
 }

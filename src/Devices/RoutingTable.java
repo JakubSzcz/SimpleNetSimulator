@@ -21,28 +21,40 @@ public class RoutingTable {
 
     // add route to routing table list
     public void add_route(Route new_route){
+        // add route if routes list is empty
         if (routes.isEmpty()){
             routes.add(new_route);
         }else{
+            // check if similar routes have already been added
             Map<Integer, Route> similar_routes = this.find_similar_routes(new_route);
             if (similar_routes.isEmpty()){
+                // add route to the list, position based on mask
                 int pointer = 0;
                 while (pointer < routes.size() && routes.get(pointer).net_mask() > new_route.net_mask()){
                     pointer++;
                 }
                 routes.add(pointer, new_route);
             }else{
+                // change similar_rotes keys Collection from set to ArrayList
                 List<Integer> keys = List.copyOf(similar_routes.keySet());
                 ArrayList<Integer> keys2 = new ArrayList<>(keys);
+
+                // sort keys in ascending order
                 Collections.sort(keys2);
+
+                // gives default position, one higher than the max of keys
                 int position = keys.get(keys2.size() - 1) + 1;
                 boolean identity_flag = false;
+
+                // check if one of similar routes is identical
                 for (int key : similar_routes.keySet()){
                     if (similar_routes.get(key).is_identical(new_route)){
                         identity_flag = true;
                         break;
                     }
                 }
+
+                // if neither of similar routes is identical find position of the new route based on distance
                 if (!identity_flag){
                     for (int key : similar_routes.keySet()){
                         if (new_route.distance() <= similar_routes.get(key).distance()){
@@ -52,7 +64,6 @@ public class RoutingTable {
                     }
                     routes.add(position, new_route);
                 }
-
             }
 
         }
