@@ -30,4 +30,12 @@ class ProtocolsTest {
         assertEquals("0.0.0.1", IPv4.parse_to_string(1L));
         assertEquals("0.2.0.1", IPv4.parse_to_string(131073L));
     }
+
+    @Test
+    void smask_string_to_long() {
+        assertEquals(0L, IPv4.smask_string_to_long("0"));
+        assertEquals(4294967295L, IPv4.smask_string_to_long("32"));
+        assertEquals(4294967040L, IPv4.smask_string_to_long("24"));
+        assertEquals(4294967040L, IPv4.smask_string_to_long("/24"));
+    }
 }

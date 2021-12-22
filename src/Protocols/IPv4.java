@@ -6,14 +6,14 @@ public class IPv4 {
     /////////////////////////////////////////////////////////
 
     //return true if given address is correct
-    public static boolean is_valid(long ip_address){
+    public static boolean is_mask_valid(long ip_mask){
 
         return true;
     }
 
     //parse ip address from String dotted format to the long number
     public static long parse_to_long(String ip_address_string){
-
+        ip_address_string = ip_address_string.trim();
         //split ip_address_string into String ip_octets
         String[] ip_octets_string = ip_address_string.split("\\.");
 
@@ -38,7 +38,7 @@ public class IPv4 {
             int to_add =  32-ip_address_string.length();
             String zeros = "0";
             for(int i = 0; i < to_add-1; i++){
-                zeros += "0";
+                zeros = zeros.concat("0");
             }
             ip_address_string = zeros + ip_address_string;
         }
@@ -55,15 +55,41 @@ public class IPv4 {
             ip_octets_int[i] = Integer.parseInt(ip_octets_string[i], 2);
             ip_octets_string[i] = String.valueOf(ip_octets_int[i]);
         }
-        ip_address_string = ip_octets_string[0];
-
         //converting decimal strings into one string ip dotted address
+        ip_address_string = ip_octets_string[0];
         for(int i = 0; i < 3; i++){
             ip_address_string += "." + ip_octets_string[i+1];
         }
 
         return ip_address_string;
     }
+
+    //parse ipv4 mask from String format "/xx" or just "xx" to long number
+    public static long smask_string_to_long(String net_mask_string){
+        //net_mask = "/24" - usun to
+        //delete '/' if was given
+        StringBuilder net_mask_builder = new StringBuilder(net_mask_string);
+        if(net_mask_string.charAt(0) == '/'){
+            net_mask_builder.deleteCharAt(0);
+        }
+        //convert mask to binary format
+        int mask = Integer.valueOf(net_mask_builder.toString());
+        net_mask_string = "";
+        for(int i = 0; i < mask; i++){
+            net_mask_string = net_mask_string.concat("1");
+        }
+        String zeros = "0";
+        for(int i = 0; i < 31-mask; i++){
+            zeros = zeros.concat("0");
+        }
+        if(mask != 32) {
+            net_mask_string = net_mask_string + zeros;
+        }
+        //convert String binary mask format to long number
+
+        return Long.parseLong(net_mask_string, 2);
+    }
+
 
     //create default IPv4 packet
     public static IPv4Packet create_packet(){
