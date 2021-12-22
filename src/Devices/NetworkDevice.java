@@ -13,6 +13,9 @@ public abstract class NetworkDevice extends Thread{
     // network card
     protected NetworkCard net_card;
 
+    // monitor
+    protected Monitor monitor;
+
     // if device is turned on - true
     protected boolean turned_on;
 
@@ -37,6 +40,7 @@ public abstract class NetworkDevice extends Thread{
     private void constructor(String name,int int_number, Boolean test){
         this.name = name;
         this.net_card = new NetworkCard(int_number);
+        this.monitor = new Monitor();
         this.turned_on = true;
         if (!test){
             start();
