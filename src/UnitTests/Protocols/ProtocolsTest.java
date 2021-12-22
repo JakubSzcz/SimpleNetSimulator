@@ -31,7 +31,7 @@ class ProtocolsTest {
         assertEquals("0.2.0.1", IPv4.parse_to_string(131073L));
     }
 
-    //checking converting mask between '"/xx"'-short mask, '"x.x.x.x"-dotted' and 'xL'-long number types
+    //checking converting mask between '"/xx"' or '"xx"'-short mask, '"x.x.x.x"-dotted' and 'xL'-long number types
 
     //dotted -> long and short -> long
     @Test

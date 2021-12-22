@@ -6,11 +6,26 @@ public class IPv4 {
     /////////////////////////////////////////////////////////
 
     //return true if given address is correct
-    public static boolean is_mask_valid(long ip_mask){
+    public static boolean is_ip_valid(long ip_address){
+        if(ip_address > 4294967295L || ip_address < 0) {
+            return false;
+        }
+        return true;
+    }
+    public static boolean is_ip_valid(String ip_address){
 
         return true;
     }
 
+    //return true if given net mask is correct
+    public static boolean is_mask_valid(long net_mask){
+
+        return true;
+    }
+    public static boolean is_mask_valid(String net_mask){
+
+        return true;
+    }
     //parse ip address from String dotted format to the long number
     public static long parse_to_long(String ip_address_string){
         ip_address_string = ip_address_string.trim();
@@ -154,4 +169,5 @@ public class IPv4 {
     public static IPv4Packet create_packet(long source_address, long destination_address, int time_to_live, Data data){
         return new IPv4Packet(source_address, destination_address, time_to_live, data);
     }
+
 }
