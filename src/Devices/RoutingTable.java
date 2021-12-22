@@ -20,15 +20,14 @@ public class RoutingTable {
     }
 
     // add route to routing table list
-    public void add_route(RouteCode code, int distance, int metric, long net, long mask, long gateway, int int_number){
-        Route new_route = new Route(code, distance, metric, net, mask, gateway, int_number);
+    public void add_route(Route new_route){
         if (routes.isEmpty()){
             routes.add(new_route);
         }else{
             Map<Integer, Route> similar_routes = this.find_similar_routes(new_route);
             if (similar_routes.isEmpty()){
                 int pointer = 0;
-                while (pointer < routes.size() && routes.get(pointer).net_mask() > mask){
+                while (pointer < routes.size() && routes.get(pointer).net_mask() > new_route.net_mask()){
                     pointer++;
                 }
                 routes.add(pointer, new_route);
@@ -57,6 +56,11 @@ public class RoutingTable {
             }
 
         }
+    }
+
+    public void add_route(RouteCode code, int distance, int metric, long net, long mask, long gateway, int int_number){
+        Route new_route = new Route(code, distance, metric, net, mask, gateway, int_number);
+        add_route(new_route);
     }
 
     // deletes route from routing table list

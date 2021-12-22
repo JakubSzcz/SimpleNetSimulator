@@ -68,37 +68,45 @@ class RouterTest {
     @Test
     public void routing_table_add_route(){
         RoutingTable routing_table = new RoutingTable();
-        routing_table.add_route(RouteCode.C, 0, 0, IPv4.parse_to_long("192.168.1.0"),
+        Route route1 = new Route(RouteCode.C, 0, 0, IPv4.parse_to_long("192.168.1.0"),
                 IPv4.parse_to_long("255.255.255.252"), IPv4.parse_to_long("192.168.1.1"),
                 0);
-        routing_table.add_route(RouteCode.C, 0, 0, IPv4.parse_to_long("192.168.2.0"),
+        Route route2 = new Route(RouteCode.C, 0, 0, IPv4.parse_to_long("192.168.2.0"),
                 IPv4.parse_to_long("255.255.255.0"), IPv4.parse_to_long("192.168.2.1"),
                 0);
-        routing_table.add_route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.1.0"),
+        Route route3 = new Route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.1.0"),
                 IPv4.parse_to_long("255.255.255.0"), IPv4.parse_to_long("192.168.1.1"),
                 0);
-        routing_table.add_route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.2.0"),
+        Route route4 = new Route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.2.0"),
                 IPv4.parse_to_long("255.255.255.0"), IPv4.parse_to_long("192.168.2.1"),
                 0);
-        routing_table.add_route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.0.0"),
+        Route route5 = new Route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.0.0"),
                 IPv4.parse_to_long("255.255.0.0"), IPv4.parse_to_long("192.168.0.1"),
                 0);
-        routing_table.add_route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.1.0"),
+        Route route6 = new Route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.1.0"),
                 IPv4.parse_to_long("255.255.255.252"), IPv4.parse_to_long("192.168.1.1"),
                 0);
-        routing_table.add_route(RouteCode.R, 120, 10, IPv4.parse_to_long("192.168.2.0"),
+        Route route7 = new Route(RouteCode.R, 120, 10, IPv4.parse_to_long("192.168.2.0"),
                 IPv4.parse_to_long("255.255.255.0"), IPv4.parse_to_long("192.168.2.1"),
                 0);
+        routing_table.add_route(route1);
+        routing_table.add_route(route2);
+        routing_table.add_route(route3);
+        routing_table.add_route(route4);
+        routing_table.add_route(route5);
+        routing_table.add_route(route6);
+        routing_table.add_route(route7);
+        System.out.println(routing_table.to_string());
 
         // expected table
-        String expected_table = "C 192.168.1.0 255.255.255.252 [0/0] via 192.168.1.1, interface0\n";
-        expected_table = expected_table + "S 192.168.1.0 255.255.255.252 [1/0] via 192.168.1.1, interface0\n";
-        expected_table = expected_table + "S 192.168.1.0 255.255.255.0 [1/0] via 192.168.1.1, interface0\n";
-        expected_table = expected_table + "C 192.168.2.0 255.255.255.0 [0/0] via 192.168.2.1, interface0\n";
-        expected_table = expected_table + "S 192.168.2.0 255.255.255.0 [1/0] via 192.168.2.1, interface0\n";
-        expected_table = expected_table + "R 192.168.2.0 255.255.255.0 [120/10] via 192.168.2.1, interface0\n";
-        expected_table = expected_table + "S 192.168.0.0 255.255.0.0 [1/0] via 192.168.0.1, interface0\n";
+        String expected_table = route1.to_string() + "\n";
+        expected_table = expected_table + route6.to_string() + "\n";
+        expected_table = expected_table + route3.to_string() + "\n";
+        expected_table = expected_table + route2.to_string() + "\n";
+        expected_table = expected_table + route4.to_string() + "\n";
+        expected_table = expected_table + route7.to_string() + "\n";
+        expected_table = expected_table + route5.to_string() + "\n";
 
-        assertEquals(expected_table, routing_table.to_string());
+         assertEquals(expected_table, routing_table.to_string());
     }
 }
