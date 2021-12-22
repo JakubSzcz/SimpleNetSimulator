@@ -64,8 +64,18 @@ public class RoutingTable {
     }
 
     // deletes route from routing table list
-    public void delete_route(){
+    public void delete_route(Route route){
+        for (int i = 0; i < routes.size(); i++){
+            if (routes.get(i).is_identical(route)){
+                routes.remove(i);
+                break;
+            }
+        }
+    }
 
+    public void delete_route(RouteCode code, int distance, int metric, long net, long mask, long gateway, int int_number){
+        Route route = new Route(code, distance, metric, net, mask, gateway, int_number);
+        delete_route(route);
     }
 
     // find routes that are similar to given one
@@ -77,6 +87,25 @@ public class RoutingTable {
             }
         }
         return to_return;
+    }
+
+    // finds index of best route for given ip address
+    // returns -1 if route doesn't exist
+    public int find_best_route(long ip_address){
+        int route_index = -1;
+        for (int i = 0; i < routes.size(); i++){
+            long net_address = ip_address & routes.get(i).net_mask();
+            if (net_address == routes.get(i).net()){
+                route_index = i;
+                break;
+            }
+        }
+        return route_index;
+    }
+
+    // returns route by given index
+    public Route get_route(int route_index){
+        return routes.get(route_index);
     }
 
     // to string method
