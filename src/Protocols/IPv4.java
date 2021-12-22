@@ -64,32 +64,86 @@ public class IPv4 {
         return ip_address_string;
     }
 
-    //parse ipv4 mask from String format "/xx" or just "xx" to long number
-    public static long smask_string_to_long(String net_mask_string){
-        //net_mask = "/24" - usun to
-        //delete '/' if was given
-        StringBuilder net_mask_builder = new StringBuilder(net_mask_string);
-        if(net_mask_string.charAt(0) == '/'){
-            net_mask_builder.deleteCharAt(0);
-        }
-        //convert mask to binary format
-        int mask = Integer.valueOf(net_mask_builder.toString());
-        net_mask_string = "";
-        for(int i = 0; i < mask; i++){
-            net_mask_string = net_mask_string.concat("1");
-        }
-        String zeros = "0";
-        for(int i = 0; i < 31-mask; i++){
-            zeros = zeros.concat("0");
-        }
-        if(mask != 32) {
-            net_mask_string = net_mask_string + zeros;
-        }
-        //convert String binary mask format to long number
+    //1. parse mask from String dotted format or short mask format(xx,/xx) to long number
+    public static long parse_mask_to_long(String net_mask_string){
+        // /xx format to long number
+        if(net_mask_string.length()<=3){
+            //delete '/' if was given
+            StringBuilder net_mask_builder = new StringBuilder(net_mask_string);
+            if(net_mask_string.charAt(0) == '/'){
+                net_mask_builder.deleteCharAt(0);
+            }
+            //convert mask to binary format
+            int mask = Integer.valueOf(net_mask_builder.toString());
+            net_mask_string = "";
+            for(int i = 0; i < mask; i++){
+                net_mask_string = net_mask_string.concat("1");
+            }
+            String zeros = "0";
+            for(int i = 0; i < 31-mask; i++){
+                zeros = zeros.concat("0");
+            }
+            if(mask != 32) {
+                net_mask_string = net_mask_string + zeros;
+            }
+            //convert String binary mask format to long number
 
-        return Long.parseLong(net_mask_string, 2);
+            return Long.parseLong(net_mask_string, 2);
+
+            //dotted String format to long number
+        }else{
+            return parse_to_long(net_mask_string);
+        }
+    }
+    //2. parse mask to String dotted format:
+
+    //2a. parse mask from long number format to String dotted
+    public static String parse_mask_to_string_dot(long net_mask_long){
+        return parse_to_string(net_mask_long);
+    }
+    //2b. parse mask from short mask format(/xx,xx) to String dotted
+    public static String parse_mask_to_string_dot(String net_short_mask){
+        long to_return = parse_mask_to_long(net_short_mask);
+        return parse_to_string(to_return);
     }
 
+    //3. parse mask to String short format(/xx,xx)- it returns mask without '/', in order to get a slash add second 'true'
+    //parameter
+
+    //3a. parse mask from long number format to String short mask format without slash(xx):
+    public static String parse_mask_to_string_short(long net_mask_long){
+        //net_mask_long = 23124124;
+        //parse to binary string:
+        String net_mask_binary = Long.toBinaryString(net_mask_long);
+        //counting 1s to get size of mask:
+        char[] mask = net_mask_binary.toCharArray();
+        int counter = 0;
+        for(int i = 0; i < net_mask_binary.length(); i++){
+            if(mask[i] == '1'){
+                counter++;
+            }
+        }
+        return String.valueOf(counter);
+    }
+    //3b. parse mask from long number format to String short mask format with slash (/xx):
+    public static String parse_mask_to_string_short(long net_mask_long, boolean slash){
+        if(slash)
+            return "/" + parse_mask_to_string_short(net_mask_long);
+        else
+            return parse_mask_to_string_short(net_mask_long);
+    }
+
+    //4. parse mask from String dotted format to String short mask format- it returns mask without '/', in order to
+    //get a slash add second 'true' parameter:
+
+    //4a. parse mask from String dotted format to String short mask without slash ("xx")
+    public static String parse_mask_to_string_short(String net_mask){
+        return parse_mask_to_string_short(parse_to_long(net_mask));
+    }
+    //4b. parse mask from String dotted format to String short mask with slash ("/xx")
+    public static String parse_mask_to_string_short(String net_mask, boolean slash){
+        return parse_mask_to_string_short(parse_to_long(net_mask), slash);
+    }
 
     //create default IPv4 packet
     public static IPv4Packet create_packet(){
