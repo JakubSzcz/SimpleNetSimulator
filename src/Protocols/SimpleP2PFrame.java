@@ -26,9 +26,11 @@ public class SimpleP2PFrame implements Frame{
         this.packet = new IPv4Packet();
     }
 
-    //parse frame's content
+    //parse frame's content to string
     @Override
     public String to_string() {
-        return null;
+        String to_return = "Simple peer to peer frame\n" + " Layer 3 ISO/OSI protocol: " + l3_protocol + "\n";
+        to_return += packet.to_string();
+        return to_return;
     }
 }

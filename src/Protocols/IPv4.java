@@ -163,12 +163,14 @@ public class IPv4 {
             return parse_to_long(net_mask_string);
         }
     }
+
     //2. parse mask to String dotted format:
 
     //2a. parse mask from long number format to String dotted
     public static String parse_mask_to_string_dot(long net_mask_long){
         return parse_to_string(net_mask_long);
     }
+
     //2b. parse mask from short mask format(/xx,xx) to String dotted
     public static String parse_mask_to_string_dot(String net_short_mask){
         long to_return = parse_mask_to_long(net_short_mask);
@@ -193,6 +195,7 @@ public class IPv4 {
         }
         return String.valueOf(counter);
     }
+
     //3b. parse mask from long number format to String short mask format with slash (/xx):
     public static String parse_mask_to_string_short(long net_mask_long, boolean slash){
         if(slash)
@@ -208,6 +211,7 @@ public class IPv4 {
     public static String parse_mask_to_string_short(String net_mask){
         return parse_mask_to_string_short(parse_to_long(net_mask));
     }
+
     //4b. parse mask from String dotted format to String short mask with slash ("/xx")
     public static String parse_mask_to_string_short(String net_mask, boolean slash){
         return parse_mask_to_string_short(parse_to_long(net_mask), slash);

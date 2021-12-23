@@ -7,9 +7,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProtocolsTest {
-    @Test
-    void to_string() {
-    }
 
     @Test
     //check if the ip address in string was correctly parsed to the int type
@@ -17,10 +14,6 @@ class ProtocolsTest {
         assertEquals(3232235777L, IPv4.parse_to_long("192.168.1.1"));
         assertEquals(2888455179L, IPv4.parse_to_long("172.42.84.11"));
         assertEquals(0L, IPv4.parse_to_long("0.0.0.0"));
-    }
-
-    @Test
-    void is_valid() {
     }
 
     @Test
@@ -47,6 +40,7 @@ class ProtocolsTest {
         assertEquals(4294967295L, IPv4.parse_mask_to_long("32"));
         assertEquals(4294967295L, IPv4.parse_mask_to_long("/32"));
     }
+
     //short -> dotted and long -> dotted
     @Test
     void parse_mask_to_string_dot() {
@@ -57,6 +51,7 @@ class ProtocolsTest {
         assertEquals("255.255.255.0", IPv4.parse_mask_to_string_dot("24"));
         assertEquals("255.255.255.0", IPv4.parse_mask_to_string_dot(4294967040L));
     }
+
     //long -> short and dotted -> short (with '/' and without '/')
     @Test
     void parse_mask_to_string_short() {

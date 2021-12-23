@@ -28,10 +28,11 @@ public class ICMPPacket implements Data{
         this.code = 0;
         this.check_sum = 0;
     }
-
-
+    //parse content to string
     @Override
     public String to_string() {
-        return null;
+        String to_return = "Internet Control Message Protocol\n";
+        to_return += "Type " + type + "\n" + "Code " + code + "\n" + "Checksum " + check_sum + "\n";
+        return to_return;
     }
 }
