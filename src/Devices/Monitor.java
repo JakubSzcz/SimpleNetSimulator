@@ -28,11 +28,21 @@ public class Monitor {
     }
 
     // return memory in string
-    public String to_string(){
+    /*public String to_string(){
         String to_return = "";
         for (String line : memory){
             to_return = to_return + line + "\n";
         }
         return to_return;
+    }*/
+
+    // return memory in string
+    public String to_string(){
+        StringBuilder to_return = new StringBuilder();
+        for(String line : memory){
+            to_return.append(line);
+            to_return.append("\n");
+        }
+        return to_return.toString();
     }
 }

@@ -1,6 +1,7 @@
 package UnitTests.Protocols;
 
 import Protocols.IPv4;
+import Protocols.IPv4MessageTypes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,5 +72,45 @@ class ProtocolsTest {
         assertEquals("/32", IPv4.parse_mask_to_string_short("255.255.255.255",true));
         assertEquals("0", IPv4.parse_mask_to_string_short("0.0.0.0"));
         assertEquals("/0", IPv4.parse_mask_to_string_short("0.0.0.0",true));
+    }
+
+    //checks if ip address is valid
+    @Test
+    void is_ip_valid() {
+        //is valid
+        assertEquals(IPv4MessageTypes.is_valid, IPv4.is_ip_valid("255.255.255.0"));
+        //is dotted format
+        assertEquals(IPv4MessageTypes.is_not_dotted_format, IPv4.is_ip_valid("2552552550"));
+        assertEquals(IPv4MessageTypes.is_not_dotted_format, IPv4.is_ip_valid(".2552552..550"));
+        //must be int
+        assertEquals(IPv4MessageTypes.octet_value_must_be_int, IPv4.is_ip_valid("255.255.255.test"));
+        assertEquals(IPv4MessageTypes.octet_value_must_be_int, IPv4.is_ip_valid("Lorem .ipsum .dolor .sit"));
+        assertEquals(IPv4MessageTypes.octet_value_must_be_int, IPv4.is_ip_valid("0,5.3/2.0,02.test"));
+        assertEquals(IPv4MessageTypes.octet_value_must_be_int, IPv4.is_ip_valid("0,523.0.242.12,423"));
+        //must be positive
+        assertEquals(IPv4MessageTypes.octet_value_must_be_positive, IPv4.is_ip_valid("192.168.1.-2"));
+        assertEquals(IPv4MessageTypes.octet_value_must_be_positive, IPv4.is_ip_valid("192.-168.1.2"));
+        //is too big
+        assertEquals(IPv4MessageTypes.octet_value_is_too_big, IPv4.is_ip_valid("192.4258.1.2"));
+    }
+
+    //check if net mask is valid
+    @Test
+    void is_mask_valid() {
+        //is valid
+        assertEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("255.255.255.0"));
+        assertEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("24"));
+        assertEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("/24"));
+        // is not int
+        assertEquals(IPv4MessageTypes.mask_value_must_be_int, IPv4.is_mask_valid("abc"));
+        assertEquals(IPv4MessageTypes.mask_value_must_be_int, IPv4.is_mask_valid("a24"));
+        assertEquals(IPv4MessageTypes.mask_value_must_be_int, IPv4.is_mask_valid("/bc"));
+        assertEquals(IPv4MessageTypes.mask_value_must_be_int, IPv4.is_mask_valid("0.5"));
+        //is too big
+        assertEquals(IPv4MessageTypes.mask_value_is_to_big, IPv4.is_mask_valid("33"));
+        assertEquals(IPv4MessageTypes.mask_value_is_to_big, IPv4.is_mask_valid("/33"));
+        //must be positive
+        assertEquals(IPv4MessageTypes.mask_value_must_be_positive, IPv4.is_mask_valid("-24"));
+        assertEquals(IPv4MessageTypes.mask_value_must_be_positive, IPv4.is_mask_valid("/-8"));
     }
 }

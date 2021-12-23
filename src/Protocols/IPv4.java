@@ -5,27 +5,79 @@ public class IPv4 {
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    //return true if given address is correct
-    public static boolean is_ip_valid(long ip_address){
-        if(ip_address > 4294967295L || ip_address < 0) {
-            return false;
+    //return is_valid if given address is correct, return no valid message type if address is not correct
+    public static IPv4MessageTypes is_ip_valid(String ip_address){
+        //checks if ip_address include 3 dots
+        ip_address = ip_address.trim();
+        long dots_number = ip_address.chars().filter(ch -> ch == '.').count();
+        if(dots_number != 3){
+            return IPv4MessageTypes.is_not_dotted_format;
         }
-        return true;
+        //convert to octets string
+        String[] ip_octets_string = ip_address.split("\\.");
+        //checks if address include 4 nonempty octets
+        if(ip_octets_string.length == 4){
+            for(String octet : ip_octets_string){
+                if(octet.isEmpty()){
+                    return IPv4MessageTypes.is_not_dotted_format;
+                }
+            }
+        }else{
+            return IPv4MessageTypes.is_not_dotted_format;
+        }
+        //trying to convert string octets to int numbers
+        //checks if octets include only ints
+        int[] ip_octets_int = new int[4];
+        try{
+            for(int i = 0; i < 4; i++){
+                ip_octets_int[i] = Integer.parseInt(ip_octets_string[i]);
+            }
+        }catch (NumberFormatException e){
+            return IPv4MessageTypes.octet_value_must_be_int;
+        }
+        //checks if value of int octet is correct
+        for(int octet : ip_octets_int){
+            if(octet > 255){
+                return IPv4MessageTypes.octet_value_is_too_big;
+            }
+            if(octet < 0){
+                return IPv4MessageTypes.octet_value_must_be_positive;
+            }
+        }
+        //ip address is valid
+        return IPv4MessageTypes.is_valid;
     }
-    public static boolean is_ip_valid(String ip_address){
 
-        return true;
+    //return is_valid if given mask is correct, return no valid message type if mask is not correct
+    public static IPv4MessageTypes is_mask_valid(String net_mask){
+        if(net_mask.length() <=3 ) {
+            net_mask = net_mask.trim();
+            //removing '/' if was given
+            StringBuilder net_mask_builder = new StringBuilder(net_mask);
+            if (net_mask.charAt(0) == '/') {
+                net_mask_builder.deleteCharAt(0);
+            }
+            net_mask = net_mask_builder.toString();
+            int net_mask_int;
+            //check if net mask includes only ints
+            try {
+                net_mask_int = Integer.parseInt(net_mask);
+            } catch (NumberFormatException e) {
+                return IPv4MessageTypes.mask_value_must_be_int;
+            }
+            //check if net mask is within <0,32>
+            if(net_mask_int > 32){
+                return IPv4MessageTypes.mask_value_is_to_big;
+            }
+            if(net_mask_int < 0){
+                return IPv4MessageTypes.mask_value_must_be_positive;
+            }
+            return IPv4MessageTypes.is_valid;
+        }
+        //checks if dotted format mask is correct
+        return is_ip_valid(net_mask);
     }
 
-    //return true if given net mask is correct
-    public static boolean is_mask_valid(long net_mask){
-
-        return true;
-    }
-    public static boolean is_mask_valid(String net_mask){
-
-        return true;
-    }
     //parse ip address from String dotted format to the long number
     public static long parse_to_long(String ip_address_string){
         ip_address_string = ip_address_string.trim();
@@ -51,9 +103,9 @@ public class IPv4 {
         //add 0s to beginning of the binary address if it's length is different from 32
         if(ip_address_string.length() < 32){
             int to_add =  32-ip_address_string.length();
-            String zeros = "0";
+            StringBuilder zeros = new StringBuilder("0");
             for(int i = 0; i < to_add-1; i++){
-                zeros = zeros.concat("0");
+                zeros.append("0");
             }
             ip_address_string = zeros + ip_address_string;
         }
@@ -71,12 +123,13 @@ public class IPv4 {
             ip_octets_string[i] = String.valueOf(ip_octets_int[i]);
         }
         //converting decimal strings into one string ip dotted address
-        ip_address_string = ip_octets_string[0];
+        StringBuilder to_return = new StringBuilder(ip_octets_string[0]);
         for(int i = 0; i < 3; i++){
-            ip_address_string += "." + ip_octets_string[i+1];
+            to_return.append(".");
+            to_return.append(ip_octets_string[i+1]);
         }
 
-        return ip_address_string;
+        return to_return.toString();
     }
 
     //1. parse mask from String dotted format or short mask format(xx,/xx) to long number
