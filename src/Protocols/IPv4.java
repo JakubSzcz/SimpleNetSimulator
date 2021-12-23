@@ -182,7 +182,6 @@ public class IPv4 {
 
     //3a. parse mask from long number format to String short mask format without slash(xx):
     public static String parse_mask_to_string_short(long net_mask_long){
-        //net_mask_long = 23124124;
         //parse to binary string:
         String net_mask_binary = Long.toBinaryString(net_mask_long);
         //counting 1s to get size of mask:
