@@ -74,8 +74,29 @@ public class IPv4 {
             }
             return IPv4MessageTypes.is_valid;
         }
-        //checks if dotted format mask is correct
-        return is_ip_valid(net_mask);
+        //checks if dotted format is correct
+        if(is_ip_valid(net_mask) == IPv4MessageTypes.is_valid){
+            //check if dotted format mask values are correct
+            net_mask = net_mask.trim();
+            //converting to binary format
+            String mask_binary = Long.toBinaryString(parse_to_long(net_mask));
+            //add 0s to beginning of the binary address if it's length is different from 32
+            if(mask_binary.length() < 32){
+                int to_add =  32-mask_binary.length();
+                StringBuilder zeros = new StringBuilder("0");
+                for(int i = 0; i < to_add-1; i++){
+                    zeros.append("0");
+                }
+                mask_binary = zeros + mask_binary;
+            }
+            //check if binary mask format is correct
+            if(mask_binary.contains("01" )){
+                return IPv4MessageTypes.mask_value_is_incorrect;
+            }
+            return  IPv4MessageTypes.is_valid;
+        }else{
+            return is_ip_valid(net_mask);
+        }
     }
 
     //parse ip address from String dotted format to the long number

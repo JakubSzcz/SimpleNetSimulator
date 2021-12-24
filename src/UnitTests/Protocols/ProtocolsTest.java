@@ -93,6 +93,7 @@ class ProtocolsTest {
     @Test
     void is_mask_valid() {
         //is valid
+        assertEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("192.0.0.0"));
         assertEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("255.255.255.0"));
         assertEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("24"));
         assertEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("/24"));
@@ -108,7 +109,9 @@ class ProtocolsTest {
         assertEquals(IPv4MessageTypes.mask_value_must_be_positive, IPv4.is_mask_valid("-24"));
         assertEquals(IPv4MessageTypes.mask_value_must_be_positive, IPv4.is_mask_valid("/-8"));
         //is not mask
-        assertNotEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("192.255.255.0"));
-        assertNotEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("7.5.0.0"));
+        assertEquals(IPv4MessageTypes.mask_value_is_incorrect, IPv4.is_mask_valid("192.255.255.0"));
+        assertEquals(IPv4MessageTypes.mask_value_is_incorrect, IPv4.is_mask_valid("7.5.0.0"));
+        assertEquals(IPv4MessageTypes.octet_value_is_too_big, IPv4.is_mask_valid("256.0.255.0"));
+        assertEquals(IPv4MessageTypes.octet_value_must_be_int, IPv4.is_mask_valid("abc.0.255.0"));
     }
 }

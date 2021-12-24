@@ -11,5 +11,6 @@ public enum IPv4MessageTypes {
     mask_value_must_be_int,
     mask_value_is_to_big,
     mask_value_must_be_positive,
+    mask_value_is_incorrect,
 
 }
