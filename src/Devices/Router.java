@@ -63,5 +63,4 @@ public class Router extends NetworkDevice{
         Route route = new Route(code, distance, metric, net, mask, gateway, int_number);
         delete_route(route);
     }
-
 }

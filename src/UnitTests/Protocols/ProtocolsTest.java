@@ -107,5 +107,8 @@ class ProtocolsTest {
         //must be positive
         assertEquals(IPv4MessageTypes.mask_value_must_be_positive, IPv4.is_mask_valid("-24"));
         assertEquals(IPv4MessageTypes.mask_value_must_be_positive, IPv4.is_mask_valid("/-8"));
+        //is not mask
+        assertNotEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("192.255.255.0"));
+        assertNotEquals(IPv4MessageTypes.is_valid, IPv4.is_mask_valid("7.5.0.0"));
     }
 }
