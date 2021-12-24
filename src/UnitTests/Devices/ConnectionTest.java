@@ -1,8 +1,9 @@
 package UnitTests.Devices;
 
-import Devices.Link;
-import Devices.NetworkCard;
-import Devices.Router;
+import Devices.*;
+import Protocols.Data;
+import Protocols.ICMP;
+import Protocols.IPv4;
 import Protocols.SimpleP2PFrame;
 import org.junit.jupiter.api.Test;
 
@@ -116,22 +117,21 @@ class ConnectionTest {
         assertEquals(frame2, network_card2.get_frame_from_buffer());
     }
 
-    // test Routers
-    Router r1 = new Router("R1",2, true);
-    Router r2 = new Router("R2",1, true);
-    Router r3 = new Router("R3",1, true);
-
-    // link between R1 and R2
-    Link link3 = new Link(r1.get_interface(0), r2.get_interface(0));
-
-    // link between R1 and R3
-    Link link4 = new Link(r1.get_interface(1), r3.get_interface(0));
-
     // test of connection between routers
     // tested functions:
     // Router:
     @Test
     public void connection_between_routers(){
+        // test Routers
+        Router r1 = new Router("R1",2, true);
+        Router r2 = new Router("R2",1, true);
+        Router r3 = new Router("R3",1, true);
+
+        // link between R1 and R2
+        Link link3 = new Link(r1.get_interface(0), r2.get_interface(0));
+
+        // link between R1 and R3
+        Link link4 = new Link(r1.get_interface(1), r3.get_interface(0));
         // check if buffers are clear before test
         assertTrue(r1.is_buffer_empty());
         assertTrue(r2.is_buffer_empty());

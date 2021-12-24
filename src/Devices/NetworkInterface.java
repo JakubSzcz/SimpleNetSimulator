@@ -99,4 +99,8 @@ public class NetworkInterface {
         return to_return;
     }
 
+    // return true if interface si up
+    public boolean is_up(){
+        return activated;
+    }
 }

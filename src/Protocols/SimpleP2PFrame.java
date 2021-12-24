@@ -20,6 +20,10 @@ public class SimpleP2PFrame implements Frame{
         this.l3_protocol = Layer3Protocols.IPv4;
         this.packet = new IPv4Packet( source_address, destination_address, time_to_live, data);
     }
+    public SimpleP2PFrame(Packet packet){
+        this.l3_protocol = Layer3Protocols.IPv4;
+        this.packet = packet;
+    }
     //default constructor
     public SimpleP2PFrame() {
         this.l3_protocol = Layer3Protocols.IPv4;

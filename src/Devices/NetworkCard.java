@@ -69,4 +69,9 @@ public class NetworkCard {
     public Map<String, Long> get_ip_address(int int_number){
         return interfaces.get(int_number).get_ip_address();
     }
+
+    // return true if given interface is up
+    public boolean is_interface_up(int int_number){
+        return interfaces.get(int_number).is_up();
+    }
 }

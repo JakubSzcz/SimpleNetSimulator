@@ -34,32 +34,39 @@ public class Router extends NetworkDevice{
     }
 
     // set ip address of given interface
-    void set_interface_ip(int int_number, long ip_address, long mask){
+    public void set_interface_ip(int int_number, long ip_address, long mask){
         net_card.get_interface(int_number).set_ip_address(ip_address, mask);
+        if (net_card.is_interface_up(int_number)){
+            long net_address = ip_address & mask;
+            add_connected_route(net_address, mask, int_number);
+        }
     }
 
     // delete ip address of given interface
-    void delete_interface_ip(int int_number){
+    public void delete_interface_ip(int int_number){
+        Map<String, Long> ip_address = net_card.get_ip_address(int_number);
+        long net_address = ip_address.get("address") & ip_address.get("mask");
+        delete_route(RouteCode.C, 0, 0, net_address,ip_address.get("mask"),-1, int_number);
         net_card.get_interface(int_number).set_ip_address(-1, -1);
     }
 
     // add static route to routing table
-    void add_static_route(long ip_address, long mask, int int_number){
+    public void add_static_route(long ip_address, long mask, int int_number){
         routing_table.add_route(RouteCode.S, 1,0, ip_address, mask, -1, int_number);
     }
 
     // add directly connected route to routing table
-    void add_connected_route(long ip_address, long mask, int int_number){
+    private void add_connected_route(long ip_address, long mask, int int_number){
         routing_table.add_route(RouteCode.C, 0, 0, ip_address,mask, -1, int_number);
     }
 
     // add rip route to routing table
-    void add_rip_route(long ip_address, long mask, long gateway, int int_number, int metric){
+    private void add_rip_route(long ip_address, long mask, long gateway, int int_number, int metric){
         routing_table.add_route(RouteCode.R,120, metric, ip_address,mask, -1, int_number);
     }
 
     // delete a route in routing table
-    void delete_route(Route route){
+    public void delete_route(Route route){
         routing_table.delete_route(route);
     }
 
@@ -89,7 +96,30 @@ public class Router extends NetworkDevice{
     }
 
     // sends data to given ip address
-    public void send_data(Data data, long destination_address){
+    public void send_data(Data data, long destination_address, int ttl){
+        // find route to given destination
+        int route_index = routing_table.find_best_route(destination_address);
+        // if route was found
+        if (route_index != -1){
+            Route route = routing_table.get_route(route_index);
+            // find source address and interface
+            int int_number = route.int_number();
+            Map<String, Long> address= net_card.get_ip_address(int_number);
+            // make IPv4 packet
+            Packet packet = IPv4.create_packet(address.get("address"),destination_address,ttl,data);
+            // make frame
+            Frame frame = new SimpleP2PFrame(packet);
+            // send frame
+            add_out_traffic(frame, int_number);
+        }
+    }
 
+    public void send_data(Data data, long destination_address){
+        send_data(data, destination_address, 255);
+    }
+
+    // return routing table in string
+    public String get_routing_table(){
+        return routing_table.to_string();
     }
 }
