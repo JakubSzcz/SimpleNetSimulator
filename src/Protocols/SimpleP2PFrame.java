@@ -37,4 +37,9 @@ public class SimpleP2PFrame implements Frame{
         to_return += packet.to_string();
         return to_return;
     }
+
+    // packet getter
+    public Packet get_packet(){
+        return packet;
+    }
 }

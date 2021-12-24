@@ -29,7 +29,33 @@ public class Router extends NetworkDevice{
     }
 
     // actions taken after receiving a frame
-    void handle_frame(){
+    void handle_frame(Frame frame){
+        if (frame instanceof SimpleP2PFrame simpleP2P_frame){
+            handle_simpleP2P_frame(simpleP2P_frame);
+        }
+    }
+
+    // handle SimpleP2P frame
+    void handle_simpleP2P_frame(SimpleP2PFrame simpleP2P_frame){
+        Packet packet = simpleP2P_frame.get_packet();
+        if (packet instanceof IPv4Packet ipv4_packet){
+            handle_ipv4_packet(ipv4_packet);
+        }
+    }
+
+    // handle ipv4_packet
+    void handle_ipv4_packet(IPv4Packet packet){
+        // check if packet is for this router
+        boolean for_this_router = false;
+        int int_number = net_card.get_int_number();
+        for (int i = 0; i < int_number; i++){
+
+        }
+
+    }
+
+    // handle icmp_packet
+    void handle_icmp_packet(ICMPPacket packet){
 
     }
 

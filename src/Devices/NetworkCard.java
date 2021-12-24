@@ -74,4 +74,9 @@ public class NetworkCard {
     public boolean is_interface_up(int int_number){
         return interfaces.get(int_number).is_up();
     }
+
+    // return interfaces size
+    public int get_int_number(){
+        return interfaces.size();
+    }
 }
