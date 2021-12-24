@@ -9,19 +9,32 @@ public record Route(RouteCode code, int distance, int metric, long net, long net
 
     // to string method
     public String to_string() {
+        StringBuilder to_return = new StringBuilder();
         // code
-        String to_return = code.toString();
+        to_return.append(code.toString());
         // ip address
-        to_return = to_return + " " + IPv4.parse_to_string(net);
+        to_return.append(" ");
+        to_return.append(IPv4.parse_to_string(net));
         // mask
-        to_return = to_return + " " + IPv4.parse_to_string(net_mask);
+        to_return.append(" ");
+        to_return.append(IPv4.parse_to_string(net_mask));
         // [distance/metric]
-        to_return = to_return + " [" + distance + "/" + metric + "] ";
+        to_return.append(" [");
+        to_return.append(distance);
+        to_return.append("/");
+        to_return.append(metric);
+        to_return.append("] ");
         // gateway
-        to_return = to_return + "via " + IPv4.parse_to_string(gateway);
+        to_return.append("via ");
+        if (gateway == -1){
+            to_return.append("---");
+        }else{
+            to_return.append(IPv4.parse_to_string(gateway));
+        }
         // port
-        to_return = to_return + ", interface" + int_number;
-        return to_return;
+        to_return.append(", interface");
+        to_return.append(int_number);
+        return to_return.toString();
     }
 
     // check if two Routes are identical

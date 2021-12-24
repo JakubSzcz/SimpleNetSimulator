@@ -3,6 +3,8 @@ package Devices;
 import Protocols.Frame;
 
 import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NetworkInterface {
     /////////////////////////////////////////////////////////
@@ -83,4 +85,18 @@ public class NetworkInterface {
     public Frame get_frame(){
             return out_buffer.pollFirst();
     }
+
+    // return true if ip address is set
+    public boolean is_ip_set(){
+        return -1 != address;
+    }
+
+    // return ip address
+    public Map<String, Long> get_ip_address(){
+        Map<String, Long> to_return= new HashMap<>();
+        to_return.put("address", address);
+        to_return.put("mask", mask);
+        return to_return;
+    }
+
 }

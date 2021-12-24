@@ -22,6 +22,11 @@ class RoutingTableTest {
                 IPv4.parse_to_long("255.255.255.0"), IPv4.parse_to_long("192.168.1.1"),
                 1);
         assertEquals("S 192.168.1.0 255.255.255.0 [1/0] via 192.168.1.1, interface1", route.to_string());
+
+        route = new Route(RouteCode.S, 1, 0, IPv4.parse_to_long("192.168.1.0"),
+                IPv4.parse_to_long("255.255.255.0"), -1,
+                1);
+        assertEquals("S 192.168.1.0 255.255.255.0 [1/0] via ---, interface1", route.to_string());
     }
 
     // check is_identical function from Route

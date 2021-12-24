@@ -3,6 +3,7 @@ package Devices;
 import Protocols.Frame;
 
 import java.util.ArrayDeque;
+import java.util.Map;
 import java.util.ArrayList;
 
 public class NetworkCard {
@@ -57,5 +58,15 @@ public class NetworkCard {
     // turn up interface
     public void up_interface(int int_number){
         interfaces.get(int_number).up();
+    }
+
+    // return true if interface has ip address
+    public boolean is_ip_set(int int_number){
+        return interfaces.get(int_number).is_ip_set();
+    }
+
+    // return ip address of given interface
+    public Map<String, Long> get_ip_address(int int_number){
+        return interfaces.get(int_number).get_ip_address();
     }
 }
