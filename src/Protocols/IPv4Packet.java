@@ -87,4 +87,9 @@ public class IPv4Packet implements Packet{
         to_return += data.to_string();
         return to_return;
     }
+
+    // data getter
+    public Data get_data(){
+        return data;
+    }
 }

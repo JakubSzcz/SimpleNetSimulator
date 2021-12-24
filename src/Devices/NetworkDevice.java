@@ -66,7 +66,7 @@ public abstract class NetworkDevice extends Thread{
     public void run(){
         while (true){
             if (!net_card.is_buffer_empty()){
-                handle_frame();
+                handle_frame(net_card.get_frame_from_buffer());
             }
 
             try {
@@ -78,7 +78,7 @@ public abstract class NetworkDevice extends Thread{
     }
 
     // actions taken after receiving a frame
-    abstract void handle_frame();
+    abstract void handle_frame(Frame frame);
 
     // returns interface, link needs it
     public NetworkInterface get_interface(int int_number){
