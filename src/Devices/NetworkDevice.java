@@ -100,4 +100,9 @@ public abstract class NetworkDevice extends Thread{
     public boolean is_buffer_empty(){
         return net_card.is_buffer_empty();
     }
+
+    // return monitor to string
+    public String get_monitor(){
+        return monitor.to_string();
+    }
 }

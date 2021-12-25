@@ -45,18 +45,34 @@ public class Router extends NetworkDevice{
 
     // handle ipv4_packet
     void handle_ipv4_packet(IPv4Packet packet){
+        // log
+        System.out.println(name + ": packet received from " +
+                IPv4.parse_to_string(packet.get_source_address()));
+
         // check if packet is for this router
         boolean for_this_router = false;
         int int_number = net_card.get_int_number();
         for (int i = 0; i < int_number; i++){
-
+            if(packet.get_destination_address() == net_card.get_ip_address(i).get("address")){
+                if (packet.get_data() instanceof ICMPPacket icmp_packet){
+                    handle_icmp_packet(icmp_packet);
+                }
+                for_this_router = true;
+                break;
+            }
+        }
+        if (!for_this_router){
+            packet.reduce_ttl();
+            if (packet.get_time_to_live() > 0){
+                send_ipv4_packet(packet);
+            }
         }
 
     }
 
     // handle icmp_packet
     void handle_icmp_packet(ICMPPacket packet){
-
+        monitor.add_line(packet.to_string());
     }
 
     // set ip address of given interface
@@ -123,25 +139,63 @@ public class Router extends NetworkDevice{
 
     // sends data to given ip address
     public void send_data(Data data, long destination_address, int ttl){
-        // find route to given destination
-        int route_index = routing_table.find_best_route(destination_address);
-        // if route was found
-        if (route_index != -1){
-            Route route = routing_table.get_route(route_index);
-            // find source address and interface
-            int int_number = route.int_number();
-            Map<String, Long> address= net_card.get_ip_address(int_number);
-            // make IPv4 packet
-            Packet packet = IPv4.create_packet(address.get("address"),destination_address,ttl,data);
-            // make frame
-            Frame frame = new SimpleP2PFrame(packet);
-            // send frame
-            add_out_traffic(frame, int_number);
+        // check if packet isn't for this router
+        boolean for_this_router = false;
+        int card_int_number = net_card.get_int_number();
+        for (int i = 0; i < card_int_number; i++){
+            if(destination_address == net_card.get_ip_address(i).get("address")){
+                for_this_router = true;
+                break;
+            }
         }
+        if(for_this_router){
+            if (data instanceof ICMPPacket icmp_packet){
+                handle_icmp_packet(icmp_packet);
+            }
+        }else{
+            // find route to given destination
+            int route_index = routing_table.find_best_route(destination_address);
+            // if route was found
+            if (route_index != -1){
+                Route route = routing_table.get_route(route_index);
+                // find source address and interface
+                int int_number = route.int_number();
+                Map<String, Long> address= net_card.get_ip_address(int_number);
+                // make IPv4 packet
+                Packet packet = IPv4.create_packet(address.get("address"),destination_address,ttl,data);
+                // make frame
+                Frame frame = new SimpleP2PFrame(packet);
+                // send frame
+                add_out_traffic(frame, int_number);
+                // log
+                System.out.println(name + ": packet sent to " +
+                        IPv4.parse_to_string(destination_address));
+            }
+        }
+
     }
 
     public void send_data(Data data, long destination_address){
         send_data(data, destination_address, 255);
+    }
+
+    // send ipv4 packet
+    public void send_ipv4_packet(IPv4Packet packet){
+        // find route to given destination
+        int route_index = routing_table.find_best_route(packet.get_destination_address());
+        // if route was found
+        if (route_index != -1){
+            Route route = routing_table.get_route(route_index);
+            // find interface
+            int int_number = route.int_number();
+            // make frame
+            Frame frame = new SimpleP2PFrame(packet);
+            // send frame
+            add_out_traffic(frame, int_number);
+            // log
+            System.out.println(name + ": packet sent to " +
+                    IPv4.parse_to_string(packet.get_destination_address()));
+        }
     }
 
     // return routing table in string
