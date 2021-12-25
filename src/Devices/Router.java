@@ -56,7 +56,7 @@ public class Router extends NetworkDevice{
             if(packet.get_destination_address() == net_card.get_ip_address(i).get("address")){
                 // if packet is for this router handle data
                 if (packet.get_data() instanceof ICMPPacket icmp_packet){
-                    handle_icmp_packet(icmp_packet);
+                    handle_icmp_packet(icmp_packet, packet.get_source_address(), packet.get_destination_address());
                 }
                 for_this_router = true;
                 break;
@@ -73,8 +73,17 @@ public class Router extends NetworkDevice{
     }
 
     // actions taken if received data is ICMP packet
-    void handle_icmp_packet(ICMPPacket packet){
-        monitor.add_line(packet.to_string());
+    void handle_icmp_packet(ICMPPacket packet, long source, long destination){
+        // echo reply
+        if (packet.get_type() == 0){
+            monitor.add_line(packet.to_string());
+        // echo request
+        }else if (packet.get_type() == 8){
+            Data data = ICMP.create_echo_reply();
+        // destination unreachable
+        }else if (packet.get_type() == 3){
+            monitor.add_line(packet.to_string());
+        }
     }
 
     // set ip address of given interface
@@ -153,7 +162,7 @@ public class Router extends NetworkDevice{
         if(for_this_router){
             // if packet is for this router handle data
             if (data instanceof ICMPPacket icmp_packet){
-                handle_icmp_packet(icmp_packet);
+                handle_icmp_packet(icmp_packet, destination_address, destination_address);
             }
         }else{
             // find route to given destination

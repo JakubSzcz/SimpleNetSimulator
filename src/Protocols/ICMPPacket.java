@@ -35,4 +35,14 @@ public class ICMPPacket implements Data{
         to_return += "Type " + type + "\n" + "Code " + code + "\n" + "Checksum " + check_sum + "\n";
         return to_return;
     }
+
+    // type getter
+    public int get_type() {
+        return type;
+    }
+
+    // code getter
+    public int get_code() {
+        return code;
+    }
 }

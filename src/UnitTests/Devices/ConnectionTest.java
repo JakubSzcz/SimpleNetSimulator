@@ -184,7 +184,7 @@ class ConnectionTest {
                 IPv4.parse_mask_to_long("24"));
 
         // data to send
-        Data data = ICMP.create_echo_request();
+        Data data = ICMP.create_echo_reply();
 
         // send data from r1 to r1
         r1.send_data(data, IPv4.parse_to_long("192.168.0.1"));
