@@ -14,7 +14,7 @@ public class IPv4Packet implements Packet{
     final private int identification;
     final private int flags;
     final private int fragment_offset;
-    final private int time_to_live;
+    private int time_to_live;
     final private int protocol;
     final private int header_checksum;
     final private long source_address;
@@ -91,5 +91,25 @@ public class IPv4Packet implements Packet{
     // data getter
     public Data get_data(){
         return data;
+    }
+
+    // ttl getter
+    public int get_time_to_live() {
+        return time_to_live;
+    }
+
+    // source getter
+    public long get_source_address() {
+        return source_address;
+    }
+
+    // destination getter
+    public long get_destination_address() {
+        return destination_address;
+    }
+
+    // reduce ttl
+    public void reduce_ttl() {
+        this.time_to_live = time_to_live - 1;
     }
 }
