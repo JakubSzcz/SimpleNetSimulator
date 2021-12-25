@@ -35,7 +35,7 @@ public class Router extends NetworkDevice{
         }
     }
 
-    // handle SimpleP2P frame
+    // actions taken if received frame uses SimpleP2P Protocol
     void handle_simpleP2P_frame(SimpleP2PFrame simpleP2P_frame){
         Packet packet = simpleP2P_frame.get_packet();
         if (packet instanceof IPv4Packet ipv4_packet){
@@ -43,7 +43,7 @@ public class Router extends NetworkDevice{
         }
     }
 
-    // handle ipv4_packet
+    // actions taken if received packet uses IPv4 Protocol
     void handle_ipv4_packet(IPv4Packet packet){
         // log
         System.out.println(name + ": packet received from " +
@@ -54,6 +54,7 @@ public class Router extends NetworkDevice{
         int int_number = net_card.get_int_number();
         for (int i = 0; i < int_number; i++){
             if(packet.get_destination_address() == net_card.get_ip_address(i).get("address")){
+                // if packet is for this router handle data
                 if (packet.get_data() instanceof ICMPPacket icmp_packet){
                     handle_icmp_packet(icmp_packet);
                 }
@@ -61,6 +62,7 @@ public class Router extends NetworkDevice{
                 break;
             }
         }
+        // if packet isn't for this router send it further
         if (!for_this_router){
             packet.reduce_ttl();
             if (packet.get_time_to_live() > 0){
@@ -70,7 +72,7 @@ public class Router extends NetworkDevice{
 
     }
 
-    // handle icmp_packet
+    // actions taken if received data is ICMP packet
     void handle_icmp_packet(ICMPPacket packet){
         monitor.add_line(packet.to_string());
     }
@@ -149,6 +151,7 @@ public class Router extends NetworkDevice{
             }
         }
         if(for_this_router){
+            // if packet is for this router handle data
             if (data instanceof ICMPPacket icmp_packet){
                 handle_icmp_packet(icmp_packet);
             }
