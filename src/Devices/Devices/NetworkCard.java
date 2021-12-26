@@ -1,4 +1,4 @@
-package Devices;
+package Devices.Devices;
 
 import Protocols.Frame;
 

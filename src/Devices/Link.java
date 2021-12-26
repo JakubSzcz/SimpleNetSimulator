@@ -1,5 +1,7 @@
 package Devices;
 
+import Devices.Devices.NetworkInterface;
+
 public class Link extends Thread{
     /////////////////////////////////////////////////////////
     //                 variables and objects               //

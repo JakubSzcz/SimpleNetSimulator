@@ -1,10 +1,13 @@
-package Devices;
+package Devices.Devices;
 
+import Devices.Routing.Route;
+import Devices.Routing.RouteCode;
+import Devices.Routing.RoutingTable;
 import Protocols.*;
 
 import java.util.Map;
 
-public class Router extends NetworkDevice{
+public class Router extends NetworkDevice {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
@@ -66,7 +69,12 @@ public class Router extends NetworkDevice{
         if (!for_this_router){
             packet.reduce_ttl();
             if (packet.get_time_to_live() > 0){
+                // send further
                 send_ipv4_packet(packet);
+            }else{
+                // send destination unreachable
+                Data dest_unreachable = ICMP.create_dest_unreachable();
+                send_data(dest_unreachable, packet.get_source_address());
             }
         }
 
@@ -80,6 +88,7 @@ public class Router extends NetworkDevice{
         // echo request
         }else if (packet.get_type() == 8){
             Data data = ICMP.create_echo_reply();
+            send_data(data, source);
         // destination unreachable
         }else if (packet.get_type() == 3){
             monitor.add_line(packet.to_string());
@@ -160,6 +169,13 @@ public class Router extends NetworkDevice{
             }
         }
         if(for_this_router){
+            // log
+            System.out.println(name + ": packet sent to " +
+                    IPv4.parse_to_string(destination_address));
+            // log
+            System.out.println(name + ": packet received from " +
+                    IPv4.parse_to_string(destination_address));
+
             // if packet is for this router handle data
             if (data instanceof ICMPPacket icmp_packet){
                 handle_icmp_packet(icmp_packet, destination_address, destination_address);
@@ -182,6 +198,10 @@ public class Router extends NetworkDevice{
                 // log
                 System.out.println(name + ": packet sent to " +
                         IPv4.parse_to_string(destination_address));
+            }else{
+                // if route was not found
+                ICMPPacket dest_unreachable = ICMP.create_dest_unreachable();
+                handle_icmp_packet(dest_unreachable, -1, destination_address);
             }
         }
 
@@ -191,7 +211,7 @@ public class Router extends NetworkDevice{
         send_data(data, destination_address, 255);
     }
 
-    // send ipv4 packet
+    // send ipv4 packet, use for routing purpose
     public void send_ipv4_packet(IPv4Packet packet){
         // find route to given destination
         int route_index = routing_table.find_best_route(packet.get_destination_address());
@@ -207,6 +227,10 @@ public class Router extends NetworkDevice{
             // log
             System.out.println(name + ": packet sent to " +
                     IPv4.parse_to_string(packet.get_destination_address()));
+        }else{
+            // if route was not found
+            ICMPPacket dest_unreachable = ICMP.create_dest_unreachable();
+            send_data(dest_unreachable, packet.get_source_address());
         }
     }
 

@@ -1,4 +1,7 @@
-package Devices;
+package Devices.Routing;
+
+import Devices.Routing.Route;
+import Devices.Routing.RouteCode;
 
 import java.util.*;
 

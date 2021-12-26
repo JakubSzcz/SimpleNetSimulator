@@ -1,4 +1,4 @@
-package Devices;
+package Devices.Devices;
 
 import Protocols.Frame;
 
@@ -20,7 +20,7 @@ public abstract class NetworkDevice extends Thread{
     protected boolean turned_on;
 
     // sleep time in run method
-    protected final int router_speed = 1000;
+    protected int router_speed;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -28,20 +28,29 @@ public abstract class NetworkDevice extends Thread{
 
     // normal case constructor
     public NetworkDevice(String name, int int_number){
-        constructor(name,int_number, false);
+        constructor(name,int_number, 200, false);
+    }
+
+    public NetworkDevice(String name, int int_number, int clock_period){
+        constructor(name,int_number, clock_period, false);
     }
 
     // test case constructor, Network device for tests without thread running
     public NetworkDevice(String name, int int_number, Boolean test){
-        constructor(name, int_number, test);
+        constructor(name, int_number, 200, test);
+    }
+
+    public NetworkDevice(String name, int int_number, int clock_period, Boolean test){
+        constructor(name, int_number, clock_period, test);
     }
 
     // constructor
-    private void constructor(String name,int int_number, Boolean test){
+    private void constructor(String name,int int_number, int clock_period, Boolean test){
         this.name = name;
         this.net_card = new NetworkCard(int_number);
         this.monitor = new Monitor();
         this.turned_on = true;
+        this.router_speed = clock_period;
         if (!test){
             start();
         }
@@ -104,5 +113,10 @@ public abstract class NetworkDevice extends Thread{
     // return monitor to string
     public String get_monitor(){
         return monitor.to_string();
+    }
+
+    // clear monitor
+    public void clear_monitor(){
+        monitor.clear();
     }
 }

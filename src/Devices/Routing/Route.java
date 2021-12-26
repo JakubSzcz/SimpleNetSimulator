@@ -1,4 +1,4 @@
-package Devices;
+package Devices.Routing;
 
 import Protocols.IPv4;
 
