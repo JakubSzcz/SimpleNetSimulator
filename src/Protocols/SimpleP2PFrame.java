@@ -5,17 +5,17 @@ public class SimpleP2PFrame implements Frame{
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
 
-    //name of the layer 3 protocol
+    // name of the layer 3 protocol
     private final Layer3Protocols l3_protocol;
 
-    //packet
+    // packet
     private final Packet packet;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    //normal case constructor
+    // normal case constructor
     public SimpleP2PFrame(long source_address, long destination_address, int time_to_live, Data data) {
         this.l3_protocol = Layer3Protocols.IPv4;
         this.packet = new IPv4Packet( source_address, destination_address, time_to_live, data);
@@ -24,13 +24,13 @@ public class SimpleP2PFrame implements Frame{
         this.l3_protocol = Layer3Protocols.IPv4;
         this.packet = packet;
     }
-    //default constructor
+    // default constructor
     public SimpleP2PFrame() {
         this.l3_protocol = Layer3Protocols.IPv4;
         this.packet = new IPv4Packet();
     }
 
-    //parse frame's content to string
+    // parse frame's content to string
     @Override
     public String to_string() {
         String to_return = "Simple peer to peer frame\n" + " Layer 3 ISO/OSI protocol: " + l3_protocol + "\n";

@@ -5,7 +5,7 @@ public class IPv4Packet implements Packet{
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
 
-    //contents of IPv4 packet
+    // contents of IPv4 packet
     final private int version;
     final private int ihl;
     final private int dscp;
@@ -27,16 +27,16 @@ public class IPv4Packet implements Packet{
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    //default constructor
+    // default constructor
     public IPv4Packet() {
-        //ip addresses
+        // ip addresses
         this.source_address = 0;
         this.destination_address = 1;
-        //ttl value
+        // ttl value
         this.time_to_live = 255;
-        //data
+        // data
         this.data = new ICMPPacket();
-        //default values
+        // default values
         this.version = 4;
         this.ihl = 0;
         this.dscp = 0;
@@ -50,16 +50,16 @@ public class IPv4Packet implements Packet{
         this.option = 0;
     }
 
-    //constructor
+    // constructor
     public IPv4Packet(long source_address, long destination_address, int time_to_live, Data data) {
-        //ip addresses
+        // ip addresses
         this.source_address = source_address;
         this.destination_address = destination_address;
-        //ttl value
+        // ttl value
         this.time_to_live = time_to_live;
-        //data
+        // data
         this.data = data;
-        //default values
+        // default values
         this.version = 4;
         this.ihl = 0;
         this.dscp = 0;
@@ -73,7 +73,7 @@ public class IPv4Packet implements Packet{
         this.option = 0;
     }
 
-    //parse packet's content to string
+    // parse packet's content to string
     @Override
     public String to_string() {
         String to_return = "Internet Protocol Version: " + version + "\n" + "Version: " + version + "\n";

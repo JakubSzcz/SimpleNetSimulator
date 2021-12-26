@@ -5,6 +5,6 @@ public interface Packet {
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    //parse packet
+    // parse packet
     public String to_string();
 }

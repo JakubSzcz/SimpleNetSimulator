@@ -13,7 +13,7 @@ public class ICMPPacket implements Data{
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    //default constructor
+    // default constructor
     public ICMPPacket() {
         //msg type: 0- echo reply, 3- destination unreachable, 8- echo request
         this.type = 0;
@@ -21,14 +21,14 @@ public class ICMPPacket implements Data{
         this.check_sum = 0;
     }
 
-    //constructor
+    // constructor
     public ICMPPacket(int type) {
         //msg type: 0- echo reply, 3- destination unreachable, 8- echo request
         this.type = type;
         this.code = 0;
         this.check_sum = 0;
     }
-    //parse content to string
+    // parse content to string
     @Override
     public String to_string() {
         String to_return = "Internet Control Message Protocol\n";
