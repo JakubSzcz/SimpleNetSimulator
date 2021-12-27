@@ -1,6 +1,8 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class NetworkGUI {
     private JPanel gui_panel;
@@ -15,9 +17,17 @@ public class NetworkGUI {
     private JPanel left_margin;
     private JPanel right_margin;
     private JPanel topology_map;
+    private final AddRouterPopUp add_router_pop_up;
 
     public NetworkGUI() {
         this.add_router.setBorder(BorderFactory.createEmptyBorder());
+        this.add_router_pop_up = new AddRouterPopUp();
+        add_router.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                add_router_pop_up.setVisible(true);
+            }
+        });
     }
 
     public static void main(String[] args) {
