@@ -20,7 +20,9 @@ public class AddRouterPopUp extends JDialog {
 
     // topology
     Topology topology = Topology.get_topology();
+    private Position mouse_position;
 
+    // constructor
     public AddRouterPopUp() {
         setContentPane(contentPane);
         setModal(true);
@@ -59,6 +61,11 @@ public class AddRouterPopUp extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
+    // set mouse position
+
+    public void set_mouse_position(Position position){
+        mouse_position = position;
+    }
 
     private void onOK() {
         // add router
@@ -71,7 +78,8 @@ public class AddRouterPopUp extends JDialog {
         // check if int number is integer
         try{
             int_number = Integer.parseInt(string_int_number);
-            AddRouterMessages message = topology.add_router(new Position(0, 0),name, int_number);
+            AddRouterMessages message = topology.add_router(new Position(mouse_position.get_x(), mouse_position.get_y()),
+                    name, int_number);
             if (message == AddRouterMessages.name_is_taken){
                 is_valid = false;
                 warning_text_field.setText(message.toString());

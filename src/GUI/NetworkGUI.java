@@ -1,6 +1,7 @@
 package GUI;
 
 import Topology.Topology;
+import Topology.Position;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -54,7 +55,6 @@ public class NetworkGUI {
         add_router.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                add_router_pop_up.setVisible(true);
                 flag = true;
             }
         });
@@ -66,6 +66,8 @@ public class NetworkGUI {
                 super.mouseClicked(e);
                 if(flag){
                     //dodaj ruter w to miejsce
+                    add_router_pop_up.set_mouse_position(new Position(e.getX(), e.getY()));
+                    add_router_pop_up.setVisible(true);
                     flag = false;
                     //log
                     System.out.println(flag);
