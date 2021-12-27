@@ -1,7 +1,9 @@
 package GUI;
 
+import Devices.Devices.Router;
 import Topology.Topology;
 import Topology.Position;
+import Topology.RouterButton;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -65,16 +67,19 @@ public class NetworkGUI {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if(flag){
-                    //dodaj ruter w to miejsce
                     add_router_pop_up.set_mouse_position(new Position(e.getX(), e.getY()));
                     add_router_pop_up.setVisible(true);
                     flag = false;
-                    //log
-                    System.out.println(flag);
                 }
 
             }
         });
+    }
+
+    // refresh
+    public void refresh(){
+        for(RouterButton router: topology.get_routers())
+        topology_map.add(router);
     }
 
     // main

@@ -77,4 +77,9 @@ public class Topology {
     public static Topology get_topology(){
         return topology;
     }
+
+    // routers getter
+    public ArrayList<RouterButton> get_routers(){
+        return routers;
+    }
 }
