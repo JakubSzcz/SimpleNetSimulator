@@ -1,12 +1,10 @@
 package GUI;
 
-import Protocols.IPv4MessageTypes;
 import Topology.Topology;
 import Topology.AddRouterMessages;
 import Topology.Position;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class AddRouterPopUp extends JDialog {

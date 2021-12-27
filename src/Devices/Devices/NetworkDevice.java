@@ -1,6 +1,6 @@
 package Devices.Devices;
 
-import Protocols.Frame;
+import Protocols.Frame.Frame;
 
 public abstract class NetworkDevice extends Thread{
     /////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@ import Devices.Devices.Router;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
 import Devices.Routing.RoutingTable;
-import Protocols.IPv4;
+import Protocols.Packets.IPv4;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

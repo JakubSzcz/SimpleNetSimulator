@@ -1,4 +1,4 @@
-package Protocols;
+package Protocols.Packets;
 
 public enum IPv4MessageTypes {
     is_valid,

@@ -1,6 +1,8 @@
-package Protocols;
+package Protocols.Data;
 
-public class ICMPPacket implements Data{
+import Protocols.Data.Data;
+
+public class ICMPPacket implements Data {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

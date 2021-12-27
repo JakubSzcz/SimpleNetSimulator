@@ -1,7 +1,7 @@
 package UnitTests.Protocols;
 
-import Protocols.IPv4;
-import Protocols.IPv4MessageTypes;
+import Protocols.Packets.IPv4;
+import Protocols.Packets.IPv4MessageTypes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

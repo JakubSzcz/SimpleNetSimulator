@@ -1,10 +1,11 @@
-package Protocols;
+package Protocols.Frame;
 
-public interface Data {
+public interface Frame {
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    // parse data
+    // parse frame
     public String to_string();
+
 }

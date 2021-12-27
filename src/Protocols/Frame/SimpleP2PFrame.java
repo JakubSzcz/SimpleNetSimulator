@@ -1,6 +1,11 @@
-package Protocols;
+package Protocols.Frame;
 
-public class SimpleP2PFrame implements Frame{
+import Protocols.Data.Data;
+import Protocols.Packets.Layer3Protocols;
+import Protocols.Packets.IPv4Packet;
+import Protocols.Packets.Packet;
+
+public class SimpleP2PFrame implements Frame {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

@@ -1,4 +1,6 @@
-package Protocols;
+package Protocols.Frame;
+
+import Protocols.Data.Data;
 
 public class SimpleP2P {
     /////////////////////////////////////////////////////////

@@ -1,4 +1,6 @@
-package Protocols;
+package Protocols.Data;
+
+import Protocols.Packets.IPv4;
 
 public class ICMP {
     // create default ICMP packet

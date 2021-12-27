@@ -1,4 +1,4 @@
-package Protocols;
+package Protocols.Packets;
 
 public enum Layer3Protocols {
     IPv4(),

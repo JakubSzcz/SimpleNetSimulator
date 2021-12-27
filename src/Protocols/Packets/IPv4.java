@@ -1,4 +1,6 @@
-package Protocols;
+package Protocols.Packets;
+
+import Protocols.Data.Data;
 
 public class IPv4 {
     /////////////////////////////////////////////////////////

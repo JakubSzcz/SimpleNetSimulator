@@ -1,6 +1,9 @@
-package Protocols;
+package Protocols.Packets;
 
-public class IPv4Packet implements Packet{
+import Protocols.Data.Data;
+import Protocols.Data.ICMPPacket;
+
+public class IPv4Packet implements Packet {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-package Protocols;
+package Protocols.Packets;
 
 public interface Packet {
     /////////////////////////////////////////////////////////

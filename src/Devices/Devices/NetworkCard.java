@@ -1,6 +1,6 @@
 package Devices.Devices;
 
-import Protocols.Frame;
+import Protocols.Frame.Frame;
 
 import java.util.ArrayDeque;
 import java.util.Map;

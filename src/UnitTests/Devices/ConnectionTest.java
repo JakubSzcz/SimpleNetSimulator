@@ -3,7 +3,9 @@ package UnitTests.Devices;
 import Devices.*;
 import Devices.Devices.NetworkCard;
 import Devices.Devices.Router;
-import Protocols.*;
+import Protocols.Data.ICMP;
+import Protocols.Data.ICMPPacket;
+import Protocols.Packets.IPv4;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

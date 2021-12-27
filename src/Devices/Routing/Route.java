@@ -1,6 +1,6 @@
 package Devices.Routing;
 
-import Protocols.IPv4;
+import Protocols.Packets.IPv4;
 
 public record Route(RouteCode code, int distance, int metric, long net, long net_mask, long gateway, int int_number) {
     /////////////////////////////////////////////////////////
