@@ -14,6 +14,7 @@ class ProtocolsTest {
         assertEquals(3232235777L, IPv4.parse_to_long("192.168.1.1"));
         assertEquals(2888455179L, IPv4.parse_to_long("172.42.84.11"));
         assertEquals(0L, IPv4.parse_to_long("0.0.0.0"));
+        assertEquals(168430081L, IPv4.parse_to_long("10.10.10.1"));
     }
 
     @Test

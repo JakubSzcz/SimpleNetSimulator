@@ -85,14 +85,14 @@ public class Router extends NetworkDevice {
     void handle_icmp_packet(ICMPPacket packet, long source, long destination, int ttl){
         // echo reply
         if (packet.get_type() == 0){
-            monitor.add_line(ICMP.get_message(packet,destination, source, ttl));
+            monitor.add_line(ICMP.get_message(packet, source, ttl));
         // echo request
         }else if (packet.get_type() == 8){
             Data data = ICMP.create_echo_reply();
             send_data(data, source);
         // destination unreachable
         }else if (packet.get_type() == 3){
-            monitor.add_line(ICMP.get_message(packet, destination, source, ttl));
+            monitor.add_line(ICMP.get_message(packet, source, ttl));
         }
     }
 
