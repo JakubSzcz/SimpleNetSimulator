@@ -11,10 +11,10 @@ public class RouterButton extends JButton {
     /////////////////////////////////////////////////////////
 
     // position on map
-    Position position;
+    private final Position position;
 
     // actual router
-    Router router;
+    private final Router router;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -24,5 +24,15 @@ public class RouterButton extends JButton {
         super(router.get_name(), Icons.icon.test());
         this.position = position;
         this.router = router;
+    }
+
+    // position getter
+    public Position get_position() {
+        return position;
+    }
+
+    // router getter
+    public Router get_router() {
+        return router;
     }
 }
