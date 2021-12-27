@@ -5,6 +5,7 @@ import Devices.Devices.NetworkCard;
 import Devices.Devices.Router;
 import Protocols.Data.ICMP;
 import Protocols.Data.ICMPPacket;
+import Protocols.Frame.SimpleP2PFrame;
 import Protocols.Packets.IPv4;
 import org.junit.jupiter.api.Test;
 

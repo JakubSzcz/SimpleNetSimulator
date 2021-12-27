@@ -70,6 +70,7 @@ public class NetworkGUI {
                     add_router_pop_up.set_mouse_position(new Position(e.getX(), e.getY()));
                     add_router_pop_up.setVisible(true);
                     flag = false;
+                    refresh();
                 }
 
             }
@@ -78,8 +79,8 @@ public class NetworkGUI {
 
     // refresh
     public void refresh(){
-        for(RouterButton router: topology.get_routers())
-        topology_map.add(router);
+        for(RouterButton router: topology.get_routers());
+
     }
 
     // main

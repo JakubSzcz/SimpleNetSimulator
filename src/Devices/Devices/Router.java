@@ -7,6 +7,7 @@ import Protocols.Data.Data;
 import Protocols.Data.ICMP;
 import Protocols.Data.ICMPPacket;
 import Protocols.Frame.Frame;
+import Protocols.Frame.SimpleP2PFrame;
 import Protocols.Packets.IPv4;
 import Protocols.Packets.IPv4Packet;
 import Protocols.Packets.Packet;
