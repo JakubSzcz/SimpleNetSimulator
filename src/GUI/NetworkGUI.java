@@ -67,6 +67,7 @@ public class NetworkGUI {
                 if(flag){
                     //dodaj ruter w to miejsce
                     flag = false;
+                    //log
                     System.out.println(flag);
                 }
 
