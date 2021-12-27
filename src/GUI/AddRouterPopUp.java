@@ -6,6 +6,7 @@ import Topology.AddRouterMessages;
 import Topology.Position;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class AddRouterPopUp extends JDialog {
@@ -24,6 +25,12 @@ public class AddRouterPopUp extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonAdd);
+        setLocation(200, 200);
+
+        // appearance settings
+        setSize(400, 150);
+        setResizable(false);
+        warning_text_field.setBorder(BorderFactory.createEmptyBorder());
 
         buttonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -57,9 +64,9 @@ public class AddRouterPopUp extends JDialog {
         // add router
         boolean is_valid = true;
         // name
-        String name = name_text_field.toString();
+        String name = name_text_field.getText();
         // int number
-        String string_int_number = int_number_text_field.toString();
+        String string_int_number = int_number_text_field.getText();
         int int_number;
         // check if int number is integer
         try{

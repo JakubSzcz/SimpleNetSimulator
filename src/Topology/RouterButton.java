@@ -20,8 +20,9 @@ public class RouterButton extends JButton {
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    public RouterButton(Position position, Router router) {
-        super(router.get_name(), Icons.icon.test());
+    public RouterButton(Icon icon, Position position, Router router) {
+        super(router.get_name(), icon);
+        // super(router.get_name());
         this.position = position;
         this.router = router;
     }

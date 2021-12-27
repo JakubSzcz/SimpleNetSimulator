@@ -2,7 +2,9 @@ package Topology;
 
 import Devices.Devices.Router;
 import Devices.Link;
+import Icons.Icons;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Topology {
@@ -62,7 +64,7 @@ public class Topology {
         }
 
         // if is valid
-        routers.add(new RouterButton(position, new Router(name, int_number)));
+        routers.add(new RouterButton(Icons.icon.test(), position, new Router(name, int_number)));
         return AddRouterMessages.is_valid;
     }
 

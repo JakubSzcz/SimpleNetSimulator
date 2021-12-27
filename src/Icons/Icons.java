@@ -11,10 +11,10 @@ public class Icons {
     public static Icons icon = new Icons();
 
     // test icon
-    private final ImageIcon test_icon = new ImageIcon(getClass().getResource(PATH + "test_icon.png"));
+    private final Icon test_icon = new ImageIcon(PATH + "test_icon.png");
 
-    // router
-    private final ImageIcon router_icon = new ImageIcon(getClass().getResource(PATH + "router.png"));
+    // router icon
+    private final Icon router_icon = new ImageIcon(PATH + "test_icon.png");
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -24,12 +24,14 @@ public class Icons {
     private Icons(){}
 
     // test icon
-    public ImageIcon test(){
+    public Icon test(){
         return test_icon;
     }
 
     // router icon
-    public ImageIcon router(){
+    public Icon router(){
         return router_icon;
     }
+
+
 }
