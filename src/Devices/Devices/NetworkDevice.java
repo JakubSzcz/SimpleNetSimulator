@@ -119,4 +119,9 @@ public abstract class NetworkDevice extends Thread{
     public void clear_monitor(){
         monitor.clear();
     }
+
+    // name getter
+    public String get_name() {
+        return name;
+    }
 }
