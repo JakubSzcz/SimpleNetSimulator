@@ -1,5 +1,7 @@
 package GUI;
 
+import Topology.Topology;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +9,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class NetworkGUI {
+    /////////////////////////////////////////////////////////
+    //                 variables and objects               //
+    /////////////////////////////////////////////////////////
+
+    // swing
     private JPanel gui_panel;
     private JButton add_link;
     private JButton delete_link;
@@ -19,13 +26,31 @@ public class NetworkGUI {
     private JPanel left_margin;
     private JPanel right_margin;
     private JPanel topology_map;
-    private final AddRouterPopUp add_router_pop_up;
-    private boolean flag;
 
+    // popups
+    private final AddRouterPopUp add_router_pop_up;
+
+    // vars and objects
+    private boolean flag;
+    private final Topology topology = Topology.get_topology();
+
+    /////////////////////////////////////////////////////////
+    //                     functions                       //
+    /////////////////////////////////////////////////////////
+
+    // constructor
     public NetworkGUI() {
+        // appearance
         this.add_router.setBorder(BorderFactory.createEmptyBorder());
+
+        // popups
         this.add_router_pop_up = new AddRouterPopUp();
+
+        // vars
         this.flag = false;
+
+        //                      listeners                      //
+        // add router button
         add_router.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -33,6 +58,8 @@ public class NetworkGUI {
                 flag = true;
             }
         });
+
+        // map click
         topology_map.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -47,6 +74,7 @@ public class NetworkGUI {
         });
     }
 
+    // main
     public static void main(String[] args) {
         JFrame frame = new JFrame("Network Topology");
         frame.setContentPane(new NetworkGUI().gui_panel);
