@@ -39,7 +39,6 @@ public class RouterButton extends JButton {
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(router.get_name());
                 router_pop_up.set_router(router);
                 router_pop_up.refresh();
                 router_pop_up.setVisible(true);
