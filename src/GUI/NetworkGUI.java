@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Cursor;
 
 public class NetworkGUI extends Thread{
     /////////////////////////////////////////////////////////
@@ -69,6 +70,8 @@ public class NetworkGUI extends Thread{
             @Override
             public void actionPerformed(ActionEvent e) {
                 flag = true;
+                Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+                gui_panel.setCursor(cursor);
             }
         });
 
@@ -85,7 +88,8 @@ public class NetworkGUI extends Thread{
                     if (!isAlive()){
                         start();
                     }
-
+                    Cursor cursor = new Cursor(Cursor.DEFAULT_CURSOR);
+                    gui_panel.setCursor(cursor);
                 }
 
             }
