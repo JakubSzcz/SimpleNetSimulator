@@ -79,7 +79,11 @@ public class Topology {
     // delete router from topology
     public void delete_router(String name){
         for(RouterButton router : routers){
-            if (router.get_router().get_name().equals(name)){
+            Router router_to_check = router.get_router();
+            if (router_to_check.get_name().equals(name)){
+                for(Link link : links){
+                    //if(link.get_end1().equals())
+                }
                 routers.remove(router);
                 break;
             }
