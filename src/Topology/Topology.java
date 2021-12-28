@@ -73,7 +73,12 @@ public class Topology {
 
     // delete router from topology
     public void delete_router(String name){
-
+        for(RouterButton router : routers){
+            if (router.get_router().get_name().equals(name)){
+                routers.remove(router);
+                break;
+            }
+        }
     }
 
     // topology getter
@@ -118,5 +123,9 @@ public class Topology {
         // add new map
         panel.add(map);
         panel.revalidate();
+    }
+
+    public Router get_router(int ind){
+        return routers.get(ind).get_router();
     }
 }

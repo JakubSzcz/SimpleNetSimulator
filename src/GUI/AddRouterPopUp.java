@@ -114,6 +114,8 @@ public class AddRouterPopUp extends JDialog {
         // window terminate
         if (is_valid){
             topology.refresh(panel);
+            name_text_field.setText("");
+            int_number_text_field.setText("");
             dispose();
         }
     }
