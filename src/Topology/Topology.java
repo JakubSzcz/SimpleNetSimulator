@@ -100,7 +100,7 @@ public class Topology {
         for (RouterButton router: routers){
             if (router.get_router().get_name().equals(end1_array[0])){
                 end1_interface = router.get_router().get_interface(end1_int_number);
-            }else if (router.get_router().get_name().equals(end1_array[1])){
+            }else if (router.get_router().get_name().equals(end2_array[0])){
                 end2_interface = router.get_router().get_interface(end2_int_number);
             }
         }
