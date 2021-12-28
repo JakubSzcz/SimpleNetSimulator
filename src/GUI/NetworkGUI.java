@@ -94,7 +94,7 @@ public class NetworkGUI {
             }
         });
         //delete button
-        delete_link.addActionListener(new ActionListener() {
+        delete_router.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 delete_router_pop_up.refresh();
