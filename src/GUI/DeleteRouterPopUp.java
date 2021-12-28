@@ -33,7 +33,6 @@ public class DeleteRouterPopUp extends JDialog {
         setResizable(false);
         setLocation(200, 200);
 
-        // set flag
 
         ok_button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
