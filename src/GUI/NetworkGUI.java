@@ -50,7 +50,6 @@ public class NetworkGUI extends Thread{
     public NetworkGUI() {
 
         // appearance
-        this.add_router.setBorder(BorderFactory.createEmptyBorder());
 
         // popups
         this.router_pop_up = new RouterPopUp();

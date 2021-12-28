@@ -32,6 +32,4 @@ public class Icons {
     public Icon router(){
         return router_icon;
     }
-
-
 }

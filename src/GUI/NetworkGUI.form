@@ -44,33 +44,13 @@
               <toolTipText value="Delete Existing Link"/>
             </properties>
           </component>
-          <component id="7d5d8" class="javax.swing.JButton" binding="add_router">
-            <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="1" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-1"/>
-              <focusPainted value="false"/>
-              <foreground color="-1"/>
-              <horizontalAlignment value="0"/>
-              <icon value="Icons/img/test_icon.png"/>
-              <opaque value="true"/>
-              <rolloverEnabled value="true"/>
-              <selected value="false"/>
-              <text value=""/>
-              <toolTipText value="Add New Router"/>
-              <verticalAlignment value="0"/>
-            </properties>
-            <clientProperties>
-              <hideActionText class="java.lang.Boolean" value="false"/>
-            </clientProperties>
-          </component>
           <component id="2f269" class="javax.swing.JButton" binding="delete_router">
             <constraints>
               <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <focusPainted value="false"/>
+              <hideActionText value="true"/>
               <text value="Delete Router"/>
               <toolTipText value="Delete Existing Router"/>
             </properties>
@@ -118,6 +98,16 @@
             <border type="none"/>
             <children/>
           </grid>
+          <component id="ff9bb" class="javax.swing.JButton" binding="add_router">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <focusPainted value="false"/>
+              <text value="Add Router"/>
+              <toolTipText value="Add new router"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="11237" binding="topology_map" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
