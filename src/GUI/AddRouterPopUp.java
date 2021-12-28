@@ -25,8 +25,12 @@ public class AddRouterPopUp extends JDialog {
     // topology panel
     JPanel panel;
 
+    // popup for routers
+    RouterPopUp router_pop_up;
+
     // constructor
-    public AddRouterPopUp(JPanel panel) {
+    public AddRouterPopUp(JPanel panel, RouterPopUp router_pop_up) {
+        this.router_pop_up = router_pop_up;
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonAdd);
@@ -85,7 +89,7 @@ public class AddRouterPopUp extends JDialog {
             float index_x = (float)mouse_position.get_x() / panel.getWidth() * 20;
             float index_y = (float)mouse_position.get_y() / panel.getHeight() * 20;
             AddRouterMessages message = topology.add_router(
-                    new Position((int)index_x, (int)index_y),name, int_number);
+                    new Position((int)index_x, (int)index_y),name, int_number, router_pop_up);
             if (message == AddRouterMessages.name_is_taken){
                 is_valid = false;
                 warning_text_field.setText(message.toString());

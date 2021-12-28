@@ -1,7 +1,7 @@
 package Topology;
 
 import Devices.Devices.Router;
-import Icons.Icons;
+import GUI.RouterPopUp;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,15 +19,18 @@ public class RouterButton extends JButton {
     // actual router
     private final Router router;
 
+    // popup
+    private final RouterPopUp router_pop_up;
+
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    public RouterButton(Icon icon, Position position, Router router) {
+    public RouterButton(Icon icon, Position position, Router router, RouterPopUp router_pop_up) {
         super(router.get_name(), icon);
-        // super(router.get_name());
         this.position = position;
         this.router = router;
+        this.router_pop_up = router_pop_up;
         setBorder(BorderFactory.createEmptyBorder());
         setBackground(Color.WHITE);
         setFocusPainted(false);
@@ -37,6 +40,9 @@ public class RouterButton extends JButton {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(router.get_name());
+                router_pop_up.set_router(router);
+                router_pop_up.refresh();
+                router_pop_up.setVisible(true);
             }
         });
     }

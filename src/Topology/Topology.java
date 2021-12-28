@@ -2,6 +2,7 @@ package Topology;
 
 import Devices.Devices.Router;
 import Devices.Link;
+import GUI.RouterPopUp;
 import Icons.Icons;
 
 import javax.swing.*;
@@ -46,7 +47,7 @@ public class Topology {
     }
 
     // add router to topology
-    public AddRouterMessages add_router(Position position, String name, int int_number){
+    public AddRouterMessages add_router(Position position, String name, int int_number, RouterPopUp router_pop_up){
         // check if number of interfaces is not too high
         if (int_number > max_int_number){
             return AddRouterMessages.too_many_interfaces;
@@ -66,7 +67,7 @@ public class Topology {
         }
 
         // if is valid
-        routers.add(new RouterButton(Icons.icon.router(), position, new Router(name, int_number)));
+        routers.add(new RouterButton(Icons.icon.router(), position, new Router(name, int_number), router_pop_up));
         return AddRouterMessages.is_valid;
     }
 
@@ -85,12 +86,14 @@ public class Topology {
         return routers;
     }
 
-    //
+    // add router on screen
     public void refresh(JPanel panel){
         JPanel map = new JPanel(new GridLayout(20, 20));
         boolean flag;
+
         for (int i = 0; i < 400; i++){
             flag = false;
+            // add router
             for (RouterButton router: routers){
                 int index = router.get_position().get_x() + 20 * router.get_position().get_y();
                 if (index == i){
@@ -99,6 +102,7 @@ public class Topology {
                     break;
                 }
             }
+            // add white space
             if (!flag){
                 JPanel p = new JPanel();
                 p.setForeground(Color.WHITE);
@@ -106,9 +110,12 @@ public class Topology {
                 map.add(p);
             }
         }
+        // delete old map
         panel.removeAll();
         map.setBackground(Color.WHITE);
         map.setForeground(Color.WHITE);
+
+        // add new map
         panel.add(map);
         panel.revalidate();
     }

@@ -34,6 +34,7 @@ public class NetworkGUI {
 
     // popups
     private final AddRouterPopUp add_router_pop_up;
+    private final RouterPopUp router_pop_up;
 
     // vars and objects
     private boolean flag;
@@ -45,18 +46,17 @@ public class NetworkGUI {
 
     // constructor
     public NetworkGUI() {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Icons/img/router.png"));
-
         // appearance
         this.add_router.setBorder(BorderFactory.createEmptyBorder());
 
         // popups
-        this.add_router_pop_up = new AddRouterPopUp(topology_map);
+        this.router_pop_up = new RouterPopUp();
+        this.add_router_pop_up = new AddRouterPopUp(topology_map, router_pop_up);
 
         // vars
         this.flag = false;
 
-        //
+        // set topology_map layout to grid
         topology_map.setLayout(new GridLayout(1, 1 ));
 
         //                      listeners                      //

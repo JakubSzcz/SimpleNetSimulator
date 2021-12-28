@@ -124,4 +124,9 @@ public abstract class NetworkDevice extends Thread{
     public String get_name() {
         return name;
     }
+
+    // int number getter
+    public int get_int_number(){
+        return net_card.get_int_number();
+    }
 }
