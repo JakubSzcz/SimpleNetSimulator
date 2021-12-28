@@ -7,14 +7,14 @@ public class Icons {
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
 
-    private final String PATH = "Icons/img/";
+    private final String PATH = "/Icons/img/";
     public static Icons icon = new Icons();
 
     // test icon
-    private final Icon test_icon = new ImageIcon(PATH + "test_icon.png");
+    private final Icon test_icon = new ImageIcon(getClass().getResource(PATH + "test_icon.png"));
 
     // router icon
-    private final Icon router_icon = new ImageIcon(PATH + "test_icon.png");
+    private final Icon router_icon = new ImageIcon(getClass().getResource(PATH + "router.png"));
 
     /////////////////////////////////////////////////////////
     //                     functions                       //

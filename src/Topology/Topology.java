@@ -5,7 +5,9 @@ import Devices.Link;
 import Icons.Icons;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Topology {
     /////////////////////////////////////////////////////////
@@ -64,7 +66,7 @@ public class Topology {
         }
 
         // if is valid
-        routers.add(new RouterButton(Icons.icon.test(), position, new Router(name, int_number)));
+        routers.add(new RouterButton(Icons.icon.router(), position, new Router(name, int_number)));
         return AddRouterMessages.is_valid;
     }
 
@@ -81,5 +83,33 @@ public class Topology {
     // routers getter
     public ArrayList<RouterButton> get_routers(){
         return routers;
+    }
+
+    //
+    public void refresh(JPanel panel){
+        JPanel map = new JPanel(new GridLayout(20, 20));
+        boolean flag;
+        for (int i = 0; i < 400; i++){
+            flag = false;
+            for (RouterButton router: routers){
+                int index = router.get_position().get_x() + 20 * router.get_position().get_y();
+                if (index == i){
+                    map.add(router);
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag){
+                JPanel p = new JPanel();
+                p.setForeground(Color.WHITE);
+                p.setBackground(Color.WHITE);
+                map.add(p);
+            }
+        }
+        panel.removeAll();
+        map.setBackground(Color.WHITE);
+        map.setForeground(Color.WHITE);
+        panel.add(map);
+        panel.revalidate();
     }
 }

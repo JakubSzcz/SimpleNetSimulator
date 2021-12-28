@@ -4,8 +4,10 @@ import Devices.Devices.Router;
 import Topology.Topology;
 import Topology.Position;
 import Topology.RouterButton;
+import Icons.Icons;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -43,14 +45,19 @@ public class NetworkGUI {
 
     // constructor
     public NetworkGUI() {
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Icons/img/router.png"));
+
         // appearance
         this.add_router.setBorder(BorderFactory.createEmptyBorder());
 
         // popups
-        this.add_router_pop_up = new AddRouterPopUp();
+        this.add_router_pop_up = new AddRouterPopUp(topology_map);
 
         // vars
         this.flag = false;
+
+        //
+        topology_map.setLayout(new GridLayout(1, 1 ));
 
         //                      listeners                      //
         // add router button
@@ -70,17 +77,10 @@ public class NetworkGUI {
                     add_router_pop_up.set_mouse_position(new Position(e.getX(), e.getY()));
                     add_router_pop_up.setVisible(true);
                     flag = false;
-                    refresh();
                 }
 
             }
         });
-    }
-
-    // refresh
-    public void refresh(){
-        for(RouterButton router: topology.get_routers());
-
     }
 
     // main

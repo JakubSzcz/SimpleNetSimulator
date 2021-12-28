@@ -1,10 +1,12 @@
 package GUI;
 
 import Topology.Topology;
+import Icons.Icons;
 import Topology.AddRouterMessages;
 import Topology.Position;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class AddRouterPopUp extends JDialog {
@@ -20,12 +22,16 @@ public class AddRouterPopUp extends JDialog {
     Topology topology = Topology.get_topology();
     private Position mouse_position;
 
+    // topology panel
+    JPanel panel;
+
     // constructor
-    public AddRouterPopUp() {
+    public AddRouterPopUp(JPanel panel) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonAdd);
         setLocation(200, 200);
+        this.panel = panel;
 
         // appearance settings
         setSize(400, 150);
@@ -76,8 +82,10 @@ public class AddRouterPopUp extends JDialog {
         // check if int number is integer
         try{
             int_number = Integer.parseInt(string_int_number);
-            AddRouterMessages message = topology.add_router(new Position(mouse_position.get_x(), mouse_position.get_y()),
-                    name, int_number);
+            float index_x = (float)mouse_position.get_x() / panel.getWidth() * 20;
+            float index_y = (float)mouse_position.get_y() / panel.getHeight() * 20;
+            AddRouterMessages message = topology.add_router(
+                    new Position((int)index_x, (int)index_y),name, int_number);
             if (message == AddRouterMessages.name_is_taken){
                 is_valid = false;
                 warning_text_field.setText(message.toString());
@@ -101,6 +109,7 @@ public class AddRouterPopUp extends JDialog {
 
         // window terminate
         if (is_valid){
+            topology.refresh(panel);
             dispose();
         }
     }

@@ -4,6 +4,9 @@ import Devices.Devices.Router;
 import Icons.Icons;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class RouterButton extends JButton {
     /////////////////////////////////////////////////////////
@@ -25,6 +28,17 @@ public class RouterButton extends JButton {
         // super(router.get_name());
         this.position = position;
         this.router = router;
+        setBorder(BorderFactory.createEmptyBorder());
+        setBackground(Color.WHITE);
+        setFocusPainted(false);
+
+
+        this.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(router.get_name());
+            }
+        });
     }
 
     // position getter
