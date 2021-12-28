@@ -34,6 +34,7 @@ public class ICMP {
                     return to_return.toString();
                 }else if(source_address == -1){
                     to_return.append("localhost: Destination host unreachable.");
+                    return to_return.toString();
                 }
             //display 'Echo request'
             case 8:

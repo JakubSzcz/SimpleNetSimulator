@@ -3,6 +3,7 @@ package Topology;
 import Devices.Devices.NetworkInterface;
 import Devices.Devices.Router;
 import Devices.Link;
+import Devices.Routing.Route;
 import GUI.RouterPopUp;
 import Icons.Icons;
 
@@ -105,26 +106,51 @@ public class Topology {
         String[] end1_array = end1.split(": ");
         String[] end2_array = end2.split(": ");
 
+        // int numbers
+        int end1_int_number = Integer.parseInt(end1_array[1]);
+        int end2_int_number = Integer.parseInt(end2_array[1]);
+
+        // router names
+        String r1_name = end1_array[0];
+        String r2_name = end2_array[0];
+
+        // routers
+        RouterButton r1 = null;
+        RouterButton r2 = null;
+
+        for (RouterButton router: routers){
+            if (router.get_router().get_name().equals(end1_array[0])){
+                r1 = router;
+            }else if (router.get_router().get_name().equals(end2_array[0])){
+                r2 = router;
+            }
+        }
+
         // if link between same router
         if (end1_array[0].equals(end2_array[0])){
             return AddLinkMessages.same_router_chosen;
         }
-        int end1_int_number = Integer.parseInt(end1_array[1]);
-        int end2_int_number = Integer.parseInt(end2_array[1]);
+
+        // if link has already been established - not working
+        for (Link link : links){
+            if (link.get_end1() == r1.get_router().get_interface(end1_int_number) &&
+                    link.get_end2() == r2.get_router().get_interface(end2_int_number)){
+                return AddLinkMessages.link_already_established;
+            }else if(link.get_end2() == r1.get_router().get_interface(end1_int_number) &&
+                    link.get_end1() == r2.get_router().get_interface(end2_int_number)){
+                return AddLinkMessages.link_already_established;
+            }
+        }
 
         NetworkInterface end1_interface = null;
         NetworkInterface end2_interface = null;
         Position[] end_positions = new Position[2];
 
-        for (RouterButton router: routers){
-            if (router.get_router().get_name().equals(end1_array[0])){
-                end1_interface = router.get_router().get_interface(end1_int_number);
-                end_positions[0] = router.get_position();
-            }else if (router.get_router().get_name().equals(end2_array[0])){
-                end2_interface = router.get_router().get_interface(end2_int_number);
-                end_positions[1] = router.get_position();
-            }
-        }
+        end1_interface = r1.get_router().get_interface(end1_int_number);
+        end_positions[0] = r1.get_position();
+        end2_interface = r2.get_router().get_interface(end2_int_number);
+        end_positions[1] = r2.get_position();
+
         links.add(new Link(end1_interface, end2_interface));
         this.link_positions.add(end_positions);
         return AddLinkMessages.is_valid;

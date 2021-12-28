@@ -249,7 +249,9 @@ public class RouterPopUp extends JDialog implements Runnable{
                 // valid ip and mask
                 IPv4MessageTypes ip_message = IPv4.is_ip_valid(ip_address);
 
+                // if is valid
                 if (ip_message == IPv4MessageTypes.is_valid){
+                    router.add_line_to_monitor("Pinging with 32 bytes of data:");
                     for (int i = 0; i < 4; i++){
                         router.send_data(ICMP.create_echo_request(), IPv4.parse_to_long(ip_address));
                     }
@@ -260,6 +262,7 @@ public class RouterPopUp extends JDialog implements Runnable{
         });
     }
 
+    // actions after clicking up down button on interfaces
     private void up_down_interface(int int_number){
         if (router.get_interface(int_number).is_up()){
             router.down_interface(int_number);
@@ -269,16 +272,19 @@ public class RouterPopUp extends JDialog implements Runnable{
         refresh();
     }
 
+    // after clicking OK button
     private void onOK() {
         // add your code here
         dispose();
     }
 
+    // after clicking Cancel button
     private void onCancel() {
         // add your code here if necessary
         dispose();
     }
 
+    // refresh window conten
     public void refresh(){
         // int number
         int int_number = router.get_int_number();
@@ -287,6 +293,12 @@ public class RouterPopUp extends JDialog implements Runnable{
         int width = 450;
         int height = 550 + 25 * (int_number - 1);
         setSize(width, height);
+
+        // clear fields
+        ip_address_route_add.setText("");
+        mask_route_add.setText("");
+        ip_address_config.setText("");
+        mask_config.setText("");
 
         // ip address set
         JTextField[] ip_address = new JTextField[]{int0_ip_address, int1_ip_address, int2_ip_address,
@@ -309,11 +321,13 @@ public class RouterPopUp extends JDialog implements Runnable{
 
         // set ports combo box
         port_combo_box.removeAllItems();
+        add_route_combo_box.removeAllItems();
         for (int i = 0; i < int_number; i++){
             port_combo_box.addItem(i);
             add_route_combo_box.addItem(i);
         }
 
+        // set delete route combo box content
         RouteItem item;
         delete_route_combo_box.removeAllItems();
         for (int i = 0; i < router.get_routing_table_size(); i++){
@@ -366,10 +380,12 @@ public class RouterPopUp extends JDialog implements Runnable{
         }
     }
 
+    // router setter
     public void set_router(Router router){
         this.router = router;
     }
 
+    // Thread for monitor refreshing
     @Override
     public void run() {
         while (true){

@@ -1,5 +1,6 @@
 package GUI;
 
+import Devices.Link;
 import Topology.Topology;
 import Topology.AddLinkMessages;
 import Topology.RouterButton;
@@ -105,9 +106,21 @@ public class AddLinkPopUp extends JDialog {
         for (RouterButton router: topology.get_routers()){
             int_number = router.get_router().get_int_number();
             for (int i = 0; i < int_number; i++){
-                item = router.get_router().get_name() + ": " + i;
-                end1_combo_box.addItem(item);
-                end2_combo_box.addItem(item);
+                boolean taken = false;
+                for (Link link : topology.get_links()){
+                    if (router.get_router().get_interface(i) == link.get_end1()){
+                        taken = true;
+                        break;
+                    }else if (router.get_router().get_interface(i) == link.get_end2()){
+                        taken = true;
+                        break;
+                    }
+                }
+                if (!taken){
+                    item = router.get_router().get_name() + ": " + i;
+                    end1_combo_box.addItem(item);
+                    end2_combo_box.addItem(item);
+                }
             }
         }
     }
