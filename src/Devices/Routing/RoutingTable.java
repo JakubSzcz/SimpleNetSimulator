@@ -123,15 +123,6 @@ public class RoutingTable {
     }
 
     // to string method
-    /*public String to_string(){
-        String to_return = "";
-        for (Route route : routes){
-            to_return = to_return + route.to_string() + "\n";
-        }
-        return to_return;
-    }*/
-
-    // to string method
     public String to_string(){
         StringBuilder to_return = new StringBuilder();
         for(Route route : routes){
@@ -139,5 +130,10 @@ public class RoutingTable {
             to_return.append("\n");
         }
         return to_return.toString();
+    }
+
+    // return number of entries
+    public int get_size(){
+        return routes.size();
     }
 }
