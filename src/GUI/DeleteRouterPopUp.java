@@ -21,8 +21,6 @@ public class DeleteRouterPopUp extends JDialog {
     private ArrayList<RouterButton> routers;
     // topology_map
     JPanel panel;
-    //flag
-    private boolean flag;
 
     // constructor
     public DeleteRouterPopUp(JPanel panel) {
@@ -36,15 +34,10 @@ public class DeleteRouterPopUp extends JDialog {
         setLocation(200, 200);
 
         // set flag
-        if(routers.isEmpty()){
-            this.flag = false;
-        }else{
-            this.flag = true;
-        }
 
         ok_button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if(flag) {
+                if(!routers.isEmpty()) {
                     onOK();
                 }
             }
