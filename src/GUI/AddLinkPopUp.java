@@ -1,6 +1,7 @@
 package GUI;
 
 import Topology.Topology;
+import Topology.AddLinkMessages;
 import Topology.RouterButton;
 
 import javax.swing.*;
@@ -70,9 +71,17 @@ public class AddLinkPopUp extends JDialog {
 
     private void onAdd() {
         // add link
+        AddLinkMessages message = topology.add_link(end1_combo_box.getSelectedItem().toString(),
+                end2_combo_box.getSelectedItem().toString());
+
+        if (message == AddLinkMessages.same_router_chosen){
+            warning_text_field.setText(message.toString());
+        }
 
         // window terminate
-        dispose();
+        if (message == AddLinkMessages.is_valid){
+            dispose();
+        }
     }
 
     private void onCancel() {

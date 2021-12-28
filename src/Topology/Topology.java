@@ -1,5 +1,6 @@
 package Topology;
 
+import Devices.Devices.NetworkInterface;
 import Devices.Devices.Router;
 import Devices.Link;
 import GUI.RouterPopUp;
@@ -79,6 +80,32 @@ public class Topology {
                 break;
             }
         }
+    }
+
+    // add link to topology
+    public AddLinkMessages add_link(String end1, String end2){
+        String[] end1_array = end1.split(": ");
+        String[] end2_array = end2.split(": ");
+
+        // if link between same router
+        if (end1_array[0].equals(end2_array[0])){
+            return AddLinkMessages.same_router_chosen;
+        }
+        int end1_int_number = Integer.parseInt(end1_array[1]);
+        int end2_int_number = Integer.parseInt(end2_array[1]);
+
+        NetworkInterface end1_interface = null;
+        NetworkInterface end2_interface = null;
+
+        for (RouterButton router: routers){
+            if (router.get_router().get_name().equals(end1_array[0])){
+                end1_interface = router.get_router().get_interface(end1_int_number);
+            }else if (router.get_router().get_name().equals(end1_array[1])){
+                end2_interface = router.get_router().get_interface(end2_int_number);
+            }
+        }
+        links.add(new Link(end1_interface, end2_interface));
+        return AddLinkMessages.is_valid;
     }
 
     // topology getter
