@@ -949,7 +949,7 @@
                 </constraints>
                 <properties/>
               </component>
-              <component id="65300" class="javax.swing.JButton" binding="deleteButton" default-binding="true">
+              <component id="65300" class="javax.swing.JButton" binding="delete_route_button">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -965,16 +965,6 @@
             </constraints>
             <properties>
               <text value="Monitor"/>
-            </properties>
-          </component>
-          <component id="143d1" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
-            <constraints>
-              <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="50"/>
-              </grid>
-            </constraints>
-            <properties>
-              <editable value="false"/>
             </properties>
           </component>
           <grid id="3baf6" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -1001,7 +991,7 @@
                       <text value="ping"/>
                     </properties>
                   </component>
-                  <component id="b8b0e" class="javax.swing.JTextField">
+                  <component id="b8b0e" class="javax.swing.JTextField" binding="ip_address_ping">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="70" height="-1"/>
@@ -1010,10 +1000,10 @@
                     <properties>
                       <editable value="true"/>
                       <horizontalAlignment value="0"/>
-                      <text value="192.168.1.1"/>
+                      <text value=""/>
                     </properties>
                   </component>
-                  <component id="757d5" class="javax.swing.JButton" binding="sendButton" default-binding="true">
+                  <component id="757d5" class="javax.swing.JButton" binding="send_ping_button">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -1039,7 +1029,7 @@
                       <text value="show routing table"/>
                     </properties>
                   </component>
-                  <component id="3818b" class="javax.swing.JButton" binding="showButton" default-binding="true">
+                  <component id="3818b" class="javax.swing.JButton" binding="show_routing_table_button">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -1051,6 +1041,28 @@
               </grid>
             </children>
           </grid>
+          <scrollpane id="5148" binding="scroll">
+            <constraints>
+              <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="200"/>
+              </grid>
+            </constraints>
+            <properties>
+              <focusCycleRoot value="true"/>
+              <focusTraversalPolicyProvider value="true"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="143d1" class="javax.swing.JTextArea" binding="monitor_text_area">
+                <constraints/>
+                <properties>
+                  <editable value="false"/>
+                  <focusCycleRoot value="false"/>
+                  <focusTraversalPolicyProvider value="false"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
         </children>
       </grid>
       <component id="cb3c2" class="javax.swing.JTextField" binding="header_name">

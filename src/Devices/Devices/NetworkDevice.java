@@ -129,4 +129,9 @@ public abstract class NetworkDevice extends Thread{
     public int get_int_number(){
         return net_card.get_int_number();
     }
+
+    // monitor add line
+    public void add_line_to_monitor(String line){
+        monitor.add_line(line);
+    }
 }

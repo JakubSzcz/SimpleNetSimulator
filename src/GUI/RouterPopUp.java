@@ -4,6 +4,7 @@ import Devices.Devices.Router;
 import Devices.Link;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
+import Protocols.Data.ICMP;
 import Protocols.Packets.IPv4;
 import Protocols.Packets.IPv4MessageTypes;
 import Topology.Topology;
@@ -12,7 +13,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class RouterPopUp extends JDialog {
+// set routes delete route combo box
+class RouteItem{
+    public Route route;
+
+    @Override
+    public String toString(){
+        return route.to_string();
+    }
+
+}
+
+public class RouterPopUp extends JDialog implements Runnable{
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
@@ -57,10 +69,10 @@ public class RouterPopUp extends JDialog {
     private JButton ip_address_apply;
     private JButton ip_address_delete;
     private JComboBox delete_route_combo_box;
-    private JButton deleteButton;
-    private JTextArea textArea1;
-    private JButton showButton;
-    private JButton sendButton;
+    private JButton delete_route_button;
+    private JTextArea monitor_text_area;
+    private JButton show_routing_table_button;
+    private JButton send_ping_button;
     // int state
     private JButton int0_state;
     private JButton int1_state;
@@ -83,6 +95,8 @@ public class RouterPopUp extends JDialog {
     private JTextField ip_address_route_add;
     private JTextField mask_route_add;
     private JComboBox add_route_combo_box;
+    private JScrollPane scroll;
+    private JTextField ip_address_ping;
 
     // int state set
     JButton[] int_state = new JButton[]{int0_state, int1_state, int2_state, int3_state,
@@ -99,6 +113,7 @@ public class RouterPopUp extends JDialog {
     /////////////////////////////////////////////////////////
 
     public RouterPopUp() {
+        // swing
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -107,18 +122,17 @@ public class RouterPopUp extends JDialog {
         setLocation(200, 100);
         setResizable(false);
         header_name.setBorder(BorderFactory.createEmptyBorder());
+        JScrollBar scroll = new JScrollBar();
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        // start thread
+        Thread t = new Thread(this);
+        t.start();
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        // button ok
+        buttonOK.addActionListener(e -> onOK());
+
+        // button cancel
+        buttonCancel.addActionListener(e -> onCancel());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -129,138 +143,118 @@ public class RouterPopUp extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         // up/down interface 0
-        int0_state.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up_down_interface(0);
-            }
-        });
+        int0_state.addActionListener(e -> up_down_interface(0));
 
         // up/down interface 1
-        int1_state.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up_down_interface(1);
-            }
-        });
+        int1_state.addActionListener(e -> up_down_interface(1));
 
         // up/down interface 2
-        int2_state.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up_down_interface(2);
-            }
-        });
+        int2_state.addActionListener(e -> up_down_interface(2));
 
         // up/down interface 3
-        int3_state.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up_down_interface(3);
-            }
-        });
+        int3_state.addActionListener(e -> up_down_interface(3));
 
         // up/down interface 4
-        int4_state.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up_down_interface(4);
-            }
-        });
+        int4_state.addActionListener(e -> up_down_interface(4));
 
         // up/down interface 5
-        int5_state.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up_down_interface(5);
-            }
-        });
+        int5_state.addActionListener(e -> up_down_interface(5));
 
         // up/down interface 6
-        int6_state.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up_down_interface(6);
-            }
-        });
+        int6_state.addActionListener(e -> up_down_interface(6));
 
         // up/down interface 7
-        int7_state.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up_down_interface(7);
-            }
-        });
+        int7_state.addActionListener(e -> up_down_interface(7));
 
         // ip address apply
-        ip_address_apply.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // get interface
-                String int_number_string = port_combo_box.getSelectedItem().toString();
-                int int_number = Integer.parseInt(int_number_string);
+        ip_address_apply.addActionListener(e -> {
+            // get interface
+            String int_number_string = port_combo_box.getSelectedItem().toString();
+            int int_number = Integer.parseInt(int_number_string);
 
-                // get ip and mask
-                String ip_address = ip_address_config.getText();
-                String mask = mask_config.getText();
+            // get ip and mask
+            String ip_address = ip_address_config.getText();
+            String mask = mask_config.getText();
 
-                // valid ip and mask
-                IPv4MessageTypes ip_message = IPv4.is_ip_valid(ip_address);
-                IPv4MessageTypes mask_message = IPv4.is_mask_valid(mask);
+            // valid ip and mask
+            IPv4MessageTypes ip_message = IPv4.is_ip_valid(ip_address);
+            IPv4MessageTypes mask_message = IPv4.is_mask_valid(mask);
 
-                // if valid apply
-                if (ip_message == IPv4MessageTypes.is_valid && mask_message == IPv4MessageTypes.is_valid){
-                    System.out.println("true");
-                    router.set_interface_ip(int_number, IPv4.parse_to_long(ip_address),
-                            IPv4.parse_mask_to_long(mask));
-                    refresh();
-                }else{
-
-                }
+            // if valid apply
+            if (ip_message == IPv4MessageTypes.is_valid && mask_message == IPv4MessageTypes.is_valid){
+                router.set_interface_ip(int_number, IPv4.parse_to_long(ip_address),
+                        IPv4.parse_mask_to_long(mask));
+                refresh();
+            }else{
+                // TODO: errors
+                router.add_line_to_monitor(ip_message.toString());
             }
         });
 
         // delete ip
-        ip_address_delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // get interface
-                String int_number_string = port_combo_box.getSelectedItem().toString();
-                int int_number = Integer.parseInt(int_number_string);
-                router.set_interface_ip(int_number, -1, -1);
-                refresh();
-            }
+        ip_address_delete.addActionListener(e -> {
+            // get interface
+            String int_number_string = port_combo_box.getSelectedItem().toString();
+            int int_number = Integer.parseInt(int_number_string);
+            router.set_interface_ip(int_number, -1, -1);
+            refresh();
         });
 
         // route add
-        route_add.addActionListener(new ActionListener() {
+        route_add.addActionListener(e -> {
+            // get interface
+            String int_number_string = add_route_combo_box.getSelectedItem().toString();
+            int int_number = Integer.parseInt(int_number_string);
+
+            // get ip and mask
+            String ip_address = ip_address_route_add.getText();
+            String mask = mask_route_add.getText();
+
+            // valid ip and mask
+            IPv4MessageTypes ip_message = IPv4.is_ip_valid(ip_address);
+            IPv4MessageTypes mask_message = IPv4.is_mask_valid(mask);
+
+            if (ip_message == IPv4MessageTypes.is_valid && mask_message == IPv4MessageTypes.is_valid){
+                System.out.println("true");
+                router.add_static_route(IPv4.parse_to_long(ip_address),IPv4.parse_mask_to_long(mask), int_number);
+                refresh();
+            }else{
+                // TODO: errors
+            }
+        });
+
+        // delete route button
+        delete_route_button.addActionListener(e -> {
+            RouteItem route_item = (RouteItem) delete_route_combo_box.getSelectedItem();
+            router.delete_route(route_item.route);
+            refresh();
+        });
+
+        // show routing table button
+        show_routing_table_button.addActionListener(e -> {
+            router.add_line_to_monitor("Router routing table:");
+            router.add_line_to_monitor(router.get_routing_table_string());
+        });
+
+        // ping button
+        send_ping_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // get interface
-                String int_number_string = add_route_combo_box.getSelectedItem().toString();
-                int int_number = Integer.parseInt(int_number_string);
-
                 // get ip and mask
-                String ip_address = ip_address_route_add.getText();
-                String mask = mask_route_add.getText();
+                String ip_address = ip_address_ping.getText();
 
                 // valid ip and mask
                 IPv4MessageTypes ip_message = IPv4.is_ip_valid(ip_address);
-                IPv4MessageTypes mask_message = IPv4.is_mask_valid(mask);
 
-                if (ip_message == IPv4MessageTypes.is_valid && mask_message == IPv4MessageTypes.is_valid){
-                    System.out.println("true");
-                    router.add_static_route(IPv4.parse_to_long(ip_address),IPv4.parse_mask_to_long(mask), int_number);
-                    refresh();
+                if (ip_message == IPv4MessageTypes.is_valid){
+                    for (int i = 0; i < 4; i++){
+                        router.send_data(ICMP.create_echo_request(), IPv4.parse_to_long(ip_address));
+                    }
                 }else{
-
+                    // TODO: errors
                 }
             }
         });
@@ -291,7 +285,7 @@ public class RouterPopUp extends JDialog {
 
         // set window size
         int width = 450;
-        int height = 450 + 25 * (int_number - 1);
+        int height = 550 + 25 * (int_number - 1);
         setSize(width, height);
 
         // ip address set
@@ -320,13 +314,13 @@ public class RouterPopUp extends JDialog {
             add_route_combo_box.addItem(i);
         }
 
-        // set routes delete route combo box
-        String item;
+        RouteItem item;
         delete_route_combo_box.removeAllItems();
         for (int i = 0; i < router.get_routing_table_size(); i++){
             Route route = router.get_route(i);
             if (route.code() == RouteCode.S){
-                item = route.to_string();
+                item = new RouteItem();
+                item.route = route;
                 delete_route_combo_box.addItem(item);
             }
         }
@@ -374,5 +368,23 @@ public class RouterPopUp extends JDialog {
 
     public void set_router(Router router){
         this.router = router;
+    }
+
+    @Override
+    public void run() {
+        while (true){
+            if (router != null){
+                String old_text = monitor_text_area.getText();
+                if (!old_text.trim().equals(router.get_monitor().trim())){
+                    scroll.getVerticalScrollBar().setValue(monitor_text_area.getHeight());
+                }
+                monitor_text_area.setText(router.get_monitor());
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
