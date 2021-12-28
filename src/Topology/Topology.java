@@ -76,13 +76,23 @@ public class Topology {
         return AddRouterMessages.is_valid;
     }
 
-    // delete router from topology
+    // delete router and it's links from topology
     public void delete_router(String name){
         for(RouterButton router : routers){
             Router router_to_check = router.get_router();
             if (router_to_check.get_name().equals(name)){
-                for(Link link : links){
-                    //if(link.get_end1().equals())
+                if(!links.isEmpty()) {
+                    for (int j = 0; j < links.size(); j++) {
+                        for (int i = 0; i < router_to_check.get_int_number(); i++) {
+                            if (links.get(j).get_end1().equals(router_to_check.get_interface(i))) {
+                                link_positions.remove(link_positions.get(j));
+                                links.remove(links.get(j));
+                            }else if (links.get(j).get_end2().equals(router_to_check.get_interface(i))) {
+                                link_positions.remove(link_positions.get(j));
+                                links.remove(links.get(j));
+                            }
+                        }
+                    }
                 }
                 routers.remove(router);
                 break;
