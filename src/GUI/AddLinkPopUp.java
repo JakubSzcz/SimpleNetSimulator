@@ -48,7 +48,9 @@ public class AddLinkPopUp extends JDialog {
         // button Add
         buttonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onAdd();
+                if(topology.get_routers().size() > 1 ) {
+                    onAdd();
+                }
             }
         });
 
