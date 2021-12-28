@@ -53,6 +53,9 @@ public class IPv4 {
     // return is_valid if given mask is correct, return no valid message type if mask is not correct
     public static IPv4MessageTypes is_mask_valid(String net_mask){
         if(net_mask.length() <=3 ) {
+            if(net_mask.equals("")){
+                return IPv4MessageTypes.mask_value_is_incorrect;
+            }
             net_mask = net_mask.trim();
             // removing '/' if was given
             StringBuilder net_mask_builder = new StringBuilder(net_mask);
