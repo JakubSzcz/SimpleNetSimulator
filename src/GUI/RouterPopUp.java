@@ -97,6 +97,7 @@ public class RouterPopUp extends JDialog implements Runnable{
     private JComboBox add_route_combo_box;
     private JScrollPane scroll;
     private JTextField ip_address_ping;
+    private JButton clear_monitor_button;
 
     // int state set
     JButton[] int_state = new JButton[]{int0_state, int1_state, int2_state, int3_state,
@@ -189,8 +190,12 @@ public class RouterPopUp extends JDialog implements Runnable{
                         IPv4.parse_mask_to_long(mask));
                 refresh();
             }else{
-                // TODO: errors
-                router.add_line_to_monitor(ip_message.toString());
+                if (ip_message != IPv4MessageTypes.is_valid){
+                    router.add_line_to_monitor("Wrong ip address");
+                }
+                if (mask_message != IPv4MessageTypes.is_valid){
+                    router.add_line_to_monitor("Wrong mask");
+                }
             }
         });
 
@@ -222,7 +227,13 @@ public class RouterPopUp extends JDialog implements Runnable{
                 router.add_static_route(IPv4.parse_to_long(ip_address),IPv4.parse_mask_to_long(mask), int_number);
                 refresh();
             }else{
-                // TODO: errors
+                if (ip_message != IPv4MessageTypes.is_valid){
+                    router.add_line_to_monitor("Wrong ip address");
+                }
+                if (mask_message != IPv4MessageTypes.is_valid){
+                    router.add_line_to_monitor("Wrong mask");
+                }
+
             }
         });
 
@@ -256,9 +267,15 @@ public class RouterPopUp extends JDialog implements Runnable{
                         router.send_data(ICMP.create_echo_request(), IPv4.parse_to_long(ip_address));
                     }
                 }else{
-                    // TODO: errors
+                    if (ip_message != IPv4MessageTypes.is_valid){
+                        router.add_line_to_monitor("Wrong ip address");
+                    }
                 }
             }
+        });
+        // clear monitor button
+        clear_monitor_button.addActionListener(e -> {
+            router.clear_monitor();
         });
     }
 

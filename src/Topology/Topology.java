@@ -131,7 +131,8 @@ public class Topology {
             return AddLinkMessages.same_router_chosen;
         }
 
-        // if link has already been established - not working
+        // if link has already been established
+        // TODO: this is not working
         for (Link link : links){
             if (link.get_end1() == r1.get_router().get_interface(end1_int_number) &&
                     link.get_end2() == r2.get_router().get_interface(end2_int_number)){
