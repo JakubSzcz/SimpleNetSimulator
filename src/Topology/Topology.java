@@ -201,4 +201,9 @@ public class Topology {
     public ArrayList<Link> get_links(){
         return links;
     }
+
+    // max router getter
+    public int get_max_int_number(){
+        return max_int_number;
+    }
 }

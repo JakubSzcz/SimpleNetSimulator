@@ -226,23 +226,23 @@ class RoutingTableTest {
                 IPv4.parse_mask_to_long("24"), -1, 0);
 
         // tests
-        assertEquals(route1.to_string() + "\n", r1.get_routing_table());
-        assertEquals(route1.to_string() + "\n", r2.get_routing_table());
+        assertEquals(route1.to_string() + "\n", r1.get_routing_table_string());
+        assertEquals(route1.to_string() + "\n", r2.get_routing_table_string());
 
         // interfaces down
         r1.down_interface(0);
         r2.down_interface(0);
 
         // tests
-        assertEquals("", r1.get_routing_table());
-        assertEquals("", r2.get_routing_table());
+        assertEquals("", r1.get_routing_table_string());
+        assertEquals("", r2.get_routing_table_string());
 
         // interfaces up
         r1.up_interface(0);
         r2.up_interface(0);
 
         // tests
-        assertEquals(route1.to_string() + "\n", r1.get_routing_table());
-        assertEquals(route1.to_string() + "\n", r2.get_routing_table());
+        assertEquals(route1.to_string() + "\n", r1.get_routing_table_string());
+        assertEquals(route1.to_string() + "\n", r2.get_routing_table_string());
     }
 }

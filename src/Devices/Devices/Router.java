@@ -243,7 +243,17 @@ public class Router extends NetworkDevice {
     }
 
     // return routing table in string
-    public String get_routing_table(){
+    public String get_routing_table_string(){
         return routing_table.to_string();
+    }
+
+    // get routing table size
+    public int get_routing_table_size(){
+        return routing_table.get_size();
+    }
+
+    // route getter
+    public Route get_route(int route_index){
+        return routing_table.get_route(route_index);
     }
 }
