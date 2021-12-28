@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class NetworkGUI {
+public class NetworkGUI extends Thread{
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
@@ -48,13 +48,14 @@ public class NetworkGUI {
 
     // constructor
     public NetworkGUI() {
+
         // appearance
         this.add_router.setBorder(BorderFactory.createEmptyBorder());
 
         // popups
         this.router_pop_up = new RouterPopUp();
         this.add_router_pop_up = new AddRouterPopUp(topology_map, router_pop_up);
-        this.add_link_pop_up = new AddLinkPopUp();
+        this.add_link_pop_up = new AddLinkPopUp(topology_map);
         this.delete_router_pop_up = new DeleteRouterPopUp(topology_map);
 
         // vars
@@ -81,6 +82,11 @@ public class NetworkGUI {
                     add_router_pop_up.set_mouse_position(new Position(e.getX(), e.getY()));
                     add_router_pop_up.setVisible(true);
                     flag = false;
+                    // thread start
+                    if (!isAlive()){
+                        start();
+                    }
+
                 }
 
             }
@@ -101,6 +107,18 @@ public class NetworkGUI {
                 delete_router_pop_up.setVisible(true);
             }
         });
+    }
+
+    @Override
+    public void run() {
+        while (true){
+            topology.draw_links(topology_map);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // main

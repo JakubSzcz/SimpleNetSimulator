@@ -22,6 +22,9 @@ public class Topology {
     // links in topology
     ArrayList<Link> links;
 
+    // links end positions
+    ArrayList<Position[]> link_positions;
+
     // topology object
     private static final Topology topology = new Topology();
 
@@ -45,6 +48,7 @@ public class Topology {
     private Topology(){
         routers = new ArrayList<>();
         links = new ArrayList<>();
+        link_positions = new ArrayList<>();
     }
 
     // add router to topology
@@ -96,15 +100,19 @@ public class Topology {
 
         NetworkInterface end1_interface = null;
         NetworkInterface end2_interface = null;
+        Position[] end_positions = new Position[2];
 
         for (RouterButton router: routers){
             if (router.get_router().get_name().equals(end1_array[0])){
                 end1_interface = router.get_router().get_interface(end1_int_number);
+                end_positions[0] = router.get_position();
             }else if (router.get_router().get_name().equals(end2_array[0])){
                 end2_interface = router.get_router().get_interface(end2_int_number);
+                end_positions[1] = router.get_position();
             }
         }
         links.add(new Link(end1_interface, end2_interface));
+        this.link_positions.add(end_positions);
         return AddLinkMessages.is_valid;
     }
 
@@ -139,6 +147,7 @@ public class Topology {
                 JPanel p = new JPanel();
                 p.setForeground(Color.WHITE);
                 p.setBackground(Color.WHITE);
+                p.setVisible(false);
                 map.add(p);
             }
         }
@@ -150,6 +159,21 @@ public class Topology {
         // add new map
         panel.add(map);
         panel.revalidate();
+    }
+
+    public void draw_links(JPanel panel){
+        Graphics2D graphics2D = (Graphics2D) panel.getGraphics();
+        for (int i = 0; i < links.size(); i++){
+            float x_half = (float)panel.getWidth() / 40;
+            float y_half = (float)panel.getHeight() / 40;
+            float end1_x = (float) link_positions.get(i)[0].get_x() * panel.getWidth() / 20;
+            float end1_y = (float) link_positions.get(i)[0].get_y() * panel.getHeight() / 20;
+            float end2_x = (float) link_positions.get(i)[1].get_x() * panel.getWidth() / 20;
+            float end2_y = (float) link_positions.get(i)[1].get_y() * panel.getHeight() / 20;
+            graphics2D.drawLine((int)(end1_x + x_half), (int)(end1_y + y_half),
+                    (int)(end2_x + x_half), (int)(end2_y + y_half));
+        }
+
     }
 
     public Router get_router(int ind){

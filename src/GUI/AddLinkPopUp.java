@@ -23,15 +23,21 @@ public class AddLinkPopUp extends JDialog {
     // vars and objects
     private Topology topology = Topology.get_topology();
 
+    // panel
+    JPanel panel;
+
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    public AddLinkPopUp() {
+    public AddLinkPopUp(JPanel panel) {
         // swing
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonAdd);
+
+        // initialization
+        this.panel = panel;
 
         // appearance settings
         setSize(200, 200);
