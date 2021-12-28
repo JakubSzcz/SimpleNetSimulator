@@ -36,6 +36,7 @@ public class NetworkGUI {
     private final AddRouterPopUp add_router_pop_up;
     private final RouterPopUp router_pop_up;
     private final AddLinkPopUp add_link_pop_up;
+    private final DeleteRouterPopUp delete_router_pop_up;
 
     // vars and objects
     private boolean flag;
@@ -54,6 +55,7 @@ public class NetworkGUI {
         this.router_pop_up = new RouterPopUp();
         this.add_router_pop_up = new AddRouterPopUp(topology_map, router_pop_up);
         this.add_link_pop_up = new AddLinkPopUp();
+        this.delete_router_pop_up = new DeleteRouterPopUp(topology_map);
 
         // vars
         this.flag = false;
@@ -89,6 +91,14 @@ public class NetworkGUI {
             public void actionPerformed(ActionEvent e) {
                 add_link_pop_up.refresh();
                 add_link_pop_up.setVisible(true);
+            }
+        });
+        //delete button
+        delete_link.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                delete_router_pop_up.refresh();
+                delete_router_pop_up.setVisible(true);
             }
         });
     }
