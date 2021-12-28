@@ -5,7 +5,10 @@
     <constraints>
       <xy x="48" y="54" width="585" height="818"/>
     </constraints>
-    <properties/>
+    <properties>
+      <maximumSize width="-1" height="-1"/>
+      <opaque value="false"/>
+    </properties>
     <border type="none"/>
     <children>
       <grid id="94766" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -52,7 +55,7 @@
       <grid id="e3588" binding="JPanel" layout-manager="GridLayoutManager" row-count="18" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="4" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="4" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none" title=""/>
@@ -78,19 +81,6 @@
                   <text value="int0"/>
                 </properties>
               </component>
-              <grid id="e6b" binding="int0_state" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-4510639"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
               <component id="481" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -143,6 +133,22 @@
                   <text value="unconnected"/>
                 </properties>
               </component>
+              <component id="fa79f" class="javax.swing.JButton" binding="int0_state">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="5" height="5"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-4510639"/>
+                  <enabled value="true"/>
+                  <foreground color="-4510639"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <text value=""/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="3c734" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -161,19 +167,6 @@
                   <text value="int1"/>
                 </properties>
               </component>
-              <grid id="c48f7" binding="int1_state" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-4510639"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
               <component id="36f1e" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -226,6 +219,22 @@
                   <text value="unconnected"/>
                 </properties>
               </component>
+              <component id="a5af9" class="javax.swing.JButton" binding="int1_state">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="5" height="5"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-4510639"/>
+                  <enabled value="true"/>
+                  <foreground color="-4510639"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <text value=""/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="2ba18" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -244,19 +253,6 @@
                   <text value="int2"/>
                 </properties>
               </component>
-              <grid id="76b15" binding="int2_state" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-4510639"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
               <component id="555b0" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -309,6 +305,22 @@
                   <text value="unconnected"/>
                 </properties>
               </component>
+              <component id="4fc26" class="javax.swing.JButton" binding="int2_state">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="5" height="5"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-4510639"/>
+                  <enabled value="true"/>
+                  <foreground color="-4510639"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <text value=""/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="e1218" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -327,19 +339,6 @@
                   <text value="int3"/>
                 </properties>
               </component>
-              <grid id="45ff6" binding="int3_state" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-4510639"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
               <component id="aaa84" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -392,6 +391,22 @@
                   <text value="unconnected"/>
                 </properties>
               </component>
+              <component id="c9871" class="javax.swing.JButton" binding="int3_state">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="5" height="5"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-4510639"/>
+                  <enabled value="true"/>
+                  <foreground color="-4510639"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <text value=""/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="69c34" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -410,19 +425,6 @@
                   <text value="int4"/>
                 </properties>
               </component>
-              <grid id="b60ef" binding="int4_state" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-4510639"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
               <component id="dbfab" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -475,6 +477,22 @@
                   <text value="unconnected"/>
                 </properties>
               </component>
+              <component id="36c68" class="javax.swing.JButton" binding="int4_state">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="5" height="5"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-4510639"/>
+                  <enabled value="true"/>
+                  <foreground color="-4510639"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <text value=""/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="236e5" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -493,19 +511,6 @@
                   <text value="int5"/>
                 </properties>
               </component>
-              <grid id="53595" binding="int5_state" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-4510639"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
               <component id="b9cf9" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -558,6 +563,22 @@
                   <text value="unconnected"/>
                 </properties>
               </component>
+              <component id="6f5ed" class="javax.swing.JButton" binding="int5_state">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="5" height="5"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-4510639"/>
+                  <enabled value="true"/>
+                  <foreground color="-4510639"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <text value=""/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="206b6" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -576,19 +597,6 @@
                   <text value="int6"/>
                 </properties>
               </component>
-              <grid id="442e0" binding="int6_state" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-4510639"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
               <component id="6efa7" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -641,6 +649,22 @@
                   <text value="unconnected"/>
                 </properties>
               </component>
+              <component id="4303f" class="javax.swing.JButton" binding="int6_state">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="5" height="5"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-4510639"/>
+                  <enabled value="true"/>
+                  <foreground color="-4510639"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <text value=""/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="ab1fd" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -659,19 +683,6 @@
                   <text value="int7"/>
                 </properties>
               </component>
-              <grid id="66801" binding="int7_state" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-4510639"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
               <component id="f72fe" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -722,6 +733,22 @@
                   <editable value="false"/>
                   <horizontalAlignment value="0"/>
                   <text value="unconnected"/>
+                </properties>
+              </component>
+              <component id="6f42d" class="javax.swing.JButton" binding="int7_state">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="5" height="5"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-4510639"/>
+                  <enabled value="true"/>
+                  <foreground color="-4510639"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <text value=""/>
                 </properties>
               </component>
             </children>

@@ -51,4 +51,14 @@ public class Link extends Thread{
             }
         }
     }
+
+    // end1 getter
+    public NetworkInterface get_end1(){
+        return end_1;
+    }
+
+    // end2 getter
+    public NetworkInterface get_end2(){
+        return end_2;
+    }
 }

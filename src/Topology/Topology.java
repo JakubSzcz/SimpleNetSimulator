@@ -172,11 +172,19 @@ public class Topology {
             float end2_y = (float) link_positions.get(i)[1].get_y() * panel.getHeight() / 20;
             graphics2D.drawLine((int)(end1_x + x_half), (int)(end1_y + y_half),
                     (int)(end2_x + x_half), (int)(end2_y + y_half));
+            float x_average = (end1_x + end2_x + 2 * x_half) / 2;
+            float y_average = (end1_y + end2_y + 2 * y_half) / 2;
+            graphics2D.drawString("link " + i, (int)x_average, (int)y_average);
         }
-
     }
 
+    // routers
     public Router get_router(int ind){
         return routers.get(ind).get_router();
+    }
+
+    // links getter
+    public ArrayList<Link> get_links(){
+        return links;
     }
 }
