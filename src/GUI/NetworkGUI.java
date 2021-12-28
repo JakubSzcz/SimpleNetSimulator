@@ -35,6 +35,7 @@ public class NetworkGUI {
     // popups
     private final AddRouterPopUp add_router_pop_up;
     private final RouterPopUp router_pop_up;
+    private final AddLinkPopUp add_link_pop_up;
 
     // vars and objects
     private boolean flag;
@@ -52,6 +53,7 @@ public class NetworkGUI {
         // popups
         this.router_pop_up = new RouterPopUp();
         this.add_router_pop_up = new AddRouterPopUp(topology_map, router_pop_up);
+        this.add_link_pop_up = new AddLinkPopUp();
 
         // vars
         this.flag = false;
@@ -79,6 +81,14 @@ public class NetworkGUI {
                     flag = false;
                 }
 
+            }
+        });
+        // add link button
+        add_link.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                add_link_pop_up.refresh();
+                add_link_pop_up.setVisible(true);
             }
         });
     }

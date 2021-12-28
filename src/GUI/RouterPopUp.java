@@ -77,6 +77,7 @@ public class RouterPopUp extends JDialog {
 
         // appearance settings
         setSize(500, 630);
+        setLocation(200, 100);
         setResizable(false);
 
         buttonOK.addActionListener(new ActionListener() {

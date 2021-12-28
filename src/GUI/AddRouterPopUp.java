@@ -10,6 +10,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class AddRouterPopUp extends JDialog {
+    /////////////////////////////////////////////////////////
+    //                 variables and objects               //
+    /////////////////////////////////////////////////////////
+
     // form objects
     private JPanel contentPane;
     private JButton buttonAdd;
@@ -28,18 +32,22 @@ public class AddRouterPopUp extends JDialog {
     // popup for routers
     RouterPopUp router_pop_up;
 
+    /////////////////////////////////////////////////////////
+    //                     functions                       //
+    /////////////////////////////////////////////////////////
+
     // constructor
     public AddRouterPopUp(JPanel panel, RouterPopUp router_pop_up) {
         this.router_pop_up = router_pop_up;
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonAdd);
-        setLocation(200, 200);
         this.panel = panel;
 
         // appearance settings
         setSize(400, 150);
         setResizable(false);
+        setLocation(200, 200);
         warning_text_field.setBorder(BorderFactory.createEmptyBorder());
 
         buttonAdd.addActionListener(new ActionListener() {
