@@ -2,7 +2,9 @@ package Devices;
 
 import Devices.Devices.NetworkInterface;
 
-public class Link extends Thread{
+import java.io.Serializable;
+
+public class Link extends Thread implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

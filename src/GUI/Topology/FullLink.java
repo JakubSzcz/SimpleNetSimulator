@@ -2,7 +2,9 @@ package GUI.Topology;
 
 import Devices.Link;
 
-public class FullLink {
+import java.io.Serializable;
+
+public class FullLink implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

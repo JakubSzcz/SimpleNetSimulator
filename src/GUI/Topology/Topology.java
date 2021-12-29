@@ -395,6 +395,7 @@ public class Topology {
             // add lists to file
             output_stream.writeObject(routers_list);
             output_stream.writeObject(positions_list);
+            output_stream.writeObject(flinks);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -414,6 +415,7 @@ public class Topology {
                 topology.add_router(positions_list.get(i), routers_list.get(i).get_name(),
                         routers_list.get(i).get_int_number(),router_pop_up);
             }
+            links = (ArrayList<Link>)input_stream.readObject();
             topology.refresh(panel);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
