@@ -4,15 +4,12 @@ import GUI.Topology.Topology;
 import GUI.Topology.Position;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
-import java.io.File;
-import java.util.Locale;
 
 public class NetworkGUI extends Thread{
     /////////////////////////////////////////////////////////
@@ -26,7 +23,7 @@ public class NetworkGUI extends Thread{
     private JButton add_router;
     private JButton delete_router;
     private JButton save_topology;
-    private JButton open_topology;
+    private JButton load_topology;
     private JPanel buttons;
     private JPanel down_margin;
     private JPanel left_margin;
@@ -38,27 +35,11 @@ public class NetworkGUI extends Thread{
     private final RouterPopUp router_pop_up;
     private final AddLinkPopUp add_link_pop_up;
     private final DeleteRouterPopUp delete_router_pop_up;
+    private final DeleteLinkPopUp delete_link_pop_up;
 
     // vars and objects
     private boolean flag;
     private final Topology topology = Topology.get_topology();
-
-    // File Filter
-    private final FileFilter sns_file_filter = new FileFilter() {
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory()){
-                return true;
-            }
-            String filename = f.getName().toLowerCase();
-            return filename.endsWith(".sns");
-        }
-
-        @Override
-        public String getDescription() {
-            return "Simple Net Simulator (* sns)";
-        }
-    };
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -71,6 +52,7 @@ public class NetworkGUI extends Thread{
         this.add_router_pop_up = new AddRouterPopUp(topology_map, router_pop_up);
         this.add_link_pop_up = new AddLinkPopUp(topology_map);
         this.delete_router_pop_up = new DeleteRouterPopUp(topology_map);
+        this.delete_link_pop_up = new DeleteLinkPopUp(topology_map);
 
         // add router flag
         this.flag = false;
@@ -117,46 +99,16 @@ public class NetworkGUI extends Thread{
             add_link_pop_up.setVisible(true);
         });
 
-        //delete button
+        //delete router button
         delete_router.addActionListener(e -> {
             delete_router_pop_up.refresh();
             delete_router_pop_up.setVisible(true);
         });
 
-        // save button
-        save_topology.addActionListener(e -> {
-            // create new file chooser
-            JFileChooser file_chooser = new JFileChooser();
-            file_chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-            // allow files with sns extension only
-            file_chooser.setFileFilter(sns_file_filter);
-            file_chooser.setDialogTitle("Choose a file");
-            int user_selection = file_chooser.showSaveDialog(gui_panel);
-
-            // if user chose a file
-            if (user_selection == JFileChooser.APPROVE_OPTION){
-                File file_to_save = file_chooser.getSelectedFile();
-                topology.save(file_to_save.getAbsolutePath() + ".sns");
-            }
-        });
-
-        // open button
-        open_topology.addActionListener(e -> {
-            // create new file chooser
-            JFileChooser file_chooser = new JFileChooser();
-            file_chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-            // allow files with sns extension only
-            file_chooser.setFileFilter(sns_file_filter);
-            file_chooser.setDialogTitle("Choose a file");
-            int user_selection = file_chooser.showOpenDialog(gui_panel);
-
-            // if user chose a file
-            if (user_selection == JFileChooser.APPROVE_OPTION){
-                File file_to_open = file_chooser.getSelectedFile();
-                topology.open(file_to_open.getAbsolutePath() + ".sns");
-            }
+        // delete link button
+        delete_link.addActionListener(e -> {
+            delete_link_pop_up.refresh();
+            delete_link_pop_up.setVisible(true);
         });
     }
 

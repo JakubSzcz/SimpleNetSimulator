@@ -42,7 +42,7 @@ public class DeleteRouterPopUp extends JDialog {
         getRootPane().setDefaultButton(ok_button);
 
         // init
-        routers = topology.get_routers();
+        this.routers = topology.get_routers();
         this.panel = panel;
 
         // appearance settings
@@ -57,6 +57,7 @@ public class DeleteRouterPopUp extends JDialog {
             }
         });
 
+
         // cancel button
         cancel_button.addActionListener(e -> onCancel());
 
@@ -69,7 +70,8 @@ public class DeleteRouterPopUp extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        delete_router_content.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        delete_router_content.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,
+                0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     // if ok button was clicked
@@ -78,7 +80,6 @@ public class DeleteRouterPopUp extends JDialog {
         String to_delete = router_to_delete.getSelectedItem().toString();
         topology.delete_router(to_delete);
         topology.refresh(panel);
-
         // window terminate
         dispose();
     }
