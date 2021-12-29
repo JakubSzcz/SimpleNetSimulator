@@ -107,7 +107,8 @@ public class NetworkGUI extends Thread{
 
         // delete link button
         delete_link.addActionListener(e -> {
-                delete_link_pop_up.setVisible(true);
+            delete_link_pop_up.refresh();
+            delete_link_pop_up.setVisible(true);
         });
     }
 

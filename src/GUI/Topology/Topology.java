@@ -24,6 +24,9 @@ public class Topology {
     // links end positions
     ArrayList<Position[]> link_positions;
 
+    // Full Links (name + link + position)
+    ArrayList<FullLink> flinks;
+
     // topology object
     private static final Topology topology = new Topology();
 
@@ -48,6 +51,7 @@ public class Topology {
         routers = new ArrayList<>();
         links = new ArrayList<>();
         link_positions = new ArrayList<>();
+        flinks = new ArrayList<>();
     }
 
     // add router to topology
@@ -92,9 +96,20 @@ public class Topology {
                             // check if any of router interfaces is included in searched link
                             // and if so, delete given link
                             if (links.get(j).get_end1().equals(router_to_check.get_interface(i))) {
+                                // deleting from FullLink
+                                for(int k = 0; k < flinks.size(); k++){
+                                    if(flinks.get(k).get_link().equals(links.get(j))){
+                                        flinks.remove(flinks.get(k));
+                                    }
+                                }
                                 link_positions.remove(link_positions.get(j));
                                 links.remove(links.get(j));
                             }else if (links.get(j).get_end2().equals(router_to_check.get_interface(i))) {
+                                for(int k = 0; k < flinks.size(); k++){
+                                    if(flinks.get(k).get_link().equals(links.get(j))){
+                                        flinks.remove(flinks.get(k));
+                                    }
+                                }
                                 link_positions.remove(link_positions.get(j));
                                 links.remove(links.get(j));
                             }
@@ -178,20 +193,37 @@ public class Topology {
         end_positions[0] = r1.get_position();
         end_positions[1] = r2.get_position();
 
-        links.add(new Link(end1_interface, end2_interface));
+        Link link_to_add = new Link(end1_interface, end2_interface);
+        links.add(link_to_add);
+        FullLink to_add = new FullLink(link_to_add, end_positions, get_link_name(flinks));
+        flinks.add(to_add);
         link_positions.add(end_positions);
         return AddLinkMessages.is_valid;
     }
 
     //delete link
     public void delete_link(String name){
-        // get index of link to delete
-        int ind = Integer.parseInt(String.valueOf(name.charAt(name.length()-1)));
-        // find link to delete and its position
-        Link link_to_delete;
-        Position links_position;
-        for(int i  = 0; i < links.size(); i++){
-            //if(links.get(i).getName())
+        // if there is no links -> break
+        if(!links.isEmpty()) {
+            // find link to delete
+            name = name.trim();
+            for (int i = 0; i < flinks.size(); i++) {
+                if (flinks.get(i).get_name().equals(name)) {
+                    // delete link from links
+                    for (int j = 0; j < links.size(); j++) {
+                        if (links.get(j).equals(flinks.get(i).get_link())) {
+                            links.remove(links.get(j));
+                            link_positions.remove(link_positions.get(j));
+                            //log
+                            //System.out.println("usuwa link");
+                        }
+                    }
+                    // delete link from flinks
+                    flinks.remove(flinks.get(i));
+                    //log
+                    //System.out.println("Usuwa flink");
+                }
+            }
         }
     }
 
@@ -236,16 +268,16 @@ public class Topology {
 
     public void draw_links(JPanel panel){
         Graphics2D graphics2D = (Graphics2D) panel.getGraphics();
-        for (int i = 0; i < links.size(); i++){
+        for (int i = 0; i < flinks.size(); i++){
             // half of rectangle on which routers are placed
             float x_half = (float)panel.getWidth() / 40;
             float y_half = (float)panel.getHeight() / 40;
 
             // link ends coordinates
-            float end1_x = (float) link_positions.get(i)[0].get_x() * panel.getWidth() / 20;
-            float end1_y = (float) link_positions.get(i)[0].get_y() * panel.getHeight() / 20;
-            float end2_x = (float) link_positions.get(i)[1].get_x() * panel.getWidth() / 20;
-            float end2_y = (float) link_positions.get(i)[1].get_y() * panel.getHeight() / 20;
+            float end1_x = (float) flinks.get(i).get_link_position()[0].get_x() * panel.getWidth() / 20;
+            float end1_y = (float) flinks.get(i).get_link_position()[0].get_y() * panel.getHeight() / 20;
+            float end2_x = (float) flinks.get(i).get_link_position()[1].get_x() * panel.getWidth() / 20;
+            float end2_y = (float) flinks.get(i).get_link_position()[1].get_y() * panel.getHeight() / 20;
 
             // draw link
             graphics2D.drawLine((int)(end1_x + x_half), (int)(end1_y + y_half),
@@ -256,9 +288,32 @@ public class Topology {
             float y_average = (end1_y + end2_y + 2 * y_half) / 2;
 
             // draw link name
-            graphics2D.drawString("link " + i, (int)x_average, (int)y_average);
+            graphics2D.drawString("link " + flinks.get(i).get_name(), (int)x_average, (int)y_average);
         }
     }
+
+    // checks if name of link is already taken
+    public String get_link_name(ArrayList<FullLink> flinks){
+        if(flinks.isEmpty()){
+            return "0";
+        }
+        int possible_name = 0;
+        while (true){
+            boolean flag = true;
+            for(int i = 0; i < flinks.size(); i++){
+                if(flinks.get(i).get_name().equals(String.valueOf(possible_name))){
+                    possible_name++;
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                break;
+            }
+        }
+        return String.valueOf(possible_name);
+    }
+
     // getters:
 
     // topology getter
@@ -302,6 +357,8 @@ public class Topology {
     }
 
     // links position getter
-    public ArrayList<Position[]> get_link_positions() { return link_positions;
-    }
+    public ArrayList<Position[]> get_link_positions() { return link_positions;}
+
+    // flinks getter
+    public ArrayList<FullLink> get_flinks(){ return flinks;}
 }
