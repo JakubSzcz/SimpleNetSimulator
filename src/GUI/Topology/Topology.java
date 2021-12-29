@@ -8,6 +8,7 @@ import GUI.Icons.Icons;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Topology {
@@ -280,5 +281,15 @@ public class Topology {
     // min name characters getter
     public int get_min_name_characters() {
         return min_name_characters;
+    }
+
+    // save topology to file
+    public void save(String file_name){
+
+    }
+
+    // open topology from file
+    public void open(String file_name){
+
     }
 }

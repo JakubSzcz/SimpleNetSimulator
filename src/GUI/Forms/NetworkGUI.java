@@ -4,10 +4,15 @@ import GUI.Topology.Topology;
 import GUI.Topology.Position;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.io.File;
+import java.util.Locale;
 
 public class NetworkGUI extends Thread{
     /////////////////////////////////////////////////////////
@@ -21,7 +26,7 @@ public class NetworkGUI extends Thread{
     private JButton add_router;
     private JButton delete_router;
     private JButton save_topology;
-    private JButton load_topology;
+    private JButton open_topology;
     private JPanel buttons;
     private JPanel down_margin;
     private JPanel left_margin;
@@ -37,6 +42,23 @@ public class NetworkGUI extends Thread{
     // vars and objects
     private boolean flag;
     private final Topology topology = Topology.get_topology();
+
+    // File Filter
+    private final FileFilter sns_file_filter = new FileFilter() {
+        @Override
+        public boolean accept(File f) {
+            if (f.isDirectory()){
+                return true;
+            }
+            String filename = f.getName().toLowerCase();
+            return filename.endsWith(".sns");
+        }
+
+        @Override
+        public String getDescription() {
+            return "Simple Net Simulator (* sns)";
+        }
+    };
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -99,6 +121,42 @@ public class NetworkGUI extends Thread{
         delete_router.addActionListener(e -> {
             delete_router_pop_up.refresh();
             delete_router_pop_up.setVisible(true);
+        });
+
+        // save button
+        save_topology.addActionListener(e -> {
+            // create new file chooser
+            JFileChooser file_chooser = new JFileChooser();
+            file_chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+            // allow files with sns extension only
+            file_chooser.setFileFilter(sns_file_filter);
+            file_chooser.setDialogTitle("Choose a file");
+            int user_selection = file_chooser.showSaveDialog(gui_panel);
+
+            // if user chose a file
+            if (user_selection == JFileChooser.APPROVE_OPTION){
+                File file_to_save = file_chooser.getSelectedFile();
+                topology.save(file_to_save.getAbsolutePath() + ".sns");
+            }
+        });
+
+        // open button
+        open_topology.addActionListener(e -> {
+            // create new file chooser
+            JFileChooser file_chooser = new JFileChooser();
+            file_chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+            // allow files with sns extension only
+            file_chooser.setFileFilter(sns_file_filter);
+            file_chooser.setDialogTitle("Choose a file");
+            int user_selection = file_chooser.showOpenDialog(gui_panel);
+
+            // if user chose a file
+            if (user_selection == JFileChooser.APPROVE_OPTION){
+                File file_to_open = file_chooser.getSelectedFile();
+                topology.open(file_to_open.getAbsolutePath() + ".sns");
+            }
         });
     }
 
