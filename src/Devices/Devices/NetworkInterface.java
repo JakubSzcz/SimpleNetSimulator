@@ -2,11 +2,12 @@ package Devices.Devices;
 
 import Protocols.Frame.Frame;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NetworkInterface {
+public class NetworkInterface implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

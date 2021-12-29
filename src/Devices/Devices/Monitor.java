@@ -1,8 +1,9 @@
 package Devices.Devices;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Monitor {
+public class Monitor implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

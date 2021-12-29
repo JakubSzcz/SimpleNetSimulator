@@ -151,7 +151,7 @@ public class NetworkGUI extends Thread{
             int user_selection = file_chooser.showOpenDialog(gui_panel);
 
             if (user_selection == JFileChooser.APPROVE_OPTION){
-                topology.open(file_chooser.getSelectedFile().getAbsolutePath());
+                topology.open(file_chooser.getSelectedFile().getAbsolutePath(), router_pop_up, topology_map);
             }
         });
     }

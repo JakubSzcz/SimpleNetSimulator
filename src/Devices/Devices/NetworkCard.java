@@ -2,11 +2,12 @@ package Devices.Devices;
 
 import Protocols.Frame.Frame;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.ArrayList;
 
-public class NetworkCard {
+public class NetworkCard implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

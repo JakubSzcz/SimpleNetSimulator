@@ -3,9 +3,10 @@ package Devices.Routing;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class RoutingTable {
+public class RoutingTable implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

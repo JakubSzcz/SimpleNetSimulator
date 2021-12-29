@@ -8,6 +8,7 @@ import GUI.Icons.Icons;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Topology {
@@ -268,27 +269,27 @@ public class Topology {
 
     public void draw_links(JPanel panel){
         Graphics2D graphics2D = (Graphics2D) panel.getGraphics();
-        for (int i = 0; i < flinks.size(); i++){
+        for (FullLink flink : flinks) {
             // half of rectangle on which routers are placed
-            float x_half = (float)panel.getWidth() / 40;
-            float y_half = (float)panel.getHeight() / 40;
+            float x_half = (float) panel.getWidth() / 40;
+            float y_half = (float) panel.getHeight() / 40;
 
             // link ends coordinates
-            float end1_x = (float) flinks.get(i).get_link_position()[0].get_x() * panel.getWidth() / 20;
-            float end1_y = (float) flinks.get(i).get_link_position()[0].get_y() * panel.getHeight() / 20;
-            float end2_x = (float) flinks.get(i).get_link_position()[1].get_x() * panel.getWidth() / 20;
-            float end2_y = (float) flinks.get(i).get_link_position()[1].get_y() * panel.getHeight() / 20;
+            float end1_x = (float) flink.get_link_position()[0].get_x() * panel.getWidth() / 20;
+            float end1_y = (float) flink.get_link_position()[0].get_y() * panel.getHeight() / 20;
+            float end2_x = (float) flink.get_link_position()[1].get_x() * panel.getWidth() / 20;
+            float end2_y = (float) flink.get_link_position()[1].get_y() * panel.getHeight() / 20;
 
             // draw link
-            graphics2D.drawLine((int)(end1_x + x_half), (int)(end1_y + y_half),
-                    (int)(end2_x + x_half), (int)(end2_y + y_half));
+            graphics2D.drawLine((int) (end1_x + x_half), (int) (end1_y + y_half),
+                    (int) (end2_x + x_half), (int) (end2_y + y_half));
 
             // link name coordinates
             float x_average = (end1_x + end2_x + 2 * x_half) / 2;
             float y_average = (end1_y + end2_y + 2 * y_half) / 2;
 
             // draw link name
-            graphics2D.drawString("link " + flinks.get(i).get_name(), (int)x_average, (int)y_average);
+            graphics2D.drawString("link " + flink.get_name(), (int) x_average, (int) y_average);
         }
     }
 
@@ -300,8 +301,8 @@ public class Topology {
         int possible_name = 0;
         while (true){
             boolean flag = true;
-            for(int i = 0; i < flinks.size(); i++){
-                if(flinks.get(i).get_name().equals(String.valueOf(possible_name))){
+            for (FullLink flink : flinks) {
+                if (flink.get_name().equals(String.valueOf(possible_name))) {
                     possible_name++;
                     flag = false;
                     break;
@@ -362,11 +363,60 @@ public class Topology {
     // flinks getter
     public ArrayList<FullLink> get_flinks(){ return flinks;}
 
-    public void save(String file_name){
-
+    // topology clear
+    public void clear(){
+        routers.clear();
+        flinks.clear();
     }
 
-    public void open(String file_name){
+    public void save(String file_name){
+        if (file_name.length() > 3){
+            String extension = file_name.substring(file_name.length() - 4);
+            if (!extension.equals(".sns")){
+                file_name = file_name + ".sns";
+            }
+        }else{
+            file_name = file_name + ".sns";
+        }
+        try {
+            // new output stream object
+            ObjectOutputStream output_stream = new ObjectOutputStream(new FileOutputStream(file_name));
+            // routers ArrayList
+            ArrayList<Router> routers_list = new ArrayList<>();
+            // router Positions ArrayList
+            ArrayList<Position> positions_list = new ArrayList<>();
 
+            // add routers and positions to list
+            for (RouterButton router : routers){
+                routers_list.add(router.get_router());
+                positions_list.add(router.get_position());
+            }
+
+            // add lists to file
+            output_stream.writeObject(routers_list);
+            output_stream.writeObject(positions_list);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void open(String file_name, RouterPopUp router_pop_up, JPanel panel){
+        try {
+            ObjectInputStream input_stream = new ObjectInputStream(new FileInputStream(file_name));
+            topology.clear();
+            // routers ArrayList
+            ArrayList<Router> routers_list = (ArrayList<Router>)input_stream.readObject();
+            // router Positions ArrayList
+            ArrayList<Position> positions_list = (ArrayList<Position>)input_stream.readObject();
+
+            // add routers to topology
+            for (int i = 0; i < routers_list.size(); i++){
+                topology.add_router(positions_list.get(i), routers_list.get(i).get_name(),
+                        routers_list.get(i).get_int_number(),router_pop_up);
+            }
+            topology.refresh(panel);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

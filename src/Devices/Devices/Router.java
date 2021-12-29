@@ -12,9 +12,10 @@ import Protocols.Packets.IPv4;
 import Protocols.Packets.IPv4Packet;
 import Protocols.Packets.Packet;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Router extends NetworkDevice {
+public class Router extends NetworkDevice implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

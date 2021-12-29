@@ -2,7 +2,9 @@ package Devices.Devices;
 
 import Protocols.Frame.Frame;
 
-public abstract class NetworkDevice extends Thread{
+import java.io.Serializable;
+
+public abstract class NetworkDevice extends Thread implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
