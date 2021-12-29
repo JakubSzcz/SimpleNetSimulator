@@ -1,6 +1,7 @@
 package GUI.Forms;
 
 import Devices.Link;
+import GUI.Topology.FullLink;
 import GUI.Topology.Topology;
 import GUI.Topology.AddLinkMessages;
 import GUI.Topology.RouterButton;
@@ -65,7 +66,8 @@ public class AddLinkPopUp extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void onAdd() {
@@ -118,11 +120,11 @@ public class AddLinkPopUp extends JDialog {
                 boolean taken = false;
 
                 // check if interfaces of router are connected to any link
-                for (Link link : topology.get_links()){
-                    if (router.get_router().get_interface(i) == link.get_end1()){
+                for (FullLink flink : topology.get_flinks()){
+                    if (router.get_router().get_interface(i) == flink.get_link().get_end1()){
                         taken = true;
                         break;
-                    }else if (router.get_router().get_interface(i) == link.get_end2()){
+                    }else if (router.get_router().get_interface(i) == flink.get_link().get_end2()){
                         taken = true;
                         break;
                     }

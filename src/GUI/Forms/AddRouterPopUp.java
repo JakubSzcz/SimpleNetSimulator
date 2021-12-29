@@ -127,6 +127,7 @@ public class AddRouterPopUp extends JDialog {
             // clear fields
             name_text_field.setText("");
             int_number_text_field.setText("");
+            warning_text_field.setText("");
 
             // terminate window
             dispose();
@@ -138,6 +139,7 @@ public class AddRouterPopUp extends JDialog {
         // clear fields
         name_text_field.setText("");
         int_number_text_field.setText("");
+        warning_text_field.setText("");
 
         // terminate window
         dispose();

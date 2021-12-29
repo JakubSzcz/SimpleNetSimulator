@@ -19,12 +19,6 @@ public class Topology {
     // routers in topology
     ArrayList<RouterButton> routers;
 
-    // links in topology
-    ArrayList<Link> links;
-
-    // links end positions
-    ArrayList<Position[]> link_positions;
-
     // Full Links (name + link + position)
     ArrayList<FullLink> flinks;
 
@@ -50,8 +44,6 @@ public class Topology {
     // constructor
     private Topology(){
         routers = new ArrayList<>();
-        links = new ArrayList<>();
-        link_positions = new ArrayList<>();
         flinks = new ArrayList<>();
     }
 
@@ -90,29 +82,27 @@ public class Topology {
             Router router_to_check = router.get_router();
             if (router_to_check.get_name().equals(name)){
                 // check if it contains any links
-                if(!links.isEmpty()) {
+                if(!flinks.isEmpty()) {
                     // iterate trough links in order to find link attached to router
-                    for (int j = 0; j < links.size(); j++) {
-                        for (int i = 0; i < router_to_check.get_int_number(); i++) {
-                            // check if any of router interfaces is included in searched link
-                            // and if so, delete given link
-                            if (links.get(j).get_end1().equals(router_to_check.get_interface(i))) {
-                                // deleting from FullLink
-                                for(int k = 0; k < flinks.size(); k++){
-                                    if(flinks.get(k).get_link().equals(links.get(j))){
-                                        flinks.remove(flinks.get(k));
-                                    }
+                    boolean is_deleted = true;
+                    while(is_deleted){
+                        is_deleted = false;
+                        for (FullLink flink : flinks) {
+                            for (int i = 0; i < router_to_check.get_int_number(); i++) {
+                                // check if any of router interfaces is included in searched link
+                                // and if so, delete given link
+                                if (flink.get_link().get_end1().equals(router_to_check.get_interface(i))) {
+                                    flinks.remove(flink);
+                                    is_deleted = true;
+                                    break;
+                                } else if (flink.get_link().get_end2().equals(router_to_check.get_interface(i))) {
+                                    flinks.remove(flink);
+                                    is_deleted = true;
+                                    break;
                                 }
-                                link_positions.remove(link_positions.get(j));
-                                links.remove(links.get(j));
-                            }else if (links.get(j).get_end2().equals(router_to_check.get_interface(i))) {
-                                for(int k = 0; k < flinks.size(); k++){
-                                    if(flinks.get(k).get_link().equals(links.get(j))){
-                                        flinks.remove(flinks.get(k));
-                                    }
-                                }
-                                link_positions.remove(link_positions.get(j));
-                                links.remove(links.get(j));
+                            }
+                            if(is_deleted){
+                                break;
                             }
                         }
                     }
@@ -157,7 +147,7 @@ public class Topology {
 
         // if link has already been established
         if (r1 != null && r2 != null){
-            for (Link link : links){
+            for (FullLink flink : flinks){
                 // find router connected to link
                 RouterButton end1_router = null;
                 RouterButton end2_router = null;
@@ -166,9 +156,9 @@ public class Topology {
                     // iterate interfaces on router
                     for (int i = 0; i < router.get_router().get_int_number(); i++){
                         // check if interface on link is the interface on router
-                        if (link.get_end1() == router.get_router().get_interface(i)){
+                        if (flink.get_link().get_end1() == router.get_router().get_interface(i)){
                             end1_router = router;
-                        }else if (link.get_end2() == router.get_router().get_interface(i)){
+                        }else if (flink.get_link().get_end2() == router.get_router().get_interface(i)){
                             end2_router = router;
                         }
                     }
@@ -194,35 +184,25 @@ public class Topology {
         end_positions[0] = r1.get_position();
         end_positions[1] = r2.get_position();
 
+        // adding flink to flinks
         Link link_to_add = new Link(end1_interface, end2_interface);
-        links.add(link_to_add);
         FullLink to_add = new FullLink(link_to_add, end_positions, get_link_name(flinks));
         flinks.add(to_add);
-        link_positions.add(end_positions);
         return AddLinkMessages.is_valid;
     }
 
     //delete link
     public void delete_link(String name){
-        // if there is no links -> break
-        if(!links.isEmpty()) {
-            // find link to delete
+        // if there is no flinks -> break
+        if(!flinks.isEmpty()) {
+            // find flink to delete
             name = name.trim();
             for (int i = 0; i < flinks.size(); i++) {
                 if (flinks.get(i).get_name().equals(name)) {
-                    // delete link from links
-                    for (int j = 0; j < links.size(); j++) {
-                        if (links.get(j).equals(flinks.get(i).get_link())) {
-                            links.remove(links.get(j));
-                            link_positions.remove(link_positions.get(j));
-                            //log
-                            //System.out.println("usuwa link");
-                        }
-                    }
                     // delete link from flinks
                     flinks.remove(flinks.get(i));
                     //log
-                    //System.out.println("Usuwa flink");
+                    //System.out.println("deletes flink");
                 }
             }
         }
@@ -332,11 +312,6 @@ public class Topology {
         return routers.get(int_number).get_router();
     }
 
-    // links getter
-    public ArrayList<Link> get_links(){
-        return links;
-    }
-
     // max router number getter
     public int get_max_int_number(){
         return max_int_number;
@@ -356,9 +331,6 @@ public class Topology {
     public int get_min_name_characters() {
         return min_name_characters;
     }
-
-    // links position getter
-    public ArrayList<Position[]> get_link_positions() { return link_positions;}
 
     // flinks getter
     public ArrayList<FullLink> get_flinks(){ return flinks;}
@@ -415,7 +387,7 @@ public class Topology {
                 topology.add_router(positions_list.get(i), routers_list.get(i).get_name(),
                         routers_list.get(i).get_int_number(),router_pop_up);
             }
-            links = (ArrayList<Link>)input_stream.readObject();
+            flinks = (ArrayList<FullLink>)input_stream.readObject();
             topology.refresh(panel);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

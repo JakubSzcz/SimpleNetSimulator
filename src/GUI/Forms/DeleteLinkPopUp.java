@@ -23,10 +23,6 @@ public class DeleteLinkPopUp extends JDialog {
     Topology topology = Topology.get_topology();
     //topology map
     private JPanel panel;
-    // links
-    private ArrayList<Link> links;
-    // links position
-    private ArrayList<Position[]> link_positions;
     // flinks
     private ArrayList<FullLink> flinks;
 
@@ -44,13 +40,11 @@ public class DeleteLinkPopUp extends JDialog {
 
         // initialization
         this.panel = panel;
-        this.links = topology.get_links();
-        this.link_positions = topology.get_link_positions();
         this.flinks = topology.get_flinks();
 
         ok_button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if(!links.isEmpty() && !flinks.isEmpty()) {
+                if(!flinks.isEmpty()) {
                     onOK();
                 }
             }

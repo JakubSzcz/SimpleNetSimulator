@@ -142,7 +142,8 @@ public class RouterPopUp extends JDialog implements Runnable{
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,
+                0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         // up/down interface 0
         int0_state.addActionListener(e -> up_down_interface(0));
@@ -379,12 +380,12 @@ public class RouterPopUp extends JDialog implements Runnable{
         // link state
         for (int i = 0; i < int_number; i++){
             link_state[i].setText("unconnected");
-            for (int j = 0; j < topology.get_links().size(); j++){
-                if (topology.get_links().get(j).get_end1() == router.get_interface(i)){
-                    link_state[i].setText("link " + j);
+            for (int j = 0; j < topology.get_flinks().size(); j++){
+                if (topology.get_flinks().get(j).get_link().get_end1() == router.get_interface(i)){
+                    link_state[i].setText("link " + topology.get_flinks().get(j).get_name());
                     break;
-                }else if (topology.get_links().get(j).get_end2() == router.get_interface(i)){
-                    link_state[i].setText("link " + j);
+                }else if (topology.get_flinks().get(j).get_link().get_end2() == router.get_interface(i)){
+                    link_state[i].setText("link " + topology.get_flinks().get(j).get_name());
                     break;
                 }
             }
