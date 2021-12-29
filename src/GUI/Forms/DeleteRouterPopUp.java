@@ -42,7 +42,7 @@ public class DeleteRouterPopUp extends JDialog {
         getRootPane().setDefaultButton(ok_button);
 
         // init
-        routers = topology.get_routers();
+        this.routers = topology.get_routers();
         this.panel = panel;
 
         // appearance settings

@@ -78,15 +78,19 @@ public class Topology {
         return AddRouterMessages.is_valid;
     }
 
-    // TODO: comments
     // delete router and it's links from topology
     public void delete_router(String name){
+        // find router to delete
         for(RouterButton router : routers){
             Router router_to_check = router.get_router();
             if (router_to_check.get_name().equals(name)){
+                // check if it contains any links
                 if(!links.isEmpty()) {
+                    // iterate trough links in order to find link attached to router
                     for (int j = 0; j < links.size(); j++) {
                         for (int i = 0; i < router_to_check.get_int_number(); i++) {
+                            // check if any of router interfaces is included in searched link
+                            // and if so, delete given link
                             if (links.get(j).get_end1().equals(router_to_check.get_interface(i))) {
                                 link_positions.remove(link_positions.get(j));
                                 links.remove(links.get(j));
@@ -97,6 +101,7 @@ public class Topology {
                         }
                     }
                 }
+                // remove given router
                 routers.remove(router);
                 break;
             }
@@ -178,15 +183,18 @@ public class Topology {
         return AddLinkMessages.is_valid;
     }
 
-    // topology getter
-    public static Topology get_topology(){
-        return topology;
+    //delete link
+    public void delete_link(String name){
+        // get index of link to delete
+        int ind = Integer.parseInt(String.valueOf(name.charAt(name.length()-1)));
+        // find link to delete and its position
+        Link link_to_delete;
+        Position links_position;
+        for(int i  = 0; i < links.size(); i++){
+            //if(links.get(i).getName())
+        }
     }
 
-    // routers getter
-    public ArrayList<RouterButton> get_routers(){
-        return routers;
-    }
 
     // add router on panel
     public void refresh(JPanel panel){
@@ -251,6 +259,17 @@ public class Topology {
             graphics2D.drawString("link " + i, (int)x_average, (int)y_average);
         }
     }
+    // getters:
+
+    // topology getter
+    public static Topology get_topology(){
+        return topology;
+    }
+
+    // routers getter
+    public ArrayList<RouterButton> get_routers(){
+        return routers;
+    }
 
     // routers
     public Router get_router(int int_number){
@@ -280,5 +299,9 @@ public class Topology {
     // min name characters getter
     public int get_min_name_characters() {
         return min_name_characters;
+    }
+
+    // links position getter
+    public ArrayList<Position[]> get_link_positions() { return link_positions;
     }
 }

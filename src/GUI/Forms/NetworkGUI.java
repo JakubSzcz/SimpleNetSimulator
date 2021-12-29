@@ -5,6 +5,8 @@ import GUI.Topology.Position;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
@@ -33,6 +35,7 @@ public class NetworkGUI extends Thread{
     private final RouterPopUp router_pop_up;
     private final AddLinkPopUp add_link_pop_up;
     private final DeleteRouterPopUp delete_router_pop_up;
+    private final DeleteLinkPopUp delete_link_pop_up;
 
     // vars and objects
     private boolean flag;
@@ -49,6 +52,7 @@ public class NetworkGUI extends Thread{
         this.add_router_pop_up = new AddRouterPopUp(topology_map, router_pop_up);
         this.add_link_pop_up = new AddLinkPopUp(topology_map);
         this.delete_router_pop_up = new DeleteRouterPopUp(topology_map);
+        this.delete_link_pop_up = new DeleteLinkPopUp(topology_map);
 
         // add router flag
         this.flag = false;
@@ -95,10 +99,15 @@ public class NetworkGUI extends Thread{
             add_link_pop_up.setVisible(true);
         });
 
-        //delete button
+        //delete router button
         delete_router.addActionListener(e -> {
             delete_router_pop_up.refresh();
             delete_router_pop_up.setVisible(true);
+        });
+
+        // delete link button
+        delete_link.addActionListener(e -> {
+                delete_link_pop_up.setVisible(true);
         });
     }
 
