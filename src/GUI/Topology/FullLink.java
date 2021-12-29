@@ -2,15 +2,13 @@ package GUI.Topology;
 
 import Devices.Link;
 
-import java.util.ArrayList;
-
 public class FullLink {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
-    private Link link;
-    private Position[] link_positions;
-    private String name;
+    private final Link link;
+    private final Position[] link_positions;
+    private final String name;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //

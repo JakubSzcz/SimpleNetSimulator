@@ -22,13 +22,14 @@ public class NetworkGUI extends Thread{
     private JButton delete_link;
     private JButton add_router;
     private JButton delete_router;
-    private JButton save_topology;
     private JButton load_topology;
     private JPanel buttons;
     private JPanel down_margin;
     private JPanel left_margin;
     private JPanel right_margin;
     private JPanel topology_map;
+    private JButton save_topology;
+    private JButton open_topology;
 
     // popups
     private final AddRouterPopUp add_router_pop_up;
