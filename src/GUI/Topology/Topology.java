@@ -361,4 +361,12 @@ public class Topology {
 
     // flinks getter
     public ArrayList<FullLink> get_flinks(){ return flinks;}
+
+    public void save(String file_name){
+
+    }
+
+    public void open(String file_name){
+
+    }
 }

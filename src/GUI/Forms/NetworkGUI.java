@@ -4,12 +4,14 @@ import GUI.Topology.Topology;
 import GUI.Topology.Position;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.io.File;
 
 public class NetworkGUI extends Thread{
     /////////////////////////////////////////////////////////
@@ -41,6 +43,23 @@ public class NetworkGUI extends Thread{
     // vars and objects
     private boolean flag;
     private final Topology topology = Topology.get_topology();
+
+    private final FileFilter file_filter = new FileFilter() {
+        @Override
+        public boolean accept(File f) {
+            if (f.isDirectory()) {
+                return true;
+            } else {
+                String filename = f.getName().toLowerCase();
+                return filename.endsWith(".sns");
+            }
+        }
+
+        @Override
+        public String getDescription() {
+            return "Simple Network Simulator (*.sns)";
+        }
+    };
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -110,6 +129,30 @@ public class NetworkGUI extends Thread{
         delete_link.addActionListener(e -> {
             delete_link_pop_up.refresh();
             delete_link_pop_up.setVisible(true);
+        });
+
+        // save topology button
+        save_topology.addActionListener(e -> {
+            JFileChooser file_chooser = new JFileChooser();
+            file_chooser.setDialogTitle("Save file");
+            file_chooser.setFileFilter(file_filter);
+
+            int user_selection = file_chooser.showSaveDialog(gui_panel);
+
+            if (user_selection == JFileChooser.APPROVE_OPTION){
+                topology.save(file_chooser.getSelectedFile().getAbsolutePath());
+            }
+        });
+        open_topology.addActionListener(e -> {
+            JFileChooser file_chooser = new JFileChooser();
+            file_chooser.setDialogTitle("Open file");
+            file_chooser.setFileFilter(file_filter);
+
+            int user_selection = file_chooser.showOpenDialog(gui_panel);
+
+            if (user_selection == JFileChooser.APPROVE_OPTION){
+                topology.open(file_chooser.getSelectedFile().getAbsolutePath());
+            }
         });
     }
 
