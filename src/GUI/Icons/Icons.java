@@ -7,7 +7,7 @@ public class Icons {
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
 
-    private final String PATH = "/Icons/img/";
+    private final String PATH = "/GUI/Icons/img/";
     public static Icons icon = new Icons();
 
     // test icon

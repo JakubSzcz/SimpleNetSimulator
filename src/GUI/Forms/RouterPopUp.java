@@ -379,12 +379,12 @@ public class RouterPopUp extends JDialog implements Runnable{
         // link state
         for (int i = 0; i < int_number; i++){
             link_state[i].setText("unconnected");
-            for (Link link: topology.get_links()){
-                if (link.get_end1() == router.get_interface(i)){
-                    link_state[i].setText("connected");
+            for (int j = 0; j < topology.get_links().size(); j++){
+                if (topology.get_links().get(j).get_end1() == router.get_interface(i)){
+                    link_state[i].setText("link " + j);
                     break;
-                }else if (link.get_end2() == router.get_interface(i)){
-                    link_state[i].setText("connected");
+                }else if (topology.get_links().get(j).get_end2() == router.get_interface(i)){
+                    link_state[i].setText("link " + j);
                     break;
                 }
             }

@@ -135,14 +135,28 @@ public class Topology {
         }
 
         // if link has already been established
-        // TODO: this is not working
         if (r1 != null && r2 != null){
             for (Link link : links){
-                if (link.get_end1() == r1.get_router().get_interface(end1_int_number) &&
-                        link.get_end2() == r2.get_router().get_interface(end2_int_number)){
+                // find router connected to link
+                RouterButton end1_router = null;
+                RouterButton end2_router = null;
+                // iterate routers on routers list
+                for (RouterButton router: routers){
+                    // iterate interfaces on router
+                    for (int i = 0; i < router.get_router().get_int_number(); i++){
+                        // check if interface on link is the interface on router
+                        if (link.get_end1() == router.get_router().get_interface(i)){
+                            end1_router = router;
+                        }else if (link.get_end2() == router.get_router().get_interface(i)){
+                            end2_router = router;
+                        }
+                    }
+                }
+
+                // if routers connected to link are r1 and r2 return error
+                if (end1_router == r1 && end2_router == r2){
                     return AddLinkMessages.link_already_established;
-                }else if(link.get_end2() == r1.get_router().get_interface(end1_int_number) &&
-                        link.get_end1() == r2.get_router().get_interface(end2_int_number)){
+                }else  if (end1_router == r2 && end2_router == r1){
                     return AddLinkMessages.link_already_established;
                 }
             }

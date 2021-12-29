@@ -101,6 +101,9 @@ public class AddLinkPopUp extends JDialog {
         // interfaces number
         int int_number;
 
+        // clear warnings
+        warning_text_field.setText("");
+
         // item to add
         String item;
 

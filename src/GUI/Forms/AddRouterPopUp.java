@@ -135,6 +135,10 @@ public class AddRouterPopUp extends JDialog {
 
     // if cancel button was clicked
     private void onCancel() {
+        // clear fields
+        name_text_field.setText("");
+        int_number_text_field.setText("");
+
         // terminate window
         dispose();
     }
