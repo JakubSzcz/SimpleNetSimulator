@@ -17,10 +17,10 @@ public class Topology {
     /////////////////////////////////////////////////////////
 
     // routers in topology
-    ArrayList<RouterButton> routers;
+    private final ArrayList<RouterButton> routers;
 
     // Full Links (name + link + position)
-    ArrayList<FullLink> flinks;
+    private final ArrayList<FullLink> flinks;
 
     // topology object
     private static final Topology topology = new Topology();
@@ -381,13 +381,15 @@ public class Topology {
             ArrayList<Router> routers_list = (ArrayList<Router>)input_stream.readObject();
             // router Positions ArrayList
             ArrayList<Position> positions_list = (ArrayList<Position>)input_stream.readObject();
+            // flinks Arras list
+            ArrayList<FullLink> flinks_opened = (ArrayList<FullLink>)input_stream.readObject();
 
             // add routers to topology
             for (int i = 0; i < routers_list.size(); i++){
                 topology.add_router(positions_list.get(i), routers_list.get(i).get_name(),
                         routers_list.get(i).get_int_number(),router_pop_up);
             }
-            flinks = (ArrayList<FullLink>)input_stream.readObject();
+            flinks.addAll(flinks_opened);
             topology.refresh(panel);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
