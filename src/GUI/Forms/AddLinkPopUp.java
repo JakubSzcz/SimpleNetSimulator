@@ -1,9 +1,9 @@
-package GUI;
+package GUI.Forms;
 
 import Devices.Link;
-import Topology.Topology;
-import Topology.AddLinkMessages;
-import Topology.RouterButton;
+import GUI.Topology.Topology;
+import GUI.Topology.AddLinkMessages;
+import GUI.Topology.RouterButton;
 
 import javax.swing.*;
 import java.awt.event.*;

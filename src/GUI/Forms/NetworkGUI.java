@@ -1,10 +1,7 @@
-package GUI;
+package GUI.Forms;
 
-import Devices.Devices.Router;
-import Topology.Topology;
-import Topology.Position;
-import Topology.RouterButton;
-import Icons.Icons;
+import GUI.Topology.Topology;
+import GUI.Topology.Position;
 
 import javax.swing.*;
 import java.awt.*;
@@ -126,7 +123,7 @@ public class NetworkGUI extends Thread{
 
     // main
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Network Topology");
+        JFrame frame = new JFrame("Network GUI.Topology");
         frame.setContentPane(new NetworkGUI().gui_panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

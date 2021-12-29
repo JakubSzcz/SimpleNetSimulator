@@ -1,4 +1,4 @@
-package Topology;
+package GUI.Topology;
 
 public enum AddLinkMessages {
     is_valid,

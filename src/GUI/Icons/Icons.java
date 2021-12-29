@@ -1,4 +1,4 @@
-package Icons;
+package GUI.Icons;
 
 import javax.swing.*;
 

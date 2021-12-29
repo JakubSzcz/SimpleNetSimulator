@@ -1,7 +1,7 @@
-package Topology;
+package GUI.Topology;
 
 import Devices.Devices.Router;
-import GUI.RouterPopUp;
+import GUI.Forms.RouterPopUp;
 
 import javax.swing.*;
 import java.awt.*;

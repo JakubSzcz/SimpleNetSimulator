@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Forms;
 
 import Devices.Devices.Router;
 import Devices.Link;
@@ -7,7 +7,7 @@ import Devices.Routing.RouteCode;
 import Protocols.Data.ICMP;
 import Protocols.Packets.IPv4;
 import Protocols.Packets.IPv4MessageTypes;
-import Topology.Topology;
+import GUI.Topology.Topology;
 
 import javax.swing.*;
 import java.awt.*;
@@ -301,7 +301,7 @@ public class RouterPopUp extends JDialog implements Runnable{
         dispose();
     }
 
-    // refresh window conten
+    // refresh window content
     public void refresh(){
         // int number
         int int_number = router.get_int_number();

@@ -1,12 +1,10 @@
-package GUI;
+package GUI.Forms;
 
-import Topology.Topology;
-import Icons.Icons;
-import Topology.AddRouterMessages;
-import Topology.Position;
+import GUI.Topology.Topology;
+import GUI.Topology.AddRouterMessages;
+import GUI.Topology.Position;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class AddRouterPopUp extends JDialog {

@@ -1,16 +1,14 @@
-package Topology;
+package GUI.Topology;
 
 import Devices.Devices.NetworkInterface;
 import Devices.Devices.Router;
 import Devices.Link;
-import Devices.Routing.Route;
-import GUI.RouterPopUp;
-import Icons.Icons;
+import GUI.Forms.RouterPopUp;
+import GUI.Icons.Icons;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Topology {
     /////////////////////////////////////////////////////////

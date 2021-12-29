@@ -1,7 +1,7 @@
-package GUI;
+package GUI.Forms;
 
-import Topology.Topology;
-import Topology.RouterButton;
+import GUI.Topology.Topology;
+import GUI.Topology.RouterButton;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;

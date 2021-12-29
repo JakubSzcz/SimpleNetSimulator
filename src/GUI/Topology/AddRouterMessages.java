@@ -1,4 +1,4 @@
-package Topology;
+package GUI.Topology;
 
 public enum AddRouterMessages {
     is_valid,

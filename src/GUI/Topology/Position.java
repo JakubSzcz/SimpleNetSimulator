@@ -1,4 +1,4 @@
-package Topology;
+package GUI.Topology;
 
 public class Position {
     /////////////////////////////////////////////////////////
