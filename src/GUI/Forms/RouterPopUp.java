@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-// set routes delete route combo box
+// item for delete route combo box
 class RouteItem{
     public Route route;
 
@@ -35,6 +35,16 @@ public class RouterPopUp extends JDialog implements Runnable{
     private JButton buttonCancel;
     private javax.swing.JPanel JPanel;
     private JTextField header_name;
+    private JComboBox port_combo_box;
+    private JTextField ip_address_config;
+    private JTextField mask_config;
+    private JButton ip_address_apply;
+    private JButton ip_address_delete;
+    private JComboBox delete_route_combo_box;
+    private JButton delete_route_button;
+    private JTextArea monitor_text_area;
+    private JButton show_routing_table_button;
+    private JButton send_ping_button;
     // ip address
     private JTextField int0_ip_address;
     private JTextField int1_ip_address;
@@ -62,17 +72,6 @@ public class RouterPopUp extends JDialog implements Runnable{
     private JTextField int5_link_state;
     private JTextField int6_link_state;
     private JTextField int7_link_state;
-
-    private JComboBox port_combo_box;
-    private JTextField ip_address_config;
-    private JTextField mask_config;
-    private JButton ip_address_apply;
-    private JButton ip_address_delete;
-    private JComboBox delete_route_combo_box;
-    private JButton delete_route_button;
-    private JTextArea monitor_text_area;
-    private JButton show_routing_table_button;
-    private JButton send_ping_button;
     // int state
     private JButton int0_state;
     private JButton int1_state;
@@ -123,9 +122,8 @@ public class RouterPopUp extends JDialog implements Runnable{
         setLocation(200, 100);
         setResizable(false);
         header_name.setBorder(BorderFactory.createEmptyBorder());
-        JScrollBar scroll = new JScrollBar();
 
-        // start thread
+        // start thread, for links drawing
         Thread t = new Thread(this);
         t.start();
 
@@ -190,6 +188,7 @@ public class RouterPopUp extends JDialog implements Runnable{
                         IPv4.parse_mask_to_long(mask));
                 refresh();
             }else{
+                // if not valid add message to router monitor
                 if (ip_message != IPv4MessageTypes.is_valid){
                     router.add_line_to_monitor("Wrong ip address");
                 }

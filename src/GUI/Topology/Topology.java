@@ -55,10 +55,13 @@ public class Topology {
         // check if number of interfaces is not too high
         if (int_number > max_int_number){
             return AddRouterMessages.too_many_interfaces;
+        // check if number of interfaces is not too small
         }else if (int_number < min_int_number){
             return AddRouterMessages.too_less_interfaces;
+        // check if name length isn't too short
         }else if(name.length() < min_name_characters){
             return AddRouterMessages.too_short_name;
+        // check if name length isn't too long
         }else if (name.length() > max_name_characters){
             return AddRouterMessages.too_long_name;
         }
@@ -75,6 +78,7 @@ public class Topology {
         return AddRouterMessages.is_valid;
     }
 
+    // TODO: comments
     // delete router and it's links from topology
     public void delete_router(String name){
         for(RouterButton router : routers){
@@ -101,6 +105,7 @@ public class Topology {
 
     // add link to topology
     public AddLinkMessages add_link(String end1, String end2){
+        // end = [name: int_number], split to array
         String[] end1_array = end1.split(": ");
         String[] end2_array = end2.split(": ");
 
@@ -112,46 +117,50 @@ public class Topology {
         String r1_name = end1_array[0];
         String r2_name = end2_array[0];
 
-        // routers
+        // chosen RouterButtons
         RouterButton r1 = null;
         RouterButton r2 = null;
 
         for (RouterButton router: routers){
-            if (router.get_router().get_name().equals(end1_array[0])){
+            if (router.get_router().get_name().equals(r1_name)){
                 r1 = router;
-            }else if (router.get_router().get_name().equals(end2_array[0])){
+            }else if (router.get_router().get_name().equals(r2_name)){
                 r2 = router;
             }
         }
 
         // if link between same router
-        if (end1_array[0].equals(end2_array[0])){
+        if (r1_name.equals(r2_name)){
             return AddLinkMessages.same_router_chosen;
         }
 
         // if link has already been established
         // TODO: this is not working
-        for (Link link : links){
-            if (link.get_end1() == r1.get_router().get_interface(end1_int_number) &&
-                    link.get_end2() == r2.get_router().get_interface(end2_int_number)){
-                return AddLinkMessages.link_already_established;
-            }else if(link.get_end2() == r1.get_router().get_interface(end1_int_number) &&
-                    link.get_end1() == r2.get_router().get_interface(end2_int_number)){
-                return AddLinkMessages.link_already_established;
+        if (r1 != null && r2 != null){
+            for (Link link : links){
+                if (link.get_end1() == r1.get_router().get_interface(end1_int_number) &&
+                        link.get_end2() == r2.get_router().get_interface(end2_int_number)){
+                    return AddLinkMessages.link_already_established;
+                }else if(link.get_end2() == r1.get_router().get_interface(end1_int_number) &&
+                        link.get_end1() == r2.get_router().get_interface(end2_int_number)){
+                    return AddLinkMessages.link_already_established;
+                }
             }
+        }else{
+            return AddLinkMessages.error;
         }
 
-        NetworkInterface end1_interface = null;
-        NetworkInterface end2_interface = null;
-        Position[] end_positions = new Position[2];
+        // router interfaces, for new link ends
+        NetworkInterface end1_interface = r1.get_router().get_interface(end1_int_number);
+        NetworkInterface end2_interface = r2.get_router().get_interface(end2_int_number);
 
-        end1_interface = r1.get_router().get_interface(end1_int_number);
+        // Positions of router
+        Position[] end_positions = new Position[2];
         end_positions[0] = r1.get_position();
-        end2_interface = r2.get_router().get_interface(end2_int_number);
         end_positions[1] = r2.get_position();
 
         links.add(new Link(end1_interface, end2_interface));
-        this.link_positions.add(end_positions);
+        link_positions.add(end_positions);
         return AddLinkMessages.is_valid;
     }
 
@@ -165,7 +174,7 @@ public class Topology {
         return routers;
     }
 
-    // add router on screen
+    // add router on panel
     public void refresh(JPanel panel){
         JPanel map = new JPanel(new GridLayout(20, 20));
         boolean flag;
@@ -174,14 +183,17 @@ public class Topology {
             flag = false;
             // add router
             for (RouterButton router: routers){
+                // convert position to index
                 int index = router.get_position().get_x() + 20 * router.get_position().get_y();
+
+                // if i == index add router to panel
                 if (index == i){
                     map.add(router);
                     flag = true;
                     break;
                 }
             }
-            // add white space
+            // add white space if router hasn't been added
             if (!flag){
                 JPanel p = new JPanel();
                 p.setForeground(Color.WHITE);
@@ -190,12 +202,12 @@ public class Topology {
                 map.add(p);
             }
         }
-        // delete old map
+        // delete old map from panel
         panel.removeAll();
         map.setBackground(Color.WHITE);
         map.setForeground(Color.WHITE);
 
-        // add new map
+        // add new map to panel
         panel.add(map);
         panel.revalidate();
     }
@@ -203,23 +215,32 @@ public class Topology {
     public void draw_links(JPanel panel){
         Graphics2D graphics2D = (Graphics2D) panel.getGraphics();
         for (int i = 0; i < links.size(); i++){
+            // half of rectangle on which routers are placed
             float x_half = (float)panel.getWidth() / 40;
             float y_half = (float)panel.getHeight() / 40;
+
+            // link ends coordinates
             float end1_x = (float) link_positions.get(i)[0].get_x() * panel.getWidth() / 20;
             float end1_y = (float) link_positions.get(i)[0].get_y() * panel.getHeight() / 20;
             float end2_x = (float) link_positions.get(i)[1].get_x() * panel.getWidth() / 20;
             float end2_y = (float) link_positions.get(i)[1].get_y() * panel.getHeight() / 20;
+
+            // draw link
             graphics2D.drawLine((int)(end1_x + x_half), (int)(end1_y + y_half),
                     (int)(end2_x + x_half), (int)(end2_y + y_half));
+
+            // link name coordinates
             float x_average = (end1_x + end2_x + 2 * x_half) / 2;
             float y_average = (end1_y + end2_y + 2 * y_half) / 2;
+
+            // draw link name
             graphics2D.drawString("link " + i, (int)x_average, (int)y_average);
         }
     }
 
     // routers
-    public Router get_router(int ind){
-        return routers.get(ind).get_router();
+    public Router get_router(int int_number){
+        return routers.get(int_number).get_router();
     }
 
     // links getter
@@ -227,8 +248,23 @@ public class Topology {
         return links;
     }
 
-    // max router getter
+    // max router number getter
     public int get_max_int_number(){
         return max_int_number;
+    }
+
+    // min router number getter
+    public int get_min_int_number() {
+        return min_int_number;
+    }
+
+    // max name characters getter
+    public int get_max_name_characters() {
+        return max_name_characters;
+    }
+
+    // min name characters getter
+    public int get_min_name_characters() {
+        return min_name_characters;
     }
 }

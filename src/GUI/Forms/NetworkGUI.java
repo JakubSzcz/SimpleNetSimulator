@@ -5,8 +5,6 @@ import GUI.Topology.Position;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
@@ -46,30 +44,23 @@ public class NetworkGUI extends Thread{
 
     // constructor
     public NetworkGUI() {
-
-        // appearance
-
         // popups
         this.router_pop_up = new RouterPopUp();
         this.add_router_pop_up = new AddRouterPopUp(topology_map, router_pop_up);
         this.add_link_pop_up = new AddLinkPopUp(topology_map);
         this.delete_router_pop_up = new DeleteRouterPopUp(topology_map);
 
-        // vars
+        // add router flag
         this.flag = false;
 
         // set topology_map layout to grid
         topology_map.setLayout(new GridLayout(1, 1 ));
 
-        //                      listeners                      //
         // add router button
-        add_router.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                flag = true;
-                Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-                gui_panel.setCursor(cursor);
-            }
+        add_router.addActionListener(e -> {
+            flag = true;
+            Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+            gui_panel.setCursor(cursor);
         });
 
         // map click
@@ -78,37 +69,40 @@ public class NetworkGUI extends Thread{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if(flag){
+                    // add router popup
                     add_router_pop_up.set_mouse_position(new Position(e.getX(), e.getY()));
                     add_router_pop_up.setVisible(true);
+
+                    // change flag back to false
                     flag = false;
+
                     // thread start
                     if (!isAlive()){
                         start();
                     }
+
+                    // change cursor
                     Cursor cursor = new Cursor(Cursor.DEFAULT_CURSOR);
                     gui_panel.setCursor(cursor);
                 }
 
             }
         });
+
         // add link button
-        add_link.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                add_link_pop_up.refresh();
-                add_link_pop_up.setVisible(true);
-            }
+        add_link.addActionListener(e -> {
+            add_link_pop_up.refresh();
+            add_link_pop_up.setVisible(true);
         });
+
         //delete button
-        delete_router.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                delete_router_pop_up.refresh();
-                delete_router_pop_up.setVisible(true);
-            }
+        delete_router.addActionListener(e -> {
+            delete_router_pop_up.refresh();
+            delete_router_pop_up.setVisible(true);
         });
     }
 
+    // thread, draw links
     @Override
     public void run() {
         while (true){
