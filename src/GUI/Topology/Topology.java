@@ -188,6 +188,8 @@ public class Topology {
         Link link_to_add = new Link(end1_interface, end2_interface);
         FullLink to_add = new FullLink(link_to_add, end_positions, get_link_name(flinks));
         flinks.add(to_add);
+        r1.get_router().up_interface(end1_int_number);
+        r2.get_router().up_interface(end2_int_number);
         return AddLinkMessages.is_valid;
     }
 

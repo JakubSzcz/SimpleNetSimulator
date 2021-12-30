@@ -97,7 +97,7 @@ public class Router extends NetworkDevice implements Serializable {
         // echo request
         }else if (packet.get_type() == 8){
             Data data = ICMP.create_echo_reply();
-            send_data(data, source);
+            send_data(data, source, 255, false);
         // destination unreachable
         }else if (packet.get_type() == 3){
             monitor.add_line(ICMP.get_message(packet, source, ttl));
@@ -167,7 +167,7 @@ public class Router extends NetworkDevice implements Serializable {
     }
 
     // sends data to given ip address
-    public void send_data(Data data, long destination_address, int ttl){
+    public void send_data(Data data, long destination_address, int ttl, boolean show_on_monitor){
         // check if packet isn't for this router
         boolean for_this_router = false;
         int card_int_number = net_card.get_int_number();
@@ -209,15 +209,17 @@ public class Router extends NetworkDevice implements Serializable {
                         IPv4.parse_to_string(destination_address));
             }else{
                 // if route was not found
-                ICMPPacket dest_unreachable = ICMP.create_dest_unreachable();
-                handle_icmp_packet(dest_unreachable, -1, destination_address, ttl);
+                if (show_on_monitor){
+                    ICMPPacket dest_unreachable = ICMP.create_dest_unreachable();
+                    handle_icmp_packet(dest_unreachable, -1, destination_address, ttl);
+                }
             }
         }
 
     }
 
     public void send_data(Data data, long destination_address){
-        send_data(data, destination_address, 255);
+        send_data(data, destination_address, 255, true);
     }
 
     // send ipv4 packet, use for routing purpose

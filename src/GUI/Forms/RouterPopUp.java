@@ -316,6 +316,7 @@ public class RouterPopUp extends JDialog implements Runnable{
         mask_route_add.setText("");
         ip_address_config.setText("");
         mask_config.setText("");
+        ip_address_ping.setText("");
 
         // ip address set
         JTextField[] ip_address = new JTextField[]{int0_ip_address, int1_ip_address, int2_ip_address,

@@ -95,6 +95,15 @@ public class NetworkGUI extends Thread{
                 if(flag){
                     // add router popup
                     add_router_pop_up.set_mouse_position(new Position(e.getX(), e.getY()));
+                    int mouse_x = e.getX();
+                    int mouse_y = e.getY();
+                    if (mouse_x > topology_map.getWidth() - add_router_pop_up.getWidth()){
+                        mouse_x = topology_map.getWidth() - add_router_pop_up.getWidth() - 10;
+                    }
+                    if (mouse_y > topology_map.getHeight() - add_router_pop_up.getHeight()){
+                        mouse_y = topology_map.getHeight() - add_router_pop_up.getHeight() - 10;
+                    }
+                    add_router_pop_up.setLocation(mouse_x, mouse_y);
                     add_router_pop_up.setVisible(true);
 
                     // change flag back to false

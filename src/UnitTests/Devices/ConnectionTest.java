@@ -341,7 +341,7 @@ class ConnectionTest {
         r1.clear_monitor();
 
         // ping r3 from r1 but ttl = 1
-        r1.send_data(echo_request, IPv4.parse_to_long("192.168.1.1"), 1);
+        r1.send_data(echo_request, IPv4.parse_to_long("192.168.1.1"), 1, true);
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
