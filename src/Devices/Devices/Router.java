@@ -106,10 +106,13 @@ public class Router extends NetworkDevice implements Serializable {
 
     // set ip address of given interface
     public void set_interface_ip(int int_number, long ip_address, long mask){
+        boolean is_up = net_card.is_interface_up(int_number);
+        down_interface(int_number);
         net_card.get_interface(int_number).set_ip_address(ip_address, mask);
-        if (net_card.is_interface_up(int_number)){
+        if (is_up){
             long net_address = ip_address & mask;
             add_connected_route(net_address, mask, int_number);
+            up_interface(int_number);
         }
     }
 
