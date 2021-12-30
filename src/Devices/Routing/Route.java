@@ -2,7 +2,10 @@ package Devices.Routing;
 
 import Protocols.Packets.IPv4;
 
-public record Route(RouteCode code, int distance, int metric, long net, long net_mask, long gateway, int int_number) {
+import java.io.Serializable;
+
+public record Route(RouteCode code, int distance, int metric, long net, long net_mask,
+                    long gateway, int int_number) implements Serializable {
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////

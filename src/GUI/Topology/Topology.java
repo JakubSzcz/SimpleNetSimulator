@@ -386,10 +386,14 @@ public class Topology {
 
             // add routers to topology
             for (int i = 0; i < routers_list.size(); i++){
-                topology.add_router(positions_list.get(i), routers_list.get(i).get_name(),
-                        routers_list.get(i).get_int_number(),router_pop_up);
+                routers_list.get(i).start();
+                routers.add(new RouterButton(Icons.icon.router(), positions_list.get(i),
+                        routers_list.get(i), router_pop_up));
             }
             flinks.addAll(flinks_opened);
+            for (FullLink fullLink : flinks){
+                fullLink.get_link().start();
+            }
             topology.refresh(panel);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

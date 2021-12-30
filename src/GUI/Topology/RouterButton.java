@@ -36,13 +36,10 @@ public class RouterButton extends JButton {
         setFocusPainted(false);
 
 
-        this.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                router_pop_up.set_router(router);
-                router_pop_up.refresh();
-                router_pop_up.setVisible(true);
-            }
+        this.addActionListener(e -> {
+            router_pop_up.set_router(router);
+            router_pop_up.refresh();
+            router_pop_up.setVisible(true);
         });
     }
 
