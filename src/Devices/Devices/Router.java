@@ -126,7 +126,8 @@ public class Router extends NetworkDevice implements Serializable {
 
     // add static route to routing table
     public void add_static_route(long ip_address, long mask, int int_number){
-        routing_table.add_route(RouteCode.S, 1,0, ip_address, mask, -1, int_number);
+        long net_address = ip_address & mask;
+        routing_table.add_route(RouteCode.S, 1,0, net_address, mask, -1, int_number);
     }
 
     // add directly connected route to routing table

@@ -12,5 +12,10 @@ public enum IPv4MessageTypes {
     mask_value_is_to_big,
     mask_value_must_be_positive,
     mask_value_is_incorrect,
+    // ip address on interface
+    is_net_address,
+    is_broadcast_address,
+    // net mask on interface
+    mask_is_over_30,
 
 }

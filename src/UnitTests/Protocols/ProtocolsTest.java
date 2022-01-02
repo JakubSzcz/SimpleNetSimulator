@@ -115,4 +115,34 @@ class ProtocolsTest {
         assertEquals(IPv4MessageTypes.octet_value_is_too_big, IPv4.is_mask_valid("256.0.255.0"));
         assertEquals(IPv4MessageTypes.octet_value_must_be_int, IPv4.is_mask_valid("abc.0.255.0"));
     }
+
+    @Test
+    void is_interface_ip_valid(){
+        // is_net_address
+        assertEquals(IPv4MessageTypes.is_net_address, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.0"), IPv4.parse_mask_to_long("/24")));
+        assertEquals(IPv4MessageTypes.is_net_address, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.68"), IPv4.parse_mask_to_long("/30")));
+
+        // mask_is_over_30
+        assertEquals(IPv4MessageTypes.mask_is_over_30, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.0"), IPv4.parse_mask_to_long("31")));
+        assertEquals(IPv4MessageTypes.mask_is_over_30, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.0"), IPv4.parse_mask_to_long("/32")));
+        assertEquals(IPv4MessageTypes.mask_is_over_30, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.0"), IPv4.parse_mask_to_long("/40")));
+
+        // is_broadcast_address
+        assertEquals(IPv4MessageTypes.is_broadcast_address, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.255"), IPv4.parse_mask_to_long("/24")));
+        assertEquals(IPv4MessageTypes.is_broadcast_address, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.71"), IPv4.parse_mask_to_long("/30")));
+
+        // is valid
+        // is_net_address
+        assertEquals(IPv4MessageTypes.is_valid, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.2"), IPv4.parse_mask_to_long("/24")));
+        assertEquals(IPv4MessageTypes.is_valid, IPv4.is_interface_ip_valid(
+                IPv4.parse_to_long("192.168.1.70"), IPv4.parse_mask_to_long("/30")));
+    }
 }

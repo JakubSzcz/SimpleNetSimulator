@@ -50,6 +50,24 @@ public class IPv4 {
         return IPv4MessageTypes.is_valid;
     }
 
+    // check if given ip address is valid for interface
+    public static IPv4MessageTypes is_interface_ip_valid(long ip_address, long mask){
+        long net_address = (ip_address & mask);
+        String mask_string = parse_mask_to_string_short(mask);
+        int short_mask = Integer.parseInt(mask_string);
+        if (short_mask > 30){
+            return IPv4MessageTypes.mask_is_over_30;
+        }else if (net_address == ip_address){
+            return IPv4MessageTypes.is_net_address;
+        }
+        long ip_addresses_number = (long)Math.pow(2, 32 - short_mask);
+        long broadcast_address = net_address + ip_addresses_number - 1;
+        if (ip_address == broadcast_address){
+            return IPv4MessageTypes.is_broadcast_address;
+        }
+        return IPv4MessageTypes.is_valid;
+    }
+
     // return is_valid if given mask is correct, return no valid message type if mask is not correct
     public static IPv4MessageTypes is_mask_valid(String net_mask){
         if(net_mask.length() <=3 ) {

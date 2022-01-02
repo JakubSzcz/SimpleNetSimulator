@@ -183,11 +183,22 @@ public class RouterPopUp extends JDialog implements Runnable{
             IPv4MessageTypes ip_message = IPv4.is_ip_valid(ip_address);
             IPv4MessageTypes mask_message = IPv4.is_mask_valid(mask);
 
-            // if valid apply
+            // if valid check interface valid
             if (ip_message == IPv4MessageTypes.is_valid && mask_message == IPv4MessageTypes.is_valid){
-                router.set_interface_ip(int_number, IPv4.parse_to_long(ip_address),
+                IPv4MessageTypes ip_interface_message = IPv4.is_interface_ip_valid(IPv4.parse_to_long(ip_address),
                         IPv4.parse_mask_to_long(mask));
-                refresh();
+                if (ip_interface_message == IPv4MessageTypes.is_valid){
+                    router.set_interface_ip(int_number, IPv4.parse_to_long(ip_address),
+                            IPv4.parse_mask_to_long(mask));
+                    refresh();
+                } else if (ip_interface_message == IPv4MessageTypes.is_net_address){
+                    router.add_line_to_monitor("Wrong ip address");
+                }else if (ip_interface_message == IPv4MessageTypes.is_broadcast_address){
+                    router.add_line_to_monitor("Wrong ip address");
+                }else if (ip_interface_message == IPv4MessageTypes.mask_is_over_30){
+                    router.add_line_to_monitor("Wrong mask");
+                }
+
             }else{
                 // if not valid add message to router monitor
                 if (ip_message != IPv4MessageTypes.is_valid){
@@ -204,7 +215,7 @@ public class RouterPopUp extends JDialog implements Runnable{
             // get interface
             String int_number_string = port_combo_box.getSelectedItem().toString();
             int int_number = Integer.parseInt(int_number_string);
-            router.set_interface_ip(int_number, -1, -1);
+            router.delete_interface_ip(int_number);
             refresh();
         });
 
