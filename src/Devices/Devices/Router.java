@@ -9,10 +9,12 @@ import Protocols.Data.ICMPPacket;
 import Protocols.Frame.Frame;
 import Protocols.Frame.SimpleP2PFrame;
 import Protocols.Packets.IPv4;
+import Protocols.Packets.IPv4MessageTypes;
 import Protocols.Packets.IPv4Packet;
 import Protocols.Packets.Packet;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Router extends NetworkDevice implements Serializable {
@@ -105,15 +107,35 @@ public class Router extends NetworkDevice implements Serializable {
     }
 
     // set ip address of given interface
-    public void set_interface_ip(int int_number, long ip_address, long mask){
-        boolean is_up = net_card.is_interface_up(int_number);
-        down_interface(int_number);
-        net_card.get_interface(int_number).set_ip_address(ip_address, mask);
-        if (is_up){
-            long net_address = ip_address & mask;
-            add_connected_route(net_address, mask, int_number);
-            up_interface(int_number);
+    public IPv4MessageTypes set_interface_ip(int int_number, long ip_address, long mask){
+        IPv4MessageTypes message = IPv4.is_interface_ip_valid(ip_address, mask);
+        long smaller_mask;
+        Map<String, Long> int_ip_address;
+        if (message == IPv4MessageTypes.is_valid) {
+            for (int i = 0; i < get_int_number(); i++){
+                if (i != int_number){
+                    int_ip_address = net_card.get_ip_address(i);
+                    if (mask < int_ip_address.get("mask")){
+                        smaller_mask = mask;
+                    }else{
+                        smaller_mask = int_ip_address.get("mask");
+                    }
+                    long net_address = int_ip_address.get("address") & smaller_mask;
+                    if ((ip_address & smaller_mask) == net_address){
+                        return IPv4MessageTypes.overlaps;
+                    }
+                }
+            }
+            boolean is_up = net_card.is_interface_up(int_number);
+            down_interface(int_number);
+            net_card.get_interface(int_number).set_ip_address(ip_address, mask);
+            if (is_up) {
+                long net_address = ip_address & mask;
+                add_connected_route(net_address, mask, int_number);
+                up_interface(int_number);
+            }
         }
+        return message;
     }
 
     // delete ip address of given interface

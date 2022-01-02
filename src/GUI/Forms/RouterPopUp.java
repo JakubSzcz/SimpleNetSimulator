@@ -185,11 +185,9 @@ public class RouterPopUp extends JDialog implements Runnable{
 
             // if valid check interface valid
             if (ip_message == IPv4MessageTypes.is_valid && mask_message == IPv4MessageTypes.is_valid){
-                IPv4MessageTypes ip_interface_message = IPv4.is_interface_ip_valid(IPv4.parse_to_long(ip_address),
-                        IPv4.parse_mask_to_long(mask));
+                IPv4MessageTypes ip_interface_message = router.set_interface_ip(int_number,
+                        IPv4.parse_to_long(ip_address), IPv4.parse_mask_to_long(mask));
                 if (ip_interface_message == IPv4MessageTypes.is_valid){
-                    router.set_interface_ip(int_number, IPv4.parse_to_long(ip_address),
-                            IPv4.parse_mask_to_long(mask));
                     refresh();
                 } else if (ip_interface_message == IPv4MessageTypes.is_net_address){
                     router.add_line_to_monitor("Wrong ip address");
@@ -197,6 +195,8 @@ public class RouterPopUp extends JDialog implements Runnable{
                     router.add_line_to_monitor("Wrong ip address");
                 }else if (ip_interface_message == IPv4MessageTypes.mask_is_over_30){
                     router.add_line_to_monitor("Wrong mask");
+                }else if (ip_interface_message == IPv4MessageTypes.overlaps){
+                    router.add_line_to_monitor("Wrong ip address");
                 }
 
             }else{

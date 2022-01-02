@@ -15,6 +15,7 @@ public enum IPv4MessageTypes {
     // ip address on interface
     is_net_address,
     is_broadcast_address,
+    overlaps,
     // net mask on interface
     mask_is_over_30,
 

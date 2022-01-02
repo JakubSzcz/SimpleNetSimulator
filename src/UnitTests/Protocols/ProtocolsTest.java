@@ -1,5 +1,6 @@
 package UnitTests.Protocols;
 
+import Devices.Devices.Router;
 import Protocols.Packets.IPv4;
 import Protocols.Packets.IPv4MessageTypes;
 import org.junit.jupiter.api.Test;
@@ -139,10 +140,33 @@ class ProtocolsTest {
                 IPv4.parse_to_long("192.168.1.71"), IPv4.parse_mask_to_long("/30")));
 
         // is valid
-        // is_net_address
         assertEquals(IPv4MessageTypes.is_valid, IPv4.is_interface_ip_valid(
                 IPv4.parse_to_long("192.168.1.2"), IPv4.parse_mask_to_long("/24")));
         assertEquals(IPv4MessageTypes.is_valid, IPv4.is_interface_ip_valid(
                 IPv4.parse_to_long("192.168.1.70"), IPv4.parse_mask_to_long("/30")));
+
+        // overlaps
+        Router router = new Router("router", 3);
+        IPv4MessageTypes message = router.set_interface_ip(0,
+                IPv4.parse_to_long("192.168.0.1"), IPv4.parse_mask_to_long("16"));
+        assertEquals(IPv4MessageTypes.is_valid, message);
+
+        message = router.set_interface_ip(1,
+                IPv4.parse_to_long("192.168.0.2"), IPv4.parse_mask_to_long("16"));
+        assertEquals(IPv4MessageTypes.overlaps, message);
+
+        message = router.set_interface_ip(1,
+                IPv4.parse_to_long("192.168.1.2"), IPv4.parse_mask_to_long("24"));
+        assertEquals(IPv4MessageTypes.overlaps, message);
+
+        message = router.set_interface_ip(1,
+                IPv4.parse_to_long("192.10.1.2"), IPv4.parse_mask_to_long("8"));
+        assertEquals(IPv4MessageTypes.overlaps, message);
+
+        message = router.set_interface_ip(1,
+                IPv4.parse_to_long("192.169.20.0"), IPv4.parse_mask_to_long("17"));
+        assertEquals(IPv4MessageTypes.is_valid, message);
+
+
     }
 }
