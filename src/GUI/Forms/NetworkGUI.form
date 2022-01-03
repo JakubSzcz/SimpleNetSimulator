@@ -31,7 +31,7 @@
             <properties>
               <focusPainted value="false"/>
               <text value="Add Link"/>
-              <toolTipText value="Add New Link"/>
+              <toolTipText value="Add new link"/>
             </properties>
           </component>
           <component id="b92ca" class="javax.swing.JButton" binding="delete_link">
@@ -41,7 +41,7 @@
             <properties>
               <focusPainted value="false"/>
               <text value="Delete Link"/>
-              <toolTipText value="Delete Existing Link"/>
+              <toolTipText value="Delete existing link"/>
             </properties>
           </component>
           <component id="2f269" class="javax.swing.JButton" binding="delete_router">
@@ -62,7 +62,7 @@
             <properties>
               <focusPainted value="false"/>
               <text value="Save"/>
-              <toolTipText value="Save GUI.Topology"/>
+              <toolTipText value="Save topology"/>
             </properties>
           </component>
           <component id="3c604" class="javax.swing.JButton" binding="open_topology">
@@ -73,7 +73,7 @@
               <focusPainted value="false"/>
               <opaque value="true"/>
               <text value="Open"/>
-              <toolTipText value="Load GUI.Topology"/>
+              <toolTipText value="Open topology"/>
             </properties>
           </component>
           <grid id="9c8b9" binding="right_margin" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

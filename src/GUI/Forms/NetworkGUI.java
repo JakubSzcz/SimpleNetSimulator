@@ -184,7 +184,7 @@ public class NetworkGUI extends Thread{
 
     // main
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Network GUI.Topology");
+        JFrame frame = new JFrame("Simple Network Simulator");
         frame.setContentPane(new NetworkGUI().gui_panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
