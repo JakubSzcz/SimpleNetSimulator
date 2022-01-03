@@ -42,7 +42,7 @@ public class AddLinkPopUp extends JDialog {
         this.panel = panel;
 
         // appearance settings
-        setSize(200, 200);
+        setSize(320, 200);
         setResizable(false);
         setLocation(200, 200);
         warning_text_field.setBorder(BorderFactory.createEmptyBorder());
