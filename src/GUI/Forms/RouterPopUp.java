@@ -234,7 +234,6 @@ public class RouterPopUp extends JDialog implements Runnable{
             IPv4MessageTypes mask_message = IPv4.is_mask_valid(mask);
 
             if (ip_message == IPv4MessageTypes.is_valid && mask_message == IPv4MessageTypes.is_valid){
-                System.out.println("true");
                 router.add_static_route(IPv4.parse_to_long(ip_address),IPv4.parse_mask_to_long(mask), int_number);
                 refresh();
             }else{

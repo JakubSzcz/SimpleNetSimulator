@@ -799,7 +799,7 @@
                     </constraints>
                     <properties>
                       <editable value="true"/>
-                      <horizontalAlignment value="2"/>
+                      <horizontalAlignment value="0"/>
                       <text value=""/>
                     </properties>
                   </component>
