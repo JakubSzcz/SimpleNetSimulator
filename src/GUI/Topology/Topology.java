@@ -108,6 +108,7 @@ public class Topology {
                     }
                 }
                 // remove given router
+                router.get_router().interrupt();
                 routers.remove(router);
                 break;
             }

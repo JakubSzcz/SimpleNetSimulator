@@ -82,8 +82,9 @@ public abstract class NetworkDevice extends Thread implements Serializable {
 
             try {
                 Thread.sleep(router_speed);
+                System.out.println(name);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
         }
     }
