@@ -1,8 +1,14 @@
 package Devices.Devices;
 
+import Application.Application;
+import Application.Trash;
 import Protocols.Frame.Frame;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public abstract class NetworkDevice extends Thread implements Serializable {
     /////////////////////////////////////////////////////////
@@ -23,6 +29,15 @@ public abstract class NetworkDevice extends Thread implements Serializable {
 
     // sleep time in run method
     protected int router_speed;
+
+    // Applications
+    protected ArrayList<Application> applications;
+
+    // applications taken identifiers
+    protected ArrayList<Integer> taken_identifiers;
+
+    // application max number
+    protected int MAX_IDENTIFIER = 2000;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -53,6 +68,9 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         this.monitor = new Monitor();
         this.turned_on = true;
         this.router_speed = clock_period;
+        this.applications = new ArrayList<Application>();
+        this.taken_identifiers = new ArrayList<>();
+        applications.add(new Trash());
         if (!test){
             start();
         }
@@ -82,7 +100,6 @@ public abstract class NetworkDevice extends Thread implements Serializable {
 
             try {
                 Thread.sleep(router_speed);
-                System.out.println(name);
             } catch (InterruptedException e) {
                 break;
             }
@@ -136,5 +153,58 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // monitor add line
     public void add_line_to_monitor(String line){
         monitor.add_line(line);
+    }
+
+    // remove application
+    public void remove_application(int identifier){
+        for (Application application: applications){
+            if (application.identifier == identifier){
+                taken_identifiers.remove(Integer.valueOf(identifier));
+                applications.remove(application);
+                break;
+            }
+        }
+    }
+
+    // generate application identifier
+    protected int generate_app_id(){
+        Random generator = new Random();
+        int identifier = -1;
+        OUTER: while (identifier == -1){
+            identifier = generator.nextInt(MAX_IDENTIFIER);
+            if (identifier == 0){
+                identifier = -1;
+                continue;
+            }
+            for (int taken_id: taken_identifiers){
+                if (taken_id == identifier){
+                    identifier = -1;
+                    continue OUTER;
+                }
+            }
+        }
+        taken_identifiers.add(identifier);
+        return identifier;
+    }
+
+    // add to trash
+    public void add_trash(HashMap<String, Object> record){
+        Trash trash = null;
+        for (Application application: applications){
+            if (application instanceof Trash trash_ap){
+                trash = trash_ap;
+            }
+        }
+        trash.add_to_buffer(record);
+    }
+
+    public ArrayDeque<HashMap<String, Object>> get_trash_buffer(){
+        Trash trash = null;
+        for (Application application: applications){
+            if (application instanceof Trash trash_ap){
+                trash = trash_ap;
+            }
+        }
+        return trash.get_buffer();
     }
 }

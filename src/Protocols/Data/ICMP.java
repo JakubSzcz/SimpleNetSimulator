@@ -11,13 +11,22 @@ public class ICMP {
     public static ICMPPacket create_echo_reply(){
         return new ICMPPacket(0);
     }
+    public static ICMPPacket create_echo_reply(int identifier, int sequence_number){
+        return new ICMPPacket(0, identifier, sequence_number);
+    }
     // create destination unreachable
     public static ICMPPacket create_dest_unreachable(){
         return new ICMPPacket(3);
     }
+    public static ICMPPacket create_dest_unreachable(int identifier, int sequence_number){
+        return new ICMPPacket(3, identifier, sequence_number);
+    }
     // create echo request
     public static ICMPPacket create_echo_request(){
         return new ICMPPacket(8);
+    }
+    public static ICMPPacket create_echo_request(int identifier, int sequence_number){
+        return new ICMPPacket(8, identifier, sequence_number);
     }
     // return proper message according to the ICMP packet type
     public static String get_message(ICMPPacket icmp_packet, long source_address, int ttl){
@@ -25,7 +34,8 @@ public class ICMP {
         switch (icmp_packet.get_type()){
             // display echo replay
             case 0:
-                to_return.append(IPv4.parse_to_string(source_address)).append(": bytes=32 TTL=").append(ttl).append(".");
+                to_return.append(IPv4.parse_to_string(source_address)).append(": bytes=32 TTL=")
+                        .append(ttl).append(".");
                 return to_return.toString();
             // display 'Destination unreachable message'
             case 3:

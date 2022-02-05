@@ -3,29 +3,23 @@ package Application;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 
-public abstract class Application extends Thread{
+public class Trash extends Application{
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
-
-    // identifier
-    public final int identifier;
-
-    // buffer
-    protected ArrayDeque<HashMap<String, Object>> buffer;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
     // constructor
-    protected Application(int identifier){
-        this.identifier = identifier;
-        this.buffer = new ArrayDeque<>();
+    public Trash(){
+        super(0);
     }
 
-    // add to buffer
-    public void add_to_buffer(HashMap<String, Object> record){
-        buffer.addLast(record);
+    // get buffer
+    public ArrayDeque<HashMap<String, Object>> get_buffer(){
+        return buffer;
     }
+
 }

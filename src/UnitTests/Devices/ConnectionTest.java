@@ -9,6 +9,8 @@ import Protocols.Frame.SimpleP2PFrame;
 import Protocols.Packets.IPv4;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConnectionTest {
@@ -196,8 +198,11 @@ class ConnectionTest {
         r1.send_data(data, IPv4.parse_to_long("192.168.0.1"));
 
         // test
+        HashMap<String, Object> record = r1.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(data,
-                IPv4.parse_to_long("192.168.0.1"), 255)+"\n", r1.get_monitor());
+                IPv4.parse_to_long("192.168.0.1"), 255),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                        (int)record.get("ttl")));
 
         // send data from r1 to r2
         r1.send_data(data, IPv4.parse_to_long("192.168.0.2"));
@@ -209,8 +214,10 @@ class ConnectionTest {
         }
 
         // test
+        record = r2.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(data,
-                IPv4.parse_to_long("192.168.0.1"), 255)+"\n", r2.get_monitor());
+                IPv4.parse_to_long("192.168.0.1"), 255), ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
 
         // add static route on r1 to r3
         r1.add_static_route(IPv4.parse_to_long("192.168.1.0"),
@@ -226,10 +233,11 @@ class ConnectionTest {
         }
 
         // test
+        record = r2.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(data,
-                IPv4.parse_to_long("192.168.0.1"), 255) + "\n" + ICMP.get_message(data,
-                IPv4.parse_to_long("192.168.0.1"), 255)
-                + "\n", r2.get_monitor());
+                IPv4.parse_to_long("192.168.0.1"), 255),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
 
         // send data from r1 to r3
         r1.send_data(data, IPv4.parse_to_long("192.168.1.1"));
@@ -241,8 +249,11 @@ class ConnectionTest {
         }
 
         // test
+        record = r3.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(data,
-                IPv4.parse_to_long("192.168.0.1"), 254) + "\n", r3.get_monitor());
+                IPv4.parse_to_long("192.168.0.1"), 254),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
     }
 
     // ping test
@@ -283,17 +294,21 @@ class ConnectionTest {
         r1.send_data(echo_request, IPv4.parse_to_long("192.168.0.1"));
 
         // test
+        HashMap<String, Object> record = r1.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(echo_reply,
-                IPv4.parse_to_long("192.168.0.1"), 255)+ "\n", r1.get_monitor());
-        r1.clear_monitor();
+                IPv4.parse_to_long("192.168.0.1"), 255),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
 
         // ping from r1 to 10.10.10.1
         r1.send_data(echo_request, IPv4.parse_to_long("10.10.10.1"));
 
         // test
+        record = r1.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(dest_unreachable,
-                -1L, 255)+ "\n", r1.get_monitor());
-        r1.clear_monitor();
+                -1L, 255),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
 
         // ping r2 from r1
         r1.send_data(echo_request, IPv4.parse_to_long("192.168.0.2"));
@@ -304,9 +319,11 @@ class ConnectionTest {
         }
 
         // test
+        record = r1.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(echo_reply,
-                IPv4.parse_to_long("192.168.0.2"), 255)+ "\n", r1.get_monitor());
-        r1.clear_monitor();
+                IPv4.parse_to_long("192.168.0.2"), 255),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
 
         // add static route on r1 to r3 and on r3 to r1
         r1.add_static_route(IPv4.parse_to_long("192.168.1.0"),
@@ -323,9 +340,11 @@ class ConnectionTest {
         }
 
         // test
+        record = r1.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(echo_reply,
-                IPv4.parse_to_long("192.168.0.2"), 255)+ "\n", r1.get_monitor());
-        r1.clear_monitor();
+                IPv4.parse_to_long("192.168.0.2"), 255),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
 
         // ping r3 from r1
         r1.send_data(echo_request, IPv4.parse_to_long("192.168.1.1"));
@@ -336,9 +355,11 @@ class ConnectionTest {
         }
 
         // test
+        record = r1.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(echo_reply,
-                IPv4.parse_to_long("192.168.1.1"), 254)+ "\n", r1.get_monitor());
-        r1.clear_monitor();
+                IPv4.parse_to_long("192.168.1.1"), 254),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
 
         // ping r3 from r1 but ttl = 1
         r1.send_data(echo_request, IPv4.parse_to_long("192.168.1.1"), 1, true);
@@ -349,9 +370,11 @@ class ConnectionTest {
         }
 
         // test
+        record = r1.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(dest_unreachable,
-                IPv4.parse_to_long("192.168.0.2"), 255)+ "\n", r1.get_monitor());
-        r1.clear_monitor();
+                IPv4.parse_to_long("192.168.0.2"), 255),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
 
         // add static route on r1 to 10.10.10.0/24
         r1.add_static_route(IPv4.parse_to_long("10.10.10.0"),
@@ -366,8 +389,10 @@ class ConnectionTest {
         }
 
         // test
+        record = r1.get_trash_buffer().getLast();
         assertEquals(ICMP.get_message(dest_unreachable,
-                IPv4.parse_to_long("192.168.0.2"), 255)+ "\n", r1.get_monitor());
-        r1.clear_monitor();
+                IPv4.parse_to_long("192.168.0.2"), 255),
+                ICMP.get_message((ICMPPacket) record.get("data"), (long)record.get("source"),
+                (int)record.get("ttl")));
     }
 }

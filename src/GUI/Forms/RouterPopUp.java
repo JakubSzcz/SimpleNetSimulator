@@ -272,10 +272,7 @@ public class RouterPopUp extends JDialog implements Runnable{
 
                 // if is valid
                 if (ip_message == IPv4MessageTypes.is_valid){
-                    router.add_line_to_monitor("Pinging with 32 bytes of data:");
-                    for (int i = 0; i < 4; i++){
-                        router.send_data(ICMP.create_echo_request(), IPv4.parse_to_long(ip_address));
-                    }
+                    router.ping(IPv4.parse_to_long(ip_address));
                 }else{
                     if (ip_message != IPv4MessageTypes.is_valid){
                         router.add_line_to_monitor("Wrong ip address");

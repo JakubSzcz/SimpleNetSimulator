@@ -1,5 +1,7 @@
 package Devices.Devices;
 
+import Application.Application;
+import Application.Ping;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
 import Devices.Routing.RoutingTable;
@@ -84,7 +86,13 @@ public class Router extends NetworkDevice implements Serializable {
                 send_ipv4_packet(packet);
             }else{
                 // send destination unreachable
-                Data dest_unreachable = ICMP.create_dest_unreachable();
+                Data dest_unreachable;
+                if (packet.get_data() instanceof ICMPPacket icmp_packet){
+                    dest_unreachable = ICMP.create_dest_unreachable(icmp_packet.get_identifier(),
+                            icmp_packet.get_sequence_number());
+                }else{
+                    dest_unreachable = ICMP.create_dest_unreachable();
+                }
                 send_data(dest_unreachable, packet.get_source_address());
             }
         }
@@ -93,16 +101,30 @@ public class Router extends NetworkDevice implements Serializable {
 
     // actions taken if received data is ICMP packet
     void handle_icmp_packet(ICMPPacket packet, long source, long destination, int ttl){
-        // echo reply
-        if (packet.get_type() == 0){
-            monitor.add_line(ICMP.get_message(packet, source, ttl));
+        // echo reply and destination unreachable
+        boolean trash = true;
+        if (packet.get_type() == 0 || packet.get_type() == 3){
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("data", packet);
+            map.put("source", source);
+            map.put("ttl", ttl);
+            for(Application application: applications){
+                if (application.identifier == packet.get_identifier()){
+                    if (application instanceof Ping ping){
+                        ping.add_to_buffer(map);
+                        ping.interrupt();
+                        trash = false;
+                        break;
+                    }
+                }
+            }
+            if (trash){
+                add_trash(map);
+            }
         // echo request
         }else if (packet.get_type() == 8){
-            Data data = ICMP.create_echo_reply();
+            Data data = ICMP.create_echo_reply(packet.get_identifier(), packet.get_sequence_number());
             send_data(data, source, 255, false);
-        // destination unreachable
-        }else if (packet.get_type() == 3){
-            monitor.add_line(ICMP.get_message(packet, source, ttl));
         }
     }
 
@@ -236,7 +258,13 @@ public class Router extends NetworkDevice implements Serializable {
             }else{
                 // if route was not found
                 if (show_on_monitor){
-                    ICMPPacket dest_unreachable = ICMP.create_dest_unreachable();
+                    ICMPPacket dest_unreachable;
+                    if (data instanceof ICMPPacket icmp_packet) {
+                        dest_unreachable = ICMP.create_dest_unreachable(icmp_packet.get_identifier(),
+                                icmp_packet.get_sequence_number());
+                    }else{
+                        dest_unreachable = ICMP.create_dest_unreachable();
+                    }
                     handle_icmp_packet(dest_unreachable, -1, destination_address, ttl);
                 }
             }
@@ -266,9 +294,20 @@ public class Router extends NetworkDevice implements Serializable {
                     IPv4.parse_to_string(packet.get_destination_address()));
         }else{
             // if route was not found
-            ICMPPacket dest_unreachable = ICMP.create_dest_unreachable();
+            ICMPPacket dest_unreachable;
+            if (packet.get_data() instanceof ICMPPacket icmp_packet) {
+                dest_unreachable = ICMP.create_dest_unreachable(icmp_packet.get_identifier(),
+                        icmp_packet.get_sequence_number());
+            }else{
+                dest_unreachable = ICMP.create_dest_unreachable();
+            }
             send_data(dest_unreachable, packet.get_source_address());
         }
+    }
+
+    // ping
+    public void ping(long destination_address){
+        applications.add(new Ping(generate_app_id(),this, destination_address));
     }
 
     // return routing table in string
