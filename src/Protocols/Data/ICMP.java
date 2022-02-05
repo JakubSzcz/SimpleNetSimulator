@@ -29,13 +29,13 @@ public class ICMP {
         return new ICMPPacket(8, identifier, sequence_number);
     }
     // return proper message according to the ICMP packet type
-    public static String get_message(ICMPPacket icmp_packet, long source_address, int ttl){
+    public static String get_message(ICMPPacket icmp_packet, long source_address, int ttl, long time){
         StringBuilder to_return = new StringBuilder("Replay from ");
         switch (icmp_packet.get_type()){
             // display echo replay
             case 0:
-                to_return.append(IPv4.parse_to_string(source_address)).append(": bytes=32 TTL=")
-                        .append(ttl).append(".");
+                to_return.append(IPv4.parse_to_string(source_address)).append(": bytes=32 time=")
+                        .append(time).append("ms TTL=").append(ttl).append(".");
                 return to_return.toString();
             // display 'Destination unreachable message'
             case 3:
@@ -53,5 +53,8 @@ public class ICMP {
                 return null;
         }
         return null;
+    }
+    public static String get_message(ICMPPacket icmp_packet, long source_address, int ttl){
+        return get_message(icmp_packet, source_address, ttl, -1);
     }
 }
