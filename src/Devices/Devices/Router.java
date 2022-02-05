@@ -1,6 +1,7 @@
 package Devices.Devices;
 
 import Application.Application;
+import Application.ApplicationDataTypes;
 import Application.Ping;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
@@ -105,17 +106,16 @@ public class Router extends NetworkDevice implements Serializable {
         boolean trash = true;
         if (packet.get_type() == 0 || packet.get_type() == 3){
             HashMap<String, Object> map = new HashMap<>();
+            map.put("type", ApplicationDataTypes.ICMP);
             map.put("data", packet);
             map.put("source", source);
             map.put("ttl", ttl);
             for(Application application: applications){
                 if (application.identifier == packet.get_identifier()){
-                    if (application instanceof Ping ping){
-                        ping.add_to_buffer(map);
-                        ping.interrupt();
-                        trash = false;
-                        break;
-                    }
+                    application.add_to_buffer(map);
+                    application.interrupt();
+                    trash = false;
+                    break;
                 }
             }
             if (trash){
