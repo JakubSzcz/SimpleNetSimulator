@@ -70,7 +70,7 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         this.router_speed = clock_period;
         this.applications = new ArrayList<Application>();
         this.taken_identifiers = new ArrayList<>();
-        applications.add(new Trash());
+        turn_on();
         if (!test){
             start();
         }
@@ -78,11 +78,13 @@ public abstract class NetworkDevice extends Thread implements Serializable {
 
     // turns on the device
     public void turn_on(){
+        applications.add(new Trash());
         turned_on = true;
     }
 
     // turns off the device
     public void turn_of(){
+        kill_all_applications();
         turned_on = false;
     }
 
@@ -188,16 +190,21 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     }
 
     // add to trash
-    public void add_trash(HashMap<String, Object> record){
+    public void add_to_trash(HashMap<String, Object> record){
         Trash trash = null;
         for (Application application: applications){
             if (application instanceof Trash trash_ap){
                 trash = trash_ap;
             }
         }
+        if (trash == null){
+            trash = new Trash();
+            applications.add(trash);
+        }
         trash.add_to_buffer(record);
     }
 
+    // trash buffer getter
     public ArrayDeque<HashMap<String, Object>> get_trash_buffer(){
         Trash trash = null;
         for (Application application: applications){
@@ -205,6 +212,19 @@ public abstract class NetworkDevice extends Thread implements Serializable {
                 trash = trash_ap;
             }
         }
+        if (trash == null){
+            trash = new Trash();
+            applications.add(trash);
+        }
         return trash.get_buffer();
+    }
+
+    //
+    private void kill_all_applications(){
+        for(Application application: applications){
+            application.stop();
+            taken_identifiers.remove(Integer.valueOf(application.identifier));
+        }
+        applications.clear();
     }
 }

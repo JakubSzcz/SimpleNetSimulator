@@ -363,6 +363,7 @@ public class Topology {
 
             // add routers and positions to list
             for (RouterButton router : routers){
+                router.get_router().turn_of();
                 routers_list.add(router.get_router());
                 positions_list.add(router.get_position());
             }
@@ -390,6 +391,7 @@ public class Topology {
             // add routers to topology
             for (int i = 0; i < routers_list.size(); i++){
                 routers_list.get(i).start();
+                routers_list.get(i).turn_on();
                 routers.add(new RouterButton(Icons.icon.router(), positions_list.get(i),
                         routers_list.get(i), router_pop_up));
             }

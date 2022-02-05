@@ -119,7 +119,7 @@ public class Router extends NetworkDevice implements Serializable {
                 }
             }
             if (trash){
-                add_trash(map);
+                add_to_trash(map);
             }
         // echo request
         }else if (packet.get_type() == 8){
