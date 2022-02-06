@@ -232,4 +232,9 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     public void execute_command(String command){
         cli.execute_command(command);
     }
+
+    // get possible commands
+    public HashMap<String, ArrayList<String>> get_all_commands(){
+        return cli.get_all_commands();
+    }
 }

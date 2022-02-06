@@ -4,6 +4,7 @@ import Devices.Devices.Router;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class RouterCLI extends NetworkDeviceCLI{
@@ -59,5 +60,15 @@ public class RouterCLI extends NetworkDeviceCLI{
     @Override
     protected void execute_config_command(String single_command, ArrayList<String> commands_list){
         // TODO
+    }
+
+    @Override
+    public HashMap<String, ArrayList<String>> get_all_commands() {
+        HashMap<String, ArrayList<String>> to_return = new HashMap<>();
+        to_return.put("disable", disable_commands);
+        to_return.put("enable", enable_commands);
+        to_return.put("config", config_commands);
+        to_return.put("configure", configure_commands);
+        return to_return;
     }
 }
