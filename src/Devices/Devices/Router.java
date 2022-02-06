@@ -3,6 +3,7 @@ package Devices.Devices;
 import Application.Application;
 import Application.ApplicationDataTypes;
 import Application.Ping;
+import Devices.CLI.RouterCLI;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
 import Devices.Routing.RoutingTable;
@@ -35,6 +36,7 @@ public class Router extends NetworkDevice implements Serializable {
     // normal case constructor
     public Router(String name, int int_number){
         super(name, int_number);
+        cli = new RouterCLI(this);
         routing_table = new RoutingTable();
     }
 

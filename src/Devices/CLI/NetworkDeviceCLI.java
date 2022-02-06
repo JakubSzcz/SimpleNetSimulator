@@ -61,37 +61,78 @@ public abstract class NetworkDeviceCLI {
     }
 
     // execute command, main method
-    public void execute_command(String command){
+    public final void execute_command(String command){
+        // single command to process
+        String single_command;
+
+        // commands in list
         ArrayList<String> commands_list = new ArrayList<>(
                 Arrays.asList(command.split(" "))
         );
+
+        // check cli mode
         if (commands_list.size() > 0){
             switch (mode){
                 case DISABLE -> {
-                    if (disable_commands.contains(commands_list.get(0))){
-                        System.out.println("disable");
+                    single_command = commands_list.get(0);
+                    commands_list.remove(single_command);
+                    if (disable_commands.contains(single_command)){
+                        if (single_command.equals("enable")){
+                            mode = CLIModes.ENABLE;
+                        }else if (single_command.equals("show")){
+                            // TODO
+                        }else if (single_command.equals("?")){
+                            StringBuilder line = new StringBuilder();
+                            for (String word : disable_commands){
+                                line.append(word).append("\n");
+                            }
+                            device.add_line_to_monitor(line.toString());
+                        }else{
+                            execute_disable_command(single_command, commands_list);
+                        }
                     }else{
                         // TODO
                     }
                 }
                 case ENABLE -> {
-                    if (enable_commands.contains(commands_list.get(0))){
+                    single_command = commands_list.get(0);
+                    commands_list.remove(single_command);
+                    if (enable_commands.contains(single_command)){
                         System.out.println("enable");
                     }else{
                         // TODO
                     }
                 }
                 case CONFIG -> {
-                    if (config_commands.contains(commands_list.get(0))){
+                    single_command = commands_list.get(0);
+                    commands_list.remove(single_command);
+                    if (config_commands.contains(single_command)){
                         System.out.println("config");
                     }else{
                         // TODO
                     }
                 }
-                default -> {
-
-                }
+                default -> execute_different_mode(commands_list);
             }
         }
     }
+
+    /////////////////////////////////////////////////////////
+    //                abstract functions                   //
+    /////////////////////////////////////////////////////////
+
+    // execute mode which is possible only in child
+    protected abstract void execute_different_mode(ArrayList<String> commands_list);
+
+    // execute command in disable mode which is possible only in child
+    protected abstract void execute_disable_command(String single_command,
+                                                    ArrayList<String> commands_list);
+
+    // execute command in enable mode which is possible only in child
+    protected abstract void execute_enable_command(String single_command,
+                                                    ArrayList<String> commands_list);
+
+    // execute command in config mode which is possible only in child
+    protected abstract void execute_config_command(String single_command,
+                                                    ArrayList<String> commands_list);
 }

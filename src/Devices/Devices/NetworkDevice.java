@@ -2,6 +2,7 @@ package Devices.Devices;
 
 import Application.Application;
 import Application.Trash;
+import Devices.CLI.NetworkDeviceCLI;
 import Protocols.Frame.Frame;
 
 import java.io.Serializable;
@@ -39,37 +40,36 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // application max number
     protected int MAX_IDENTIFIER = 2000;
 
+    // CLI
+    protected NetworkDeviceCLI cli;
+
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
     // normal case constructor
     public NetworkDevice(String name, int int_number){
-        constructor(name,int_number, 200, false);
+        this(name,int_number, 200, false);
     }
 
     public NetworkDevice(String name, int int_number, int clock_period){
-        constructor(name,int_number, clock_period, false);
+        this(name,int_number, clock_period, false);
     }
 
     // test case constructor, Network device for tests without thread running
     public NetworkDevice(String name, int int_number, Boolean test){
-        constructor(name, int_number, 200, test);
+        this(name, int_number, 200, test);
     }
 
     public NetworkDevice(String name, int int_number, int clock_period, Boolean test){
-        constructor(name, int_number, clock_period, test);
-    }
-
-    // constructor
-    private void constructor(String name,int int_number, int clock_period, Boolean test){
         this.name = name;
         this.net_card = new NetworkCard(int_number);
         this.monitor = new Monitor();
         this.turned_on = true;
         this.router_speed = clock_period;
-        this.applications = new ArrayList<Application>();
+        this.applications = new ArrayList<>();
         this.taken_identifiers = new ArrayList<>();
+        this.cli = null;
         turn_on();
         if (!test){
             start();
@@ -219,12 +219,17 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         return trash.get_buffer();
     }
 
-    //
+    // kill all apps
     private void kill_all_applications(){
         for(Application application: applications){
             application.stop();
             taken_identifiers.remove(Integer.valueOf(application.identifier));
         }
         applications.clear();
+    }
+
+    // execute commands
+    public void execute_command(String command){
+        cli.execute_command(command);
     }
 }
