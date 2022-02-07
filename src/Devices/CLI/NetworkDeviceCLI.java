@@ -2,6 +2,7 @@ package Devices.CLI;
 
 import Devices.Devices.NetworkDevice;
 import Protocols.Packets.IPv4;
+import Protocols.Packets.IPv4MessageTypes;
 
 import java.util.*;
 
@@ -25,6 +26,12 @@ public abstract class NetworkDeviceCLI {
     // config commands
     protected ArrayList<String> config_commands;
 
+    // config-if commands
+    protected ArrayList<String> config_if_commands;
+
+    // config-if ip commands
+    protected ArrayList<String> interface_ip_commands;
+
     // enable, configure commands
     protected ArrayList<String> configure_commands;
 
@@ -33,6 +40,9 @@ public abstract class NetworkDeviceCLI {
 
     // show ip commands
     protected ArrayList<String> show_ip_commands;
+
+    // interface in config-if mode
+    protected int active_interface;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -55,6 +65,16 @@ public abstract class NetworkDeviceCLI {
                 Arrays.asList("do", "exit", "interface", "ip", "?")
         );
 
+        // config-ig commands
+        this.config_if_commands = new ArrayList<>(
+                Arrays.asList("do", "exit", "ip", "shutdown", "?")
+        );
+
+        // config-ig ip commands
+        this.interface_ip_commands = new ArrayList<>(
+                Arrays.asList("address", "?")
+        );
+
         // enable, configure commands
         this.configure_commands = new ArrayList<>(
                 Arrays.asList("terminal", "?")
@@ -70,11 +90,10 @@ public abstract class NetworkDeviceCLI {
                 List.of("?")
         );
 
-        // mode
+        // init
         this.mode = CLIModes.DISABLE;
-
-        // network device
         this.device = device;
+        this.active_interface = -1;
     }
 
     // execute command, main method
@@ -82,17 +101,20 @@ public abstract class NetworkDeviceCLI {
         execute_command(command, false);
     }
     public final void execute_command(String command, boolean add_command_to_monitor){
-        // single command to process
-        String single_command;
+        // add to monitor
+        if (add_command_to_monitor){
+            device.add_line_to_monitor(get_prompt() + command);
+        }
 
         // commands in list
         ArrayList<String> commands_list = new ArrayList<>(
                 Arrays.asList(command.split(" "))
         );
-
-        if (add_command_to_monitor){
-            device.add_line_to_monitor(get_prompt() + command);
-        }
+        execute_command(commands_list);
+    }
+    public final void execute_command(ArrayList<String> commands_list){
+        // single command to process
+        String single_command;
 
         // check cli mode
         if (commands_list.size() > 0){
@@ -139,6 +161,23 @@ public abstract class NetworkDeviceCLI {
                         }
                     }else{
                         wrong_command();
+                    }
+                }
+                case CONFIG_IF -> {
+                    single_command = commands_list.get(0);
+                    commands_list.remove(single_command);
+                    if (config_if_commands.contains(single_command)) {
+                        switch (single_command) {
+                            case "do" -> do$(commands_list);
+                            case "exit" -> {
+                                active_interface = -1;
+                                mode = CLIModes.CONFIG;
+                            }
+                            case "ip" -> interface_ip(commands_list);
+                            case "shutdown" -> interface_shutdown(commands_list);
+                            case "?" -> question_mark(config_if_commands);
+                            default -> execute_config_command(single_command, commands_list);
+                        }
                     }
                 }
                 default -> execute_different_mode(commands_list);
@@ -283,12 +322,118 @@ public abstract class NetworkDeviceCLI {
 
     // config do command
     private void do$(ArrayList<String> commands_list){
-        // TODO
+        if (commands_list.size() > 0){
+            CLIModes current_mode = mode;
+            mode = CLIModes.ENABLE;
+            execute_command(commands_list);
+            mode = current_mode;
+        }else{
+            incomplete_command();
+        }
+
     }
 
     // config interface command
     private void interface$(ArrayList<String> commands_list){
-        // TODO
+        switch (commands_list.size()) {
+            case 1 -> {
+                String int_number_string = commands_list.get(0).replace("interface", "");
+                try {
+                    int int_number = Integer.parseInt(int_number_string);
+                    interface$(int_number);
+                } catch (NumberFormatException e) {
+                    wrong_command();
+                }
+            }
+            case 2 -> {
+                if (commands_list.get(0).equals("interface")){
+                    try {
+                        int int_number = Integer.parseInt(commands_list.get(1));
+                        interface$(int_number);
+                    }catch (NumberFormatException e){
+                        wrong_command();
+                    }
+                }else{
+                    wrong_command();
+                }
+            }
+            case 0 -> {
+                incomplete_command();
+            }
+            default -> wrong_command();
+        }
+    }
+
+    private void interface$(int int_number){
+        if (int_number > 0 && int_number < device.get_int_number()){
+            active_interface = int_number;
+            mode = CLIModes.CONFIG_IF;
+        }else{
+            wrong_command();
+        }
+    }
+
+    private void interface_ip(ArrayList<String> commands_list){
+        String single_command = commands_list.get(0);
+        commands_list.remove(single_command);
+        if (interface_ip_commands.contains(single_command)) {
+            switch (single_command) {
+                case "address" -> interface_ip_address(commands_list);
+                case "?" -> question_mark(interface_ip_commands);
+            }
+        }else{
+            wrong_command();
+        }
+    }
+
+    private void interface_ip_address(ArrayList<String> commands_list){
+        switch (commands_list.size()){
+            case 0,1 -> incomplete_command();
+            case 2 -> {
+                // get ip and mask
+                String ip_address_string = commands_list.get(0);
+                String mask_string = commands_list.get(1);
+
+                // valid ip and mask
+                IPv4MessageTypes ip_message = IPv4.is_ip_valid(ip_address_string);
+                IPv4MessageTypes mask_message = IPv4.is_mask_valid(mask_string);
+
+                // if valid check interface valid
+                if (ip_message == IPv4MessageTypes.is_valid && mask_message == IPv4MessageTypes.is_valid) {
+                    IPv4MessageTypes ip_interface_message = device.set_interface_ip(active_interface,
+                            IPv4.parse_to_long(ip_address_string), IPv4.parse_mask_to_long(mask_string));
+                    switch (ip_interface_message) {
+                        case is_valid:
+                            break;
+                        case is_net_address, is_broadcast_address, mask_is_over_30:
+                            device.add_line_to_monitor("Bad mask " + mask_string + " for address "
+                            + ip_address_string);
+                            break;
+                        case overlaps:
+                            device.add_line_to_monitor(ip_address_string + " " + mask_string
+                            + " overlaps with other interface");
+                            break;
+                    }
+                }else{
+                    // if not valid add message to router monitor
+                    if (ip_message != IPv4MessageTypes.is_valid){
+                        device.add_line_to_monitor("IP address is not valid");
+                    }
+                    if (mask_message != IPv4MessageTypes.is_valid){
+                        device.add_line_to_monitor("Mask is not valid");
+                    }
+                }
+            }
+            default -> wrong_command();
+        }
+    }
+
+    private void interface_shutdown(ArrayList<String> commands_list){
+        if (commands_list.size() == 0){
+            device.down_interface(active_interface);
+        }else{
+            wrong_command();
+        }
     }
 
     // config ip command

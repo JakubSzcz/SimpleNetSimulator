@@ -130,26 +130,11 @@ public class Router extends NetworkDevice implements Serializable {
         }
     }
 
+    @Override
     // set ip address of given interface
     public IPv4MessageTypes set_interface_ip(int int_number, long ip_address, long mask){
-        IPv4MessageTypes message = IPv4.is_interface_ip_valid(ip_address, mask);
-        long smaller_mask;
-        Map<String, Long> int_ip_address;
+        IPv4MessageTypes message = super.set_interface_ip(int_number, ip_address, mask);
         if (message == IPv4MessageTypes.is_valid) {
-            for (int i = 0; i < get_int_number(); i++){
-                if (i != int_number){
-                    int_ip_address = net_card.get_ip_address(i);
-                    if (mask < int_ip_address.get("mask")){
-                        smaller_mask = mask;
-                    }else{
-                        smaller_mask = int_ip_address.get("mask");
-                    }
-                    long net_address = int_ip_address.get("address") & smaller_mask;
-                    if ((ip_address & smaller_mask) == net_address){
-                        return IPv4MessageTypes.overlaps;
-                    }
-                }
-            }
             boolean is_up = net_card.is_interface_up(int_number);
             down_interface(int_number);
             net_card.get_interface(int_number).set_ip_address(ip_address, mask);
@@ -162,12 +147,13 @@ public class Router extends NetworkDevice implements Serializable {
         return message;
     }
 
+    @Override
     // delete ip address of given interface
     public void delete_interface_ip(int int_number){
         Map<String, Long> ip_address = net_card.get_ip_address(int_number);
         long net_address = ip_address.get("address") & ip_address.get("mask");
         delete_route(RouteCode.C, 0, 0, net_address,ip_address.get("mask"),-1, int_number);
-        net_card.get_interface(int_number).set_ip_address(-1, -1);
+        super.delete_interface_ip(int_number);
     }
 
     // add static route to routing table

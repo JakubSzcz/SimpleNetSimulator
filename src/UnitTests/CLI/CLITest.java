@@ -93,4 +93,35 @@ class CLITest {
         expected.append(route.int_number());
         assertEquals(expected + "\nend\n", router.get_monitor());
     }
+
+    @Test
+    public void do$(){
+        Router router = new Router("router", 1);
+        router.execute_command("enable");
+        router.execute_command("configure terminal");
+        StringBuilder expected = new StringBuilder();
+
+        // enable
+        router.execute_command("do ?");
+        for (String word : router.get_all_commands().get("enable")){
+            expected.append(word).append("\n");
+        }
+        expected.delete(0, 2);
+        expected.append("\n");
+
+        assertEquals(expected.toString(), router.get_monitor());
+
+        // config
+        router.clear_monitor();
+        expected = new StringBuilder();
+        router.execute_command("?");
+        for (String word : router.get_all_commands().get("config")){
+            expected.append(word).append("\n");
+        }
+        expected.delete(0, 2);
+        expected.append("\n");
+
+        assertEquals(expected.toString(), router.get_monitor());
+
+    }
 }

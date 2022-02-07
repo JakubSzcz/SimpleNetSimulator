@@ -3,13 +3,13 @@ package Devices.Devices;
 import Application.Application;
 import Application.Trash;
 import Devices.CLI.NetworkDeviceCLI;
+import Devices.Routing.RouteCode;
 import Protocols.Frame.Frame;
+import Protocols.Packets.IPv4;
+import Protocols.Packets.IPv4MessageTypes;
 
 import java.io.Serializable;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public abstract class NetworkDevice extends Thread implements Serializable {
     /////////////////////////////////////////////////////////
@@ -108,8 +108,22 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         }
     }
 
+    // name getter
+    public String get_name() {
+        return name;
+    }
+
     // actions taken after receiving a frame
     abstract void handle_frame(Frame frame);
+
+    // check if card buffer is empty - only for tests
+    public boolean is_buffer_empty(){
+        return net_card.is_buffer_empty();
+    }
+
+    /////////////////////////////////////////////////////////
+    //                 interface functions                 //
+    /////////////////////////////////////////////////////////
 
     // returns interface, link needs it
     public NetworkInterface get_interface(int int_number){
@@ -126,11 +140,43 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         net_card.up_interface(int_number);
     }
 
-
-    // check if card buffer is empty - only for tests
-    public boolean is_buffer_empty(){
-        return net_card.is_buffer_empty();
+    // int number getter
+    public int get_int_number(){
+        return net_card.get_int_number();
     }
+
+    // set ip address of given interface
+    public IPv4MessageTypes set_interface_ip(int int_number, long ip_address, long mask){
+        IPv4MessageTypes message = IPv4.is_interface_ip_valid(ip_address, mask);
+        long smaller_mask;
+        Map<String, Long> int_ip_address;
+        if (message == IPv4MessageTypes.is_valid) {
+            for (int i = 0; i < get_int_number(); i++){
+                if (i != int_number){
+                    int_ip_address = net_card.get_ip_address(i);
+                    if (mask < int_ip_address.get("mask")){
+                        smaller_mask = mask;
+                    }else{
+                        smaller_mask = int_ip_address.get("mask");
+                    }
+                    long net_address = int_ip_address.get("address") & smaller_mask;
+                    if ((ip_address & smaller_mask) == net_address){
+                        return IPv4MessageTypes.overlaps;
+                    }
+                }
+            }
+        }
+        return message;
+    }
+
+    // delete ip address of given interface
+    public void delete_interface_ip(int int_number){
+        net_card.get_interface(int_number).set_ip_address(-1, -1);
+    }
+
+    /////////////////////////////////////////////////////////
+    //                 monitor functions                   //
+    /////////////////////////////////////////////////////////
 
     // return monitor to string
     public String get_monitor(){
@@ -142,20 +188,14 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         monitor.clear();
     }
 
-    // name getter
-    public String get_name() {
-        return name;
-    }
-
-    // int number getter
-    public int get_int_number(){
-        return net_card.get_int_number();
-    }
-
     // monitor add line
     public void add_line_to_monitor(String line){
         monitor.add_line(line);
     }
+
+    /////////////////////////////////////////////////////////
+    //                 application functions               //
+    /////////////////////////////////////////////////////////
 
     // remove application
     public void remove_application(int identifier){
@@ -227,6 +267,10 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         }
         applications.clear();
     }
+
+    /////////////////////////////////////////////////////////
+    //                   cli functions                     //
+    /////////////////////////////////////////////////////////
 
     // execute commands
     public void execute_command(String command){
