@@ -1,6 +1,7 @@
 package Devices.CLI;
 
 import Devices.Devices.NetworkDevice;
+import Protocols.Packets.IPv4;
 
 import java.util.*;
 
@@ -27,6 +28,12 @@ public abstract class NetworkDeviceCLI {
     // enable, configure commands
     protected ArrayList<String> configure_commands;
 
+    // show commands
+    protected ArrayList<String> show_commands;
+
+    // show ip commands
+    protected ArrayList<String> show_ip_commands;
+
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
@@ -35,7 +42,7 @@ public abstract class NetworkDeviceCLI {
     protected NetworkDeviceCLI(NetworkDevice device){
         // disable commands
         this.disable_commands = new ArrayList<>(
-                Arrays.asList("enable", "show", "?")
+                Arrays.asList("enable", "?")
         );
 
         // enable commands
@@ -53,6 +60,16 @@ public abstract class NetworkDeviceCLI {
                 Arrays.asList("terminal", "?")
         );
 
+        // show commands
+        this.show_commands = new ArrayList<>(
+                Arrays.asList("ip","running-config", "?")
+        );
+
+        // show ip commands
+        this.show_ip_commands = new ArrayList<>(
+                List.of("?")
+        );
+
         // mode
         this.mode = CLIModes.DISABLE;
 
@@ -62,6 +79,9 @@ public abstract class NetworkDeviceCLI {
 
     // execute command, main method
     public final void execute_command(String command){
+        execute_command(command, false);
+    }
+    public final void execute_command(String command, boolean add_command_to_monitor){
         // single command to process
         String single_command;
 
@@ -69,6 +89,10 @@ public abstract class NetworkDeviceCLI {
         ArrayList<String> commands_list = new ArrayList<>(
                 Arrays.asList(command.split(" "))
         );
+
+        if (add_command_to_monitor){
+            device.add_line_to_monitor(get_prompt() + command);
+        }
 
         // check cli mode
         if (commands_list.size() > 0){
@@ -79,7 +103,6 @@ public abstract class NetworkDeviceCLI {
                     if (disable_commands.contains(single_command)){
                         switch (single_command) {
                             case "enable" -> mode = CLIModes.ENABLE;
-                            case "show" -> show(commands_list);
                             case "?" -> question_mark(disable_commands);
                             default -> execute_disable_command(single_command, commands_list);
                         }
@@ -141,6 +164,18 @@ public abstract class NetworkDeviceCLI {
         return prompt.toString();
     }
 
+    // return all possible commands in HashMap
+    public HashMap<String, ArrayList<String>> get_all_commands(){
+        HashMap<String, ArrayList<String>> to_return = new HashMap<>();
+        to_return.put("disable", disable_commands);
+        to_return.put("enable", enable_commands);
+        to_return.put("config", config_commands);
+        to_return.put("configure", configure_commands);
+        to_return.put("show", show_commands);
+        to_return.put("show_ip", show_ip_commands);
+        return to_return;
+    }
+
     /////////////////////////////////////////////////////////
     //                    help functions                   //
     /////////////////////////////////////////////////////////
@@ -148,6 +183,9 @@ public abstract class NetworkDeviceCLI {
     // wrong command
     protected void wrong_command(){
         device.add_line_to_monitor("\nInvalid input detected\n");
+    }
+    protected void incomplete_command(){
+        device.add_line_to_monitor("\nIncomplete command\n");
     }
 
     // question mark command, add possible commands to monitor
@@ -168,14 +206,79 @@ public abstract class NetworkDeviceCLI {
             }else{
                 wrong_command();
             }
-        }else{
+        }else if (commands_list.size() > 1){
             wrong_command();
+        }else{
+            incomplete_command();
         }
     }
 
     // disable, enable show command
     private void show(ArrayList<String> commands_list){
-        // TODO
+        String single_command;
+        if (commands_list.size() > 0){
+            single_command = commands_list.get(0);
+            commands_list.remove(single_command);
+            if (show_commands.contains(single_command)){
+                switch (single_command){
+                    case "ip" -> show_ip(commands_list);
+                    case "running-config" -> show_run(commands_list);
+                    case "?" -> question_mark(show_commands);
+                    default -> execute_show_command(single_command, commands_list);
+                }
+            }else{
+                wrong_command();
+            }
+        }else{
+            incomplete_command();
+        }
+    }
+
+    // show ip command
+    private void show_ip(ArrayList<String> commands_list){
+        String single_command;
+        if (commands_list.size() > 0){
+            single_command = commands_list.get(0);
+            commands_list.remove(single_command);
+            if (show_ip_commands.contains(single_command)){
+                if ("?".equals(single_command)) {
+                    question_mark(show_commands);
+                } else {
+                    execute_show_ip_command(single_command, commands_list);
+                }
+            }else{
+                wrong_command();
+            }
+        }else{
+            incomplete_command();
+        }
+    }
+
+    // show running-config
+    protected void show_run(ArrayList<String> commands_list){
+        if (commands_list.size() == 0){
+            device.add_line_to_monitor("Building configuration...\n");
+            device.add_line_to_monitor("hostname: " + device.get_name() + "\n!");
+            for (int i = 0; i < device.get_int_number(); i++){
+                device.add_line_to_monitor("interface interface" + i);
+                if (device.get_interface(i).get_ip_address().get("address") != -1){
+                    long ip_address = device.get_interface(i).get_ip_address().get("address");
+                    long mask = device.get_interface(i).get_ip_address().get("mask");
+                    device.add_line_to_monitor(" ip address " + IPv4.parse_to_string(ip_address) +
+                            " " + IPv4.parse_mask_to_string_dot(mask));
+                }else{
+                    device.add_line_to_monitor(" no ip address");
+                }
+                if (device.get_interface(i).is_up()){
+                    device.add_line_to_monitor(" no shutdown");
+                }else{
+                    device.add_line_to_monitor(" shutdown");
+                }
+                device.add_line_to_monitor("!");
+            }
+        }else{
+            wrong_command();
+        }
     }
 
     // config do command
@@ -212,6 +315,11 @@ public abstract class NetworkDeviceCLI {
     protected abstract void execute_config_command(String single_command,
                                                     ArrayList<String> commands_list);
 
-    // return all possible commands in HashMap
-    public abstract HashMap<String, ArrayList<String>> get_all_commands();
+    // execute show command which is possible only in child
+    protected abstract void execute_show_command(String single_command,
+                                                   ArrayList<String> commands_list);
+
+    // execute show ip command which is possible only in child
+    protected abstract void execute_show_ip_command(String single_command,
+                                                 ArrayList<String> commands_list);
 }
