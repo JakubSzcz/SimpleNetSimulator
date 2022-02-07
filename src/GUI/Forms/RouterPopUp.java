@@ -97,6 +97,9 @@ public class RouterPopUp extends JDialog implements Runnable{
     private JScrollPane scroll;
     private JTextField ip_address_ping;
     private JButton clear_monitor_button;
+    private JButton tracerouteButton;
+    private JTextField command;
+    private JLabel prompt;
 
     // int state set
     JButton[] int_state = new JButton[]{int0_state, int1_state, int2_state, int3_state,
@@ -143,6 +146,10 @@ public class RouterPopUp extends JDialog implements Runnable{
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,
+                0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        // call onCancel() on ESCAPE
+        command.registerKeyboardAction(e -> execute_command(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,
                 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         // up/down interface 0
@@ -286,6 +293,13 @@ public class RouterPopUp extends JDialog implements Runnable{
         });
     }
 
+    private void execute_command(){
+        String command_to_execute = command.getText();
+        router.execute_command(command_to_execute, true);
+        command.setText("");
+        refresh();
+    }
+
     // actions after clicking up down button on interfaces
     private void up_down_interface(int int_number){
         if (router.get_interface(int_number).is_up()){
@@ -403,6 +417,9 @@ public class RouterPopUp extends JDialog implements Runnable{
         for (int i = 0; i < topology.get_max_int_number(); i++){
             panel[i].setVisible(i < int_number);
         }
+
+        // update prompt
+        prompt.setText(router.get_prompt());
     }
 
     // router setter

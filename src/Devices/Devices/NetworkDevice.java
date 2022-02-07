@@ -278,6 +278,11 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         cli.execute_command(command);
     }
 
+    // execute commands
+    public void execute_command(String command, boolean add_to_monitor){
+        cli.execute_command(command, add_to_monitor);
+    }
+
     // get possible commands
     public HashMap<String, ArrayList<String>> get_all_commands(){
         return cli.get_all_commands();
@@ -291,5 +296,10 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // get cli mode
     public CLIModes get_cli_mode() {
         return cli.get_mode();
+    }
+
+    // prompt getter
+    public String get_prompt(){
+        return cli.get_prompt();
     }
 }

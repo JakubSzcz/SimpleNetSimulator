@@ -176,19 +176,20 @@ public abstract class NetworkDeviceCLI {
         if (add_command_to_monitor){
             device.add_line_to_monitor(get_prompt() + command);
         }
-
         // commands in list
         ArrayList<String> commands_list = new ArrayList<>(
                 Arrays.asList(command.trim().split(" "))
         );
-        execute_command(commands_list);
+        if (!command.equals("")){
+            execute_command(commands_list);
+        }
     }
     public final void execute_command(ArrayList<String> commands_list){
         // single command to process
         String single_command;
 
-        // check cli mode
-        if (commands_list.size() > 0){
+        if (!commands_list.isEmpty()){
+            // check cli mode
             switch (mode){
                 case DISABLE -> {
                     single_command = commands_list.get(0);
@@ -330,7 +331,7 @@ public abstract class NetworkDeviceCLI {
                                  HashMap<String, String> possible_commands_info){
         StringBuilder line = new StringBuilder();
         for (String word : possible_commands){
-            line.append(word).append("\t\t\t").append(possible_commands_info.get(word))
+            line.append(word).append("\t\t").append(possible_commands_info.get(word))
                     .append("\n");
         }
         line.delete(0, 4);
@@ -344,10 +345,10 @@ public abstract class NetworkDeviceCLI {
     // # configure ...
     private void configure(ArrayList<String> commands_list){
         if (commands_list.size() == 1){
-            if (commands_list.get(0).equals("terminal")){
-                mode = CLIModes.CONFIG;
-            }else{
-                wrong_command();
+            switch (commands_list.get(0)) {
+                case "terminal" -> mode = CLIModes.CONFIG;
+                case "?" -> question_mark(configure_commands, configure_commands_info);
+                default -> wrong_command();
             }
         }else if (commands_list.size() > 1){
             wrong_command();

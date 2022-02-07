@@ -23,7 +23,7 @@ class CLITest {
 
         // expected
         for (String word : router.get_all_commands().get("disable")){
-            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+            expected.append(word).append("\t\t").append(router.get_all_commands_info()
                     .get("disable").get(word)).append("\n");
         }
         expected.delete(0, 4);
@@ -47,7 +47,7 @@ class CLITest {
 
         // expected
         for (String word : router.get_all_commands().get("enable")){
-            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+            expected.append(word).append("\t\t").append(router.get_all_commands_info()
                     .get("enable").get(word)).append("\n");
         }
         expected.delete(0, 4);
@@ -71,7 +71,7 @@ class CLITest {
 
         // expected
         for (String word : router.get_all_commands().get("config")){
-            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+            expected.append(word).append("\t\t").append(router.get_all_commands_info()
                     .get("config").get(word)).append("\n");
         }
         expected.delete(0, 4);
@@ -95,7 +95,7 @@ class CLITest {
 
         // expected
         for (String word : router.get_all_commands().get("config-if")){
-            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+            expected.append(word).append("\t\t").append(router.get_all_commands_info()
                     .get("config-if").get(word)).append("\n");
         }
         expected.delete(0, 4);
@@ -192,7 +192,7 @@ class CLITest {
         // enable
         router.execute_command("do ?");
         for (String word : router.get_all_commands().get("enable")){
-            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+            expected.append(word).append("\t\t").append(router.get_all_commands_info()
                     .get("enable").get(word)).append("\n");
         }
         expected.delete(0, 4);
@@ -205,7 +205,7 @@ class CLITest {
         expected = new StringBuilder();
         router.execute_command("?");
         for (String word : router.get_all_commands().get("config")){
-            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+            expected.append(word).append("\t\t").append(router.get_all_commands_info()
                     .get("config").get(word)).append("\n");
         }
         expected.delete(0, 4);

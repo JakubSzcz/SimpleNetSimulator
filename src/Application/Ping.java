@@ -81,9 +81,10 @@ public class Ping extends Application{
         }
         parent_router.add_line_to_monitor(String.format("\nPing statistics for %s:",
                 IPv4.parse_to_string(destination_address)));
+        double loss = (double)(how_many - received) / how_many * 100;
         parent_router.add_line_to_monitor(String.format("Packets: Sent = %d, Received = %d, " +
                 "Lost = %d (%d%% loss)", how_many, received, how_many - received,
-                (int)((how_many - received) / how_many * 100)));
+                (int)loss));
         if (times.size() > 0){
             Collections.sort(times);
             long average = 0;
