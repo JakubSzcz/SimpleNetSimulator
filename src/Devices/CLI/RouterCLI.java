@@ -88,6 +88,11 @@ public class RouterCLI extends NetworkDeviceCLI{
         }
     }
 
+    @Override
+    protected void execute_config_no_command(String single_command, ArrayList<String> commands_list) {
+        // TODO
+    }
+
     /////////////////////////////////////////////////////////
     //                    help functions                   //
     /////////////////////////////////////////////////////////

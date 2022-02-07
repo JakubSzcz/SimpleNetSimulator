@@ -27,10 +27,12 @@ public abstract class NetworkDeviceCLI {
 
     // config commands
     protected ArrayList<String> config_commands;
+    protected ArrayList<String> config_no_commands;
     protected HashMap<String, String> config_commands_info;
 
     // config-if commands
     protected ArrayList<String> config_if_commands;
+    protected ArrayList<String> config_if_no_commands;
     protected HashMap<String, String> config_if_commands_info;
 
     // config-if ip commands
@@ -53,7 +55,7 @@ public abstract class NetworkDeviceCLI {
     protected int active_interface;
 
     /////////////////////////////////////////////////////////
-    //                     functions                       //
+    //                    constructor                      //
     /////////////////////////////////////////////////////////
 
     // constructor
@@ -85,6 +87,9 @@ public abstract class NetworkDeviceCLI {
         this.config_commands = new ArrayList<>(
                 Arrays.asList("do", "exit", "interface", "ip", "no", "?")
         );
+        this.config_no_commands = new ArrayList<>(
+                Arrays.asList("interface", "ip", "?")
+        );
         this.config_commands_info = new HashMap<>(){{
             put("do", "To run exec commands in config mode");
             put("exit", "Exit from configure mode");
@@ -98,6 +103,9 @@ public abstract class NetworkDeviceCLI {
         // config-if commands
         this.config_if_commands = new ArrayList<>(
                 Arrays.asList("do", "exit", "ip","no", "shutdown", "?")
+        );
+        this.config_if_no_commands = new ArrayList<>(
+                Arrays.asList("ip", "shutdown", "?")
         );
         this.config_if_commands_info = new HashMap<>(){{
             put("do", "To run exec commands in config-if mode");
@@ -155,6 +163,10 @@ public abstract class NetworkDeviceCLI {
         this.active_interface = -1;
     }
 
+    /////////////////////////////////////////////////////////
+    //                  execute command                    //
+    /////////////////////////////////////////////////////////
+
     // execute command, main method
     public final void execute_command(String command){
         execute_command(command, false);
@@ -167,7 +179,7 @@ public abstract class NetworkDeviceCLI {
 
         // commands in list
         ArrayList<String> commands_list = new ArrayList<>(
-                Arrays.asList(command.split(" "))
+                Arrays.asList(command.trim().split(" "))
         );
         execute_command(commands_list);
     }
@@ -246,7 +258,11 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
-    // prompt
+    /////////////////////////////////////////////////////////
+    //                     functions                       //
+    /////////////////////////////////////////////////////////
+
+    // get prompt
     public String get_prompt(){
         StringBuilder prompt = new StringBuilder();
         prompt.append(device.get_name());
@@ -292,8 +308,7 @@ public abstract class NetworkDeviceCLI {
         return to_return;
     }
 
-    // return device mode
-
+    // return cli mode
     public CLIModes get_mode() {
         return mode;
     }
@@ -322,7 +337,11 @@ public abstract class NetworkDeviceCLI {
         device.add_line_to_monitor(line.toString());
     }
 
-    // enable configure command
+    /////////////////////////////////////////////////////////
+    //               disable and enable modes              //
+    /////////////////////////////////////////////////////////
+
+    // # configure ...
     private void configure(ArrayList<String> commands_list){
         if (commands_list.size() == 1){
             if (commands_list.get(0).equals("terminal")){
@@ -337,7 +356,7 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
-    // disable, enable show command
+    // # show ...
     private void show(ArrayList<String> commands_list){
         String single_command;
         if (commands_list.size() > 0){
@@ -358,7 +377,7 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
-    // show ip command
+    // # show ip ...
     private void show_ip(ArrayList<String> commands_list){
         String single_command;
         if (commands_list.size() > 0){
@@ -378,7 +397,7 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
-    // show running-config
+    // # show running-config
     protected void show_run(ArrayList<String> commands_list){
         if (commands_list.size() == 0){
             device.add_line_to_monitor("Building configuration...\n");
@@ -405,7 +424,11 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
-    // config do command
+    /////////////////////////////////////////////////////////
+    //                    config mode                      //
+    /////////////////////////////////////////////////////////
+
+    // (config)# do ...
     private void do$(ArrayList<String> commands_list){
         if (commands_list.size() > 0){
             CLIModes current_mode = mode;
@@ -418,14 +441,22 @@ public abstract class NetworkDeviceCLI {
 
     }
 
-    // config interface command
+    // (config)# interface <int number>
     private void interface$(ArrayList<String> commands_list){
+        interface$(commands_list, false);
+    }
+    // (config)# interface <int number>
+    private void interface$(ArrayList<String> commands_list, boolean no){
         switch (commands_list.size()) {
             case 1 -> {
                 String int_number_string = commands_list.get(0).replace("interface", "");
                 try {
                     int int_number = Integer.parseInt(int_number_string);
-                    interface$(int_number);
+                    if (!no){
+                        interface$(int_number);
+                    }else{
+                        no_interface(int_number);
+                    }
                 } catch (NumberFormatException e) {
                     wrong_command();
                 }
@@ -434,7 +465,11 @@ public abstract class NetworkDeviceCLI {
                 if (commands_list.get(0).equals("interface")){
                     try {
                         int int_number = Integer.parseInt(commands_list.get(1));
-                        interface$(int_number);
+                        if (!no){
+                            interface$(int_number);
+                        }else{
+                            no_interface(int_number);
+                        }
                     }catch (NumberFormatException e){
                         wrong_command();
                     }
@@ -449,6 +484,7 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
+    // (config)# interface <int number>
     private void interface$(int int_number){
         if (int_number >= 0 && int_number < device.get_int_number()){
             active_interface = int_number;
@@ -458,23 +494,87 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
-    private void config_no(ArrayList<String> commands_list){
-        // TODO
-    }
-
-    private void interface_ip(ArrayList<String> commands_list){
-        String single_command = commands_list.get(0);
-        commands_list.remove(single_command);
-        if (interface_ip_commands.contains(single_command)) {
-            switch (single_command) {
-                case "address" -> interface_ip_address(commands_list);
-                case "?" -> question_mark(interface_ip_commands, interface_ip_commands_info);
-            }
+    // (config)# no interface <int number>
+    private void no_interface(int int_number){
+        if (int_number >= 0 && int_number < device.get_int_number()){
+            device.down_interface(int_number);
+            device.delete_interface_ip(int_number);
         }else{
             wrong_command();
         }
     }
 
+    // (config)# no ...
+    private void config_no(ArrayList<String> commands_list){
+        if (commands_list.size() > 0){
+            String single_command = commands_list.get(0);
+            commands_list.remove(single_command);
+            if (config_commands.contains(single_command)){
+                switch (single_command) {
+                    case "interface" -> interface$(commands_list);
+                    case "ip" -> no_ip(commands_list);
+                    case "?" -> question_mark(config_no_commands, config_commands_info);
+                    default -> execute_config_no_command(single_command, commands_list);
+                }
+            }else{
+                wrong_command();
+            }
+        }else{
+            incomplete_command();
+        }
+    }
+
+    // (config)# ip ... command
+    private void ip(ArrayList<String> commands_list){
+        // TODO
+    }
+
+    // (config)# no ip ... command
+    private void no_ip(ArrayList<String> commands_list){
+        // TODO
+    }
+
+    /////////////////////////////////////////////////////////
+    //                   config-if mode                    //
+    /////////////////////////////////////////////////////////
+
+    // (config-if)# ip ...
+    private void interface_ip(ArrayList<String> commands_list){
+        if (commands_list.size() > 0){
+            String single_command = commands_list.get(0);
+            commands_list.remove(single_command);
+            if (interface_ip_commands.contains(single_command)) {
+                switch (single_command) {
+                    case "address" -> interface_ip_address(commands_list);
+                    case "?" -> question_mark(interface_ip_commands, interface_ip_commands_info);
+                }
+            }else{
+                wrong_command();
+            }
+        }else{
+            incomplete_command();
+        }
+    }
+
+    // (config-if)# no ip ...
+    private void interface_no_ip(ArrayList<String> commands_list){
+        if (commands_list.size() > 0){
+            String single_command = commands_list.get(0);
+            commands_list.remove(single_command);
+            if (interface_ip_commands.contains(single_command)) {
+                switch (single_command) {
+                    case "address" -> interface_no_ip_address(commands_list);
+                    case "?" -> question_mark(interface_ip_commands, interface_ip_commands_info);
+                }
+            }else{
+                wrong_command();
+            }
+        }else{
+            incomplete_command();
+        }
+    }
+
+    // (config-if)# ip address <ip address> <mask>
     private void interface_ip_address(ArrayList<String> commands_list){
         switch (commands_list.size()){
             case 0,1 -> incomplete_command();
@@ -517,10 +617,36 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
-    private void interface_no(ArrayList<String> commands_list){
-        // TODO
+    // (config-if)# no ip address
+    private void interface_no_ip_address(ArrayList<String> commands_list){
+        if (commands_list.size() == 0){
+            device.delete_interface_ip(active_interface);
+        }else{
+            wrong_command();
+        }
     }
 
+    // (config-if)# no ...
+    private void interface_no(ArrayList<String> commands_list){
+        if (commands_list.size() > 0){
+            String single_command = commands_list.get(0);
+            commands_list.remove(single_command);
+            if (config_if_no_commands.contains(single_command)){
+                switch (single_command) {
+                    case "ip" -> interface_no_ip(commands_list);
+                    case "shutdown" -> interface_no_shutdown(commands_list);
+                    case "?" -> question_mark(config_no_commands, config_commands_info);
+                    default -> execute_config_no_command(single_command, commands_list);
+                }
+            }else{
+                wrong_command();
+            }
+        }else{
+            incomplete_command();
+        }
+    }
+
+    // (config-if)# shutdown
     private void interface_shutdown(ArrayList<String> commands_list){
         if (commands_list.size() == 0){
             device.down_interface(active_interface);
@@ -529,9 +655,13 @@ public abstract class NetworkDeviceCLI {
         }
     }
 
-    // config ip command
-    private void ip(ArrayList<String> commands_list){
-        // TODO
+    // (config-if)# no shutdown
+    private void interface_no_shutdown(ArrayList<String> commands_list){
+        if (commands_list.size() == 0){
+            device.up_interface(active_interface);
+        }else{
+            wrong_command();
+        }
     }
 
     /////////////////////////////////////////////////////////
@@ -552,6 +682,10 @@ public abstract class NetworkDeviceCLI {
     // execute command in config mode which is possible only in child
     protected abstract void execute_config_command(String single_command,
                                                     ArrayList<String> commands_list);
+
+    // execute command in config mode which is possible only in child
+    protected abstract void execute_config_no_command(String single_command,
+                                                   ArrayList<String> commands_list);
 
     // execute show command which is possible only in child
     protected abstract void execute_show_command(String single_command,
