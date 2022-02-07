@@ -2,6 +2,7 @@ package Devices.Devices;
 
 import Application.Application;
 import Application.Trash;
+import Devices.CLI.CLIModes;
 import Devices.CLI.NetworkDeviceCLI;
 import Devices.Routing.RouteCode;
 import Protocols.Frame.Frame;
@@ -280,5 +281,15 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // get possible commands
     public HashMap<String, ArrayList<String>> get_all_commands(){
         return cli.get_all_commands();
+    }
+
+    // get possible commands info
+    public HashMap<String, HashMap<String, String>> get_all_commands_info(){
+        return cli.get_all_commands_info();
+    }
+
+    // get cli mode
+    public CLIModes get_cli_mode() {
+        return cli.get_mode();
     }
 }

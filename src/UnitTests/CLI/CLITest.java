@@ -1,5 +1,6 @@
 package UnitTests.CLI;
 
+import Devices.CLI.CLIModes;
 import Devices.Devices.Router;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
@@ -16,23 +17,59 @@ class CLITest {
         // disable
         router.execute_command("?");
         for (String word : router.get_all_commands().get("disable")){
-            expected.append(word).append("\n");
+            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+                    .get("disable").get(word)).append("\n");
         }
-        expected.delete(0, 2);
+        expected.delete(0, 4);
         expected.append("\n");
 
         assertEquals(expected.toString(), router.get_monitor());
 
-        // disable
+        // enable
         router.clear_monitor();
         expected = new StringBuilder();
         router.execute_command("enable");
+        assertEquals(CLIModes.ENABLE, router.get_cli_mode());
         router.execute_command("?");
 
         for (String word : router.get_all_commands().get("enable")){
-            expected.append(word).append("\n");
+            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+                    .get("enable").get(word)).append("\n");
         }
-        expected.delete(0, 2);
+        expected.delete(0, 4);
+        expected.append("\n");
+
+        assertEquals(expected.toString(), router.get_monitor());
+
+        // config
+        router.clear_monitor();
+        expected = new StringBuilder();
+        router.execute_command("configure terminal");
+        assertEquals(CLIModes.CONFIG, router.get_cli_mode());
+        router.execute_command("?");
+
+        for (String word : router.get_all_commands().get("config")){
+            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+                    .get("config").get(word)).append("\n");
+        }
+        expected.delete(0, 4);
+        expected.append("\n");
+
+        assertEquals(expected.toString(), router.get_monitor());
+
+        // config-if
+        router.clear_monitor();
+        expected = new StringBuilder();
+        router.execute_command("interface interface0");
+        System.out.println(router.get_monitor());
+        assertEquals(CLIModes.CONFIG_IF, router.get_cli_mode());
+        router.execute_command("?");
+
+        for (String word : router.get_all_commands().get("config-if")){
+            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+                    .get("config-if").get(word)).append("\n");
+        }
+        expected.delete(0, 4);
         expected.append("\n");
 
         assertEquals(expected.toString(), router.get_monitor());
@@ -104,9 +141,10 @@ class CLITest {
         // enable
         router.execute_command("do ?");
         for (String word : router.get_all_commands().get("enable")){
-            expected.append(word).append("\n");
+            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+                    .get("enable").get(word)).append("\n");
         }
-        expected.delete(0, 2);
+        expected.delete(0, 4);
         expected.append("\n");
 
         assertEquals(expected.toString(), router.get_monitor());
@@ -116,12 +154,26 @@ class CLITest {
         expected = new StringBuilder();
         router.execute_command("?");
         for (String word : router.get_all_commands().get("config")){
-            expected.append(word).append("\n");
+            expected.append(word).append("\t\t\t").append(router.get_all_commands_info()
+                    .get("config").get(word)).append("\n");
         }
-        expected.delete(0, 2);
+        expected.delete(0, 4);
         expected.append("\n");
 
         assertEquals(expected.toString(), router.get_monitor());
 
+    }
+
+    @Test
+    public void interface_ip_address() {
+        Router router = new Router("router", 1);
+        router.execute_command("enable");
+        router.execute_command("configure terminal");
+        router.execute_command("interface interface0");
+        router.execute_command("ip address 192.168.1.1 255.255.255.0");
+        long ip_address = router.get_interface(0).get_ip_address().get("address");
+        long mask = router.get_interface(0).get_ip_address().get("mask");
+        assertEquals(IPv4.parse_to_long("192.168.1.1"), ip_address);
+        assertEquals(IPv4.parse_mask_to_long("/24"), mask);
     }
 }

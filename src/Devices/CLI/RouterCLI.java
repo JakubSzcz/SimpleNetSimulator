@@ -25,14 +25,17 @@ public class RouterCLI extends NetworkDeviceCLI{
 
         // disable commands
         disable_commands.addAll(List.of("ping"));
+        disable_commands_info.put("ping", "Send echo messages");
         Collections.sort(disable_commands);
 
         // enable commands
         enable_commands.addAll(List.of("ping"));
+        enable_commands_info.put("ping", "Send echo messages");
         Collections.sort(enable_commands);
 
         // enable commands
         show_ip_commands.addAll(List.of("route"));
+        show_ip_commands_info.put("route", "IP routing table");
         Collections.sort(show_ip_commands);
 
     }

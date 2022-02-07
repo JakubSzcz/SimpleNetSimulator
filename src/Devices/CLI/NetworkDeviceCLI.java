@@ -19,27 +19,35 @@ public abstract class NetworkDeviceCLI {
 
     // disable mode commands
     protected ArrayList<String> disable_commands;
+    protected HashMap<String, String> disable_commands_info;
 
     // enable mode commands
     protected ArrayList<String> enable_commands;
+    protected HashMap<String, String> enable_commands_info;
 
     // config commands
     protected ArrayList<String> config_commands;
+    protected HashMap<String, String> config_commands_info;
 
     // config-if commands
     protected ArrayList<String> config_if_commands;
+    protected HashMap<String, String> config_if_commands_info;
 
     // config-if ip commands
     protected ArrayList<String> interface_ip_commands;
+    protected HashMap<String, String> interface_ip_commands_info;
 
     // enable, configure commands
     protected ArrayList<String> configure_commands;
+    protected HashMap<String, String> configure_commands_info;
 
     // show commands
     protected ArrayList<String> show_commands;
+    protected HashMap<String, String> show_commands_info;
 
     // show ip commands
     protected ArrayList<String> show_ip_commands;
+    protected HashMap<String, String> show_ip_commands_info;
 
     // interface in config-if mode
     protected int active_interface;
@@ -54,41 +62,92 @@ public abstract class NetworkDeviceCLI {
         this.disable_commands = new ArrayList<>(
                 Arrays.asList("enable", "?")
         );
+        this.disable_commands_info = new HashMap<>(){{
+            put("enable", "Turn on privileged commands");
+            put("?", "");
+        }};
+        Collections.sort(disable_commands);
 
         // enable commands
         this.enable_commands = new ArrayList<>(
                 Arrays.asList("configure", "disable", "exit", "show", "?")
         );
+        this.enable_commands_info = new HashMap<>(){{
+            put("configure", "Enter configuration mode");
+            put("disable", "Turn off privileged commands");
+            put("exit", "Exit from the EXEC");
+            put("show", "Show running system information");
+            put("?", "");
+        }};
+        Collections.sort(enable_commands);
 
         // config commands
         this.config_commands = new ArrayList<>(
-                Arrays.asList("do", "exit", "interface", "ip", "?")
+                Arrays.asList("do", "exit", "interface", "ip", "no", "?")
         );
+        this.config_commands_info = new HashMap<>(){{
+            put("do", "To run exec commands in config mode");
+            put("exit", "Exit from configure mode");
+            put("interface", "Select an interface to configure");
+            put("ip", "Global IP configuration subcommands");
+            put("no", "Negate a command or set its defaults");
+            put("?", "");
+        }};
+        Collections.sort(config_commands);
 
-        // config-ig commands
+        // config-if commands
         this.config_if_commands = new ArrayList<>(
-                Arrays.asList("do", "exit", "ip", "shutdown", "?")
+                Arrays.asList("do", "exit", "ip","no", "shutdown", "?")
         );
+        this.config_if_commands_info = new HashMap<>(){{
+            put("do", "To run exec commands in config-if mode");
+            put("exit", "Exit from interface configuration mode");
+            put("ip", "Interface Internet Protocol config commands");
+            put("no", "Negate a command or set its defaults");
+            put("shutdown", "Shutdown the selected interface");
+            put("?", "");
+        }};
+        Collections.sort(config_if_commands);
 
-        // config-ig ip commands
+        // config-if ip commands
         this.interface_ip_commands = new ArrayList<>(
                 Arrays.asList("address", "?")
         );
+        this.interface_ip_commands_info = new HashMap<>(){{
+            put("address", "Set the IP address of an interface");
+            put("?", "");
+        }};
+        Collections.sort(interface_ip_commands);
 
         // enable, configure commands
         this.configure_commands = new ArrayList<>(
                 Arrays.asList("terminal", "?")
         );
+        this.configure_commands_info = new HashMap<>(){{
+            put("terminal", "Configure from the terminal");
+            put("?", "");
+        }};
+        Collections.sort(configure_commands);
 
         // show commands
         this.show_commands = new ArrayList<>(
                 Arrays.asList("ip","running-config", "?")
         );
+        this.show_commands_info = new HashMap<>(){{
+            put("ip", "IP information");
+            put("running-config", "Current operating configuration");
+            put("?", "");
+        }};
+        Collections.sort(show_commands);
 
         // show ip commands
         this.show_ip_commands = new ArrayList<>(
                 List.of("?")
         );
+        this.show_ip_commands_info = new HashMap<>(){{
+            put("?", "");
+        }};
+        Collections.sort(show_ip_commands);
 
         // init
         this.mode = CLIModes.DISABLE;
@@ -125,7 +184,7 @@ public abstract class NetworkDeviceCLI {
                     if (disable_commands.contains(single_command)){
                         switch (single_command) {
                             case "enable" -> mode = CLIModes.ENABLE;
-                            case "?" -> question_mark(disable_commands);
+                            case "?" -> question_mark(disable_commands, disable_commands_info);
                             default -> execute_disable_command(single_command, commands_list);
                         }
                     }else{
@@ -140,7 +199,7 @@ public abstract class NetworkDeviceCLI {
                             case "configure" -> configure(commands_list);
                             case "disable", "exit" -> mode = CLIModes.DISABLE;
                             case "show" -> show(commands_list);
-                            case "?" -> question_mark(enable_commands);
+                            case "?" -> question_mark(enable_commands, enable_commands_info);
                             default -> execute_enable_command(single_command, commands_list);
                         }
                     }else{
@@ -156,7 +215,8 @@ public abstract class NetworkDeviceCLI {
                             case "exit" -> mode = CLIModes.ENABLE;
                             case "interface" -> interface$(commands_list);
                             case "ip" -> ip(commands_list);
-                            case "?" -> question_mark(config_commands);
+                            case "no" -> config_no(commands_list);
+                            case "?" -> question_mark(config_commands, config_commands_info);
                             default -> execute_config_command(single_command, commands_list);
                         }
                     }else{
@@ -174,8 +234,9 @@ public abstract class NetworkDeviceCLI {
                                 mode = CLIModes.CONFIG;
                             }
                             case "ip" -> interface_ip(commands_list);
+                            case "no" -> interface_no(commands_list);
                             case "shutdown" -> interface_shutdown(commands_list);
-                            case "?" -> question_mark(config_if_commands);
+                            case "?" -> question_mark(config_if_commands, config_if_commands_info);
                             default -> execute_config_command(single_command, commands_list);
                         }
                     }
@@ -209,10 +270,32 @@ public abstract class NetworkDeviceCLI {
         to_return.put("disable", disable_commands);
         to_return.put("enable", enable_commands);
         to_return.put("config", config_commands);
+        to_return.put("config-if", config_if_commands);
+        to_return.put("interface_ip", interface_ip_commands);
         to_return.put("configure", configure_commands);
         to_return.put("show", show_commands);
         to_return.put("show_ip", show_ip_commands);
         return to_return;
+    }
+
+    // return all possible commands info in HashMap
+    public HashMap<String, HashMap<String, String>> get_all_commands_info(){
+        HashMap<String, HashMap<String, String>> to_return = new HashMap<>();
+        to_return.put("disable", disable_commands_info);
+        to_return.put("enable", enable_commands_info);
+        to_return.put("config", config_commands_info);
+        to_return.put("config-if", config_if_commands_info);
+        to_return.put("interface_ip", interface_ip_commands_info);
+        to_return.put("configure", configure_commands_info);
+        to_return.put("show", show_commands_info);
+        to_return.put("show_ip", show_ip_commands_info);
+        return to_return;
+    }
+
+    // return device mode
+
+    public CLIModes get_mode() {
+        return mode;
     }
 
     /////////////////////////////////////////////////////////
@@ -228,12 +311,14 @@ public abstract class NetworkDeviceCLI {
     }
 
     // question mark command, add possible commands to monitor
-    protected void question_mark(ArrayList<String> possible_commands){
+    protected void question_mark(ArrayList<String> possible_commands,
+                                 HashMap<String, String> possible_commands_info){
         StringBuilder line = new StringBuilder();
         for (String word : possible_commands){
-            line.append(word).append("\n");
+            line.append(word).append("\t\t\t").append(possible_commands_info.get(word))
+                    .append("\n");
         }
-        line.delete(0, 2);
+        line.delete(0, 4);
         device.add_line_to_monitor(line.toString());
     }
 
@@ -262,7 +347,7 @@ public abstract class NetworkDeviceCLI {
                 switch (single_command){
                     case "ip" -> show_ip(commands_list);
                     case "running-config" -> show_run(commands_list);
-                    case "?" -> question_mark(show_commands);
+                    case "?" -> question_mark(show_commands, show_commands_info);
                     default -> execute_show_command(single_command, commands_list);
                 }
             }else{
@@ -281,7 +366,7 @@ public abstract class NetworkDeviceCLI {
             commands_list.remove(single_command);
             if (show_ip_commands.contains(single_command)){
                 if ("?".equals(single_command)) {
-                    question_mark(show_commands);
+                    question_mark(show_ip_commands,  show_ip_commands_info);
                 } else {
                     execute_show_ip_command(single_command, commands_list);
                 }
@@ -365,12 +450,16 @@ public abstract class NetworkDeviceCLI {
     }
 
     private void interface$(int int_number){
-        if (int_number > 0 && int_number < device.get_int_number()){
+        if (int_number >= 0 && int_number < device.get_int_number()){
             active_interface = int_number;
             mode = CLIModes.CONFIG_IF;
         }else{
             wrong_command();
         }
+    }
+
+    private void config_no(ArrayList<String> commands_list){
+        // TODO
     }
 
     private void interface_ip(ArrayList<String> commands_list){
@@ -379,7 +468,7 @@ public abstract class NetworkDeviceCLI {
         if (interface_ip_commands.contains(single_command)) {
             switch (single_command) {
                 case "address" -> interface_ip_address(commands_list);
-                case "?" -> question_mark(interface_ip_commands);
+                case "?" -> question_mark(interface_ip_commands, interface_ip_commands_info);
             }
         }else{
             wrong_command();
@@ -426,6 +515,10 @@ public abstract class NetworkDeviceCLI {
             }
             default -> wrong_command();
         }
+    }
+
+    private void interface_no(ArrayList<String> commands_list){
+        // TODO
     }
 
     private void interface_shutdown(ArrayList<String> commands_list){
