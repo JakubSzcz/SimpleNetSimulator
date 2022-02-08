@@ -1,6 +1,6 @@
 package main;
 
-import Enums.AddDeviceMessages;
+import Topology.AddDeviceMessages;
 import PopUps.AddDeviceController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

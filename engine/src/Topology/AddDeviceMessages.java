@@ -1,4 +1,4 @@
-package Enums;
+package Topology;
 
 public enum AddDeviceMessages {
     is_valid,
