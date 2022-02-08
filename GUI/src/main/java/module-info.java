@@ -4,5 +4,7 @@ module GUI {
     requires engine;
 
     opens main to javafx.fxml;
+    opens PopUps to javafx.fxml;
     exports main;
+    exports PopUps;
 }

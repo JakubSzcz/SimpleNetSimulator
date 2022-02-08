@@ -43,6 +43,6 @@
       </MenuBar>
    </top>
    <center>
-      <AnchorPane fx:id="map" onMouseClicked="#map_click" prefHeight="445.0" prefWidth="900.0" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="map" prefHeight="445.0" prefWidth="900.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

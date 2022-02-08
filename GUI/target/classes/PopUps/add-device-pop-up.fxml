@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="206.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PopUps.AddDeviceController">
+   <children>
+      <ButtonBar layoutX="3.0" layoutY="166.0" prefHeight="40.0" prefWidth="328.0">
+        <buttons>
+          <Button mnemonicParsing="false" onAction="#add" text="Add" />
+            <Button mnemonicParsing="false" onAction="#close" text="Cancel" />
+        </buttons>
+      </ButtonBar>
+      <Label layoutX="30.0" layoutY="62.0" text="name" />
+      <Label layoutX="29.0" layoutY="100.0" text="number of interfaces" />
+      <Label layoutX="30.0" layoutY="21.0" text="type" />
+      <TextField fx:id="name" layoutX="179.0" layoutY="55.0" />
+      <TextField fx:id="int_number" layoutX="180.0" layoutY="93.0" />
+      <ComboBox fx:id="type" layoutX="180.0" layoutY="17.0" prefWidth="150.0" />
+      <Label fx:id="warning" layoutX="4.0" layoutY="139.0" prefHeight="18.0" prefWidth="343.0" />
+   </children>
+</AnchorPane>
