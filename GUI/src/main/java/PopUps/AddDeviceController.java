@@ -106,7 +106,7 @@ public class AddDeviceController {
         }
         // if valid
         if (is_valid){
-            DeviceButton button = new DeviceButton(name_string, mouse_x, mouse_y);
+            DeviceButton button = new DeviceButton(name_string, mouse_x, mouse_y, device_type);
             devices.add(button);
             returned_button = button;
             returned_valid = AddDeviceMessages.is_valid;
