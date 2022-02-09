@@ -43,25 +43,34 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // CLI
     protected NetworkDeviceCLI cli;
 
+    // position
+    private double pos_x;
+    private double pos_y;
+
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
     // normal case constructor
     public NetworkDevice(String name, int int_number){
-        this(name,int_number, 200, false);
+        this(name,int_number, 200, false, 0, 0);
+    }
+
+    public NetworkDevice(String name, int int_number, double pos_x, double pos_y){
+        this(name,int_number, 200, false, pos_x, pos_y);
     }
 
     public NetworkDevice(String name, int int_number, int clock_period){
-        this(name,int_number, clock_period, false);
+        this(name,int_number, clock_period, false, 0, 0);
     }
 
     // test case constructor, Network device for tests without thread running
     public NetworkDevice(String name, int int_number, Boolean test){
-        this(name, int_number, 200, test);
+        this(name, int_number, 200, test, 0, 0);
     }
 
-    public NetworkDevice(String name, int int_number, int clock_period, Boolean test){
+    public NetworkDevice(String name, int int_number, int clock_period,
+                         Boolean test, double pos_x, double pos_y){
         this.name = name;
         this.net_card = new NetworkCard(int_number);
         this.monitor = new Monitor();
@@ -70,6 +79,8 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         this.applications = new ArrayList<>();
         this.taken_identifiers = new ArrayList<>();
         this.cli = null;
+        this.pos_x = pos_x;
+        this.pos_y = pos_y;
         turn_on();
         if (!test){
             start();
@@ -111,6 +122,15 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // name getter
     public String get_name() {
         return name;
+    }
+
+    // position getters
+    public double get_pos_x() {
+        return pos_x;
+    }
+
+    public double get_pos_y() {
+        return pos_y;
     }
 
     // actions taken after receiving a frame

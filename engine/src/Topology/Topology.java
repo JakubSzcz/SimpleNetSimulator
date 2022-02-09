@@ -51,6 +51,10 @@ public class Topology {
 
     // add router to topology
     public AddDeviceMessages add_device(String name, int int_number, NetworkDevicesTypes type){
+        return add_device(name, int_number, type, 0, 0);
+    }
+    public AddDeviceMessages add_device(String name, int int_number, NetworkDevicesTypes type,
+                                        double pos_x, double pos_y){
         // check if number of interfaces is not too high
         if (int_number > MAX_INT_NUMBER){
             return AddDeviceMessages.too_many_interfaces;
@@ -75,7 +79,7 @@ public class Topology {
         // if is valid
         switch (type){
             case ROUTER ->{
-                devices.add(new Router(name, int_number));
+                devices.add(new Router(name, int_number, pos_x, pos_y));
                 HashMap<Object, Object> map = new HashMap<>();
                 map.put("name", name);
                 for (int i = 0; i < int_number; i++){
@@ -190,5 +194,10 @@ public class Topology {
             }
         }
         return device_map;
+    }
+
+    // devices getter
+    public ArrayList<NetworkDevice> get_devices() {
+        return devices;
     }
 }

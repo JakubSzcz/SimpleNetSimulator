@@ -3,9 +3,7 @@ package PopUps;
 import Topology.AddDeviceMessages;
 import Topology.Topology;
 import Topology.NetworkDevicesTypes;
-import DeviceButton.DeviceButton;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -34,16 +32,10 @@ public class AddDeviceController {
     @FXML
     Label warning;
 
-    // return values
-    static public AddDeviceMessages returned_valid;
-    static public Button returned_button;
-
     // mouse position
-    static  public double mouse_x;
-    static  public double mouse_y;
+    static public double mouse_x;
+    static public double mouse_y;
 
-    // all added buttons
-    private static final ArrayList<DeviceButton> devices = new ArrayList<>();
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -80,7 +72,8 @@ public class AddDeviceController {
             int_number_int = Integer.parseInt(string_int_number);
 
             // add device to topology
-            AddDeviceMessages message = Topology.get_topology().add_device(name_string, int_number_int, device_type);
+            AddDeviceMessages message = Topology.get_topology().
+                    add_device(name_string, int_number_int, device_type, mouse_x, mouse_y);
 
             // if any errors occurred
             if (message == AddDeviceMessages.name_is_taken){
@@ -106,10 +99,6 @@ public class AddDeviceController {
         }
         // if valid
         if (is_valid){
-            DeviceButton button = new DeviceButton(name_string, mouse_x, mouse_y, device_type);
-            devices.add(button);
-            returned_button = button;
-            returned_valid = AddDeviceMessages.is_valid;
             close();
         }
     }

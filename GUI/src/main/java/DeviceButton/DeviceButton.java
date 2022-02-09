@@ -31,6 +31,7 @@ public class DeviceButton extends Button {
         setBorder(Border.EMPTY);
         setBackground(Background.EMPTY);
 
+        // image
         switch (type){
             case ROUTER -> setGraphic(new ImageView(ROUTER_IMAGE));
         }

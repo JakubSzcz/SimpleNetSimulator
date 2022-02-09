@@ -35,7 +35,10 @@ public class Router extends NetworkDevice implements Serializable {
 
     // normal case constructor
     public Router(String name, int int_number){
-        super(name, int_number);
+        this(name, int_number, 0, 0);
+    }
+    public Router(String name, int int_number, double pos_x, double pos_y){
+        super(name, int_number, pos_x, pos_y);
         cli = new RouterCLI(this);
         routing_table = new RoutingTable();
     }
