@@ -16,22 +16,29 @@ public class Link extends Thread implements Serializable {
     // delay in ms
     private final int delay;
 
+    // link id
+    private final int id;
+
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
     // constructor
     public Link(NetworkInterface end_1, NetworkInterface end_2){
+        this(end_1, end_2, -1);
+    }
+    public Link(NetworkInterface end_1, NetworkInterface end_2, int id){
         // port1
         this.end_1 = end_1;
-        end_1.up();
 
         // port2
         this.end_2 = end_2;
-        end_2.up();
 
         // delay
         this.delay = 200;
+
+        // id
+        this.id = id;
 
         // Thread start
         start();
@@ -62,5 +69,10 @@ public class Link extends Thread implements Serializable {
     // end2 getter
     public NetworkInterface get_end2(){
         return end_2;
+    }
+
+    // id getter
+    public int get_id(){
+        return id;
     }
 }
