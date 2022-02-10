@@ -137,7 +137,8 @@ public class Topology {
         HashMap<Object, Object> map2 = get_device_from_topology_map(device2);
         map1.put(int_number1, link_id);
         map2.put(int_number2, link_id);
-        links.add(new Link(device1.get_interface(int_number1), device2.get_interface(int_number2), link_id));
+        links.add(new Link(device1.get_interface(int_number1), device2.get_interface(int_number2), link_id,
+                device1.get_pos_x(), device1.get_pos_y(), device2.get_pos_x(),device2.get_pos_y()));
         return AddLinkMessages.is_valid;
     }
 
@@ -199,5 +200,10 @@ public class Topology {
     // devices getter
     public ArrayList<NetworkDevice> get_devices() {
         return devices;
+    }
+
+    // links getter
+    public ArrayList<Link> get_links() {
+        return links;
     }
 }

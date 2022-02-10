@@ -1,4 +1,4 @@
-package DeviceButton;
+package MapObjects;
 
 import Topology.NetworkDevicesTypes;
 import javafx.scene.control.Button;

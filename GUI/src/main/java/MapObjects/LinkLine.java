@@ -1,22 +1,19 @@
-package PopUps;
+package MapObjects;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
+import javafx.scene.shape.Line;
 
-public class DeleteDeviceController {
+public class LinkLine extends Line {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////
 
-    public ComboBox devices_to_delete;
+
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
-    @FXML
-    public void initialize(){
-
+    public LinkLine(double start_x, double start_y, double end_x, double end_y){
+        super(start_x, start_y, end_x, end_y);
     }
-
 }

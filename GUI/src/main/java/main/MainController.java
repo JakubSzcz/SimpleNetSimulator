@@ -1,8 +1,10 @@
 package main;
 
-import DeviceButton.DeviceButton;
+import MapObjects.DeviceButton;
 import Devices.Devices.NetworkDevice;
 import Devices.Devices.Router;
+import Devices.Link;
+import MapObjects.LinkLine;
 import Topology.NetworkDevicesTypes;
 import PopUps.AddDeviceController;
 import Topology.Topology;
@@ -76,18 +78,48 @@ public class MainController {
         stage.setAlwaysOnTop(true);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+
+        refresh();
     }
 
     // add link
     @FXML
     private void add_link(){
-        // TODO
+        FXMLLoader fxmlLoader = new FXMLLoader(AddDeviceController.class.getResource("add-link-pop-up.fxml"));
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Add link");
+        stage.setScene(new Scene(root));
+        stage.setAlwaysOnTop(true);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+        refresh();
     }
 
     // delete link
     @FXML
     private void delete_link(){
-        // TODO
+        FXMLLoader fxmlLoader = new FXMLLoader(AddDeviceController.class.getResource("delete-link-pop-up.fxml"));
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Delete link");
+        stage.setScene(new Scene(root));
+        stage.setAlwaysOnTop(true);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+        refresh();
     }
 
     // if map was clicked
@@ -126,7 +158,13 @@ public class MainController {
         add_device_clicked = false;
     }
 
+    // refresh map
     private void refresh(){
+        draw_devices();
+        draw_links();
+    }
+
+    private void draw_devices(){
         NetworkDevicesTypes device_type = NetworkDevicesTypes.ROUTER;
         for (NetworkDevice device: Topology.get_topology().get_devices()){
             if (device instanceof Router){
@@ -135,6 +173,13 @@ public class MainController {
             DeviceButton button = new DeviceButton(device.get_name(),
                     device.get_pos_x(), device.get_pos_y(), device_type);
             map.getChildren().add(button);
+        }
+    }
+
+    private void draw_links(){
+        for (Link link: Topology.get_topology().get_links()){
+            map.getChildren().add(new LinkLine(link.get_start_x(), link.get_start_y(),
+                    link.get_end_x(), link.get_end_y()));
         }
     }
 }
