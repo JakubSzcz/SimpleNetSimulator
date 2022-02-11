@@ -4,6 +4,7 @@ import Devices.Devices.Router;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
 import Protocols.Packets.IPv4;
+import Protocols.Packets.IPv4MessageTypes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -123,6 +124,18 @@ public class RouterCLI extends NetworkDeviceCLI{
     }
 
     private void ping(ArrayList<String> commands_list){
-        // TODO
+        switch (commands_list.size()){
+            case 0 -> incomplete_command();
+            case 1 ->{
+                IPv4MessageTypes message = IPv4.is_ip_valid(commands_list.get(0));
+                if (message == IPv4MessageTypes.is_valid){
+                    Router router = (Router) device;
+                    router.ping(IPv4.parse_to_long(commands_list.get(0)));
+                }else{
+                    wrong_command();
+                }
+            }
+            default -> wrong_command();
+        }
     }
 }

@@ -5,6 +5,8 @@ import Devices.Devices.Router;
 import Devices.Routing.Route;
 import Devices.Routing.RouteCode;
 import Protocols.Packets.IPv4;
+import Topology.Topology;
+import Topology.NetworkDevicesTypes;
 import org.testng.annotations.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -262,5 +264,38 @@ public class CLITest {
 
         // check
         assertEquals(CLIModes.CONFIG, router.get_cli_mode());
+    }
+
+    @Test
+    public void ping(){
+        // routers to test
+        Topology.get_topology().add_device("R1", 1, NetworkDevicesTypes.ROUTER);
+        Topology.get_topology().add_device("R2", 1, NetworkDevicesTypes.ROUTER);
+        Topology.get_topology().add_link("R1", 0, "R2", 0);
+
+        // set ip addresses
+        Topology.get_topology().get_device("R1").set_interface_ip(0,
+                IPv4.parse_to_long("192.168.1.1"),
+                IPv4.parse_mask_to_long("24"));
+        Topology.get_topology().get_device("R1").up_interface(0);
+
+        Topology.get_topology().get_device("R2").set_interface_ip(0,
+                IPv4.parse_to_long("192.168.1.2"),
+                IPv4.parse_mask_to_long("24"));
+        Topology.get_topology().get_device("R2").up_interface(0);
+
+        // commands
+        Topology.get_topology().get_device("R1").execute_command("enable");
+        Topology.get_topology().get_device("R1").execute_command("ping 192.168.1.2");
+
+        // test
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // TODO
+        System.out.println(Topology.get_topology().get_device("R1").get_monitor());
     }
 }
