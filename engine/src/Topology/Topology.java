@@ -49,7 +49,7 @@ public class Topology {
         topology_map = new ArrayList<>();
     }
 
-    // add router to topology
+    // add device to topology
     public AddDeviceMessages add_device(String name, int int_number, NetworkDevicesTypes type){
         return add_device(name, int_number, type, 0, 0);
     }
@@ -140,6 +140,21 @@ public class Topology {
         links.add(new Link(device1.get_interface(int_number1), device2.get_interface(int_number2), link_id,
                 device1.get_pos_x(), device1.get_pos_y(), device2.get_pos_x(),device2.get_pos_y()));
         return AddLinkMessages.is_valid;
+    }
+
+    // delete link
+    public void delete_link(int link_id){
+        for (Link link : links){
+            if (link.get_id() == link_id){
+                links.remove(link);
+                break;
+            }
+        }
+    }
+
+    // delete device
+    public void delete_device(){
+        // TODO
     }
 
     /////////////////////////////////////////////////////////

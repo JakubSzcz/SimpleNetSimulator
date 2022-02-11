@@ -170,6 +170,7 @@ public class MainController {
 
     // refresh map
     private void refresh(){
+        map.getChildren().clear();
         draw_devices();
         draw_links();
     }

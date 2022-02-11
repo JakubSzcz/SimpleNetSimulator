@@ -52,7 +52,7 @@ public class AddLinkController {
 
         // if ends are empty
         if (end1 == null || end2 == null){
-            warning.setText("End aren't chosen");
+            warning.setText("End are not chosen");
         }else{
             String[] end1_array = end1.split(": ");
             String[] end2_array = end2.split(": ");
