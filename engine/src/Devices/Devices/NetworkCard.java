@@ -27,7 +27,7 @@ public class NetworkCard implements Serializable {
         buffer = new ArrayDeque<>();
         interfaces = new ArrayList<>();
         for (int i=0; i<int_number; i++){
-            interfaces.add(new NetworkInterface(buffer));
+            interfaces.add(new NetworkInterface(buffer, i));
         }
     }
 

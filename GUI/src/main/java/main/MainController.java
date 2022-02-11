@@ -32,6 +32,16 @@ public class MainController {
     // if add device was clicked
     private boolean add_device_clicked;
 
+    /////////////////////////////////////////////////////////
+    //                      settings                       //
+    /////////////////////////////////////////////////////////
+
+    // links id
+    public static boolean show_links_id = true;
+
+    // link interfaces info
+    public static boolean show_interfaces_info = true;
+
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -178,8 +188,18 @@ public class MainController {
 
     private void draw_links(){
         for (Link link: Topology.get_topology().get_links()){
-            map.getChildren().add(new LinkLine(link.get_start_x(), link.get_start_y(),
-                    link.get_end_x(), link.get_end_y()));
+            LinkLine link_line = new LinkLine(link.get_start_x(), link.get_start_y(),
+                    link.get_end_x(), link.get_end_y(), link.get_id(),
+                    "int " + link.get_end1().get_number(),
+                    "int " + link.get_end2().get_number());
+            map.getChildren().add(link_line);
+            if (show_links_id){
+                map.getChildren().add(link_line.get_id_label());
+            }
+            if (show_interfaces_info){
+                map.getChildren().add(link_line.get_end1_label());
+                map.getChildren().add(link_line.get_end2_label());
+            }
         }
     }
 }

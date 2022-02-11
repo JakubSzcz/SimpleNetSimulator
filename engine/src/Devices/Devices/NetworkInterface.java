@@ -27,17 +27,21 @@ public class NetworkInterface implements Serializable {
     // buffer for incoming traffic, reference to net card buffer
     private final ArrayDeque<Frame> buffer;
 
+    // interface number
+    private final int number;
+
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
 
     // constructor
-    NetworkInterface(ArrayDeque<Frame> buffer){
+    NetworkInterface(ArrayDeque<Frame> buffer, int number){
         this.buffer = buffer;
         out_buffer = new ArrayDeque<>();
         this.activated = false;
         address = -1;
         mask = -1;
+        this.number = number;
     }
 
     // turn on the port
@@ -103,5 +107,10 @@ public class NetworkInterface implements Serializable {
     // return true if interface si up
     public boolean is_up(){
         return activated;
+    }
+
+    // number getter
+    public int get_number() {
+        return number;
     }
 }
