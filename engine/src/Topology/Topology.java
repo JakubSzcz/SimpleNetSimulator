@@ -153,8 +153,14 @@ public class Topology {
     }
 
     // delete device
-    public void delete_device(){
-        // TODO
+    public void delete_device(String device_name){
+        HashMap<Object, Object> device_map = get_device_from_topology_map(device_name);
+        for (Object device_map_object : device_map.values()){
+            if (device_map_object instanceof Integer link_id){
+                delete_link(link_id);
+            }
+        }
+        devices.remove(get_device(device_name));
     }
 
     /////////////////////////////////////////////////////////

@@ -70,7 +70,7 @@ public class AddLinkController {
         }
     }
 
-    // add
+    // cancel
     @FXML
     public void cancel(){
         Stage stage = (Stage) end1_combo_box.getScene().getWindow();
