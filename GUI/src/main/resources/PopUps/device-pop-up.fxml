@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="550.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PopUps.DeviceController">
+  <tabs>
+    <Tab text="Command Line Interface">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <ScrollPane fx:id="cli_scroll_pane" hbarPolicy="NEVER" layoutX="1.0" layoutY="1.0" pannable="true" prefHeight="570.0" prefWidth="542.0">
+                     <content>
+                        <TextArea fx:id="cli_text_area" prefHeight="564.0" prefWidth="534.0" wrapText="true" />
+                     </content>
+                  </ScrollPane>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab text="Graphical User Interface">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>

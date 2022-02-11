@@ -176,11 +176,15 @@ public abstract class NetworkDeviceCLI {
         if (add_command_to_monitor){
             device.add_line_to_monitor(get_prompt() + command);
         }
+
+        // command trimmed
+        String command_trimmed = command.trim();
+
         // commands in list
         ArrayList<String> commands_list = new ArrayList<>(
-                Arrays.asList(command.trim().split(" "))
+                Arrays.asList(command_trimmed.split(" "))
         );
-        if (!command.equals("")){
+        if (!command_trimmed.equals("")){
             execute_command(commands_list);
         }
     }

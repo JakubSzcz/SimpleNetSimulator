@@ -1,11 +1,21 @@
 package MapObjects;
 
+import PopUps.AddDeviceController;
+import PopUps.DeviceController;
 import Topology.NetworkDevicesTypes;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class DeviceButton extends Button {
     /////////////////////////////////////////////////////////
@@ -35,5 +45,28 @@ public class DeviceButton extends Button {
         switch (type){
             case ROUTER -> setGraphic(new ImageView(ROUTER_IMAGE));
         }
+
+        // on click
+        setOnAction(event -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(AddDeviceController.class.getResource("device-pop-up.fxml"));
+            Parent root = null;
+            try {
+                root = fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            DeviceController.device_name = name;
+            Stage stage = new Stage();
+            stage.setTitle(name);
+            stage.setScene(new Scene(root));
+            stage.setAlwaysOnTop(true);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        });
+
+        // on hover
+        setOnMouseEntered(event ->{
+            setCursor(Cursor.HAND);
+        });
     }
 }
