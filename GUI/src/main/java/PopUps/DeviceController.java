@@ -23,9 +23,6 @@ public class DeviceController extends Thread{
     private String old_monitor = new String();
 
     @FXML
-    public ScrollPane cli_scroll_pane;
-
-    @FXML
     public TextArea cli_text_area;
 
     @FXML
@@ -80,7 +77,7 @@ public class DeviceController extends Thread{
         });
 
         // mouse disable
-        cli_scroll_pane.addEventFilter(MouseEvent.ANY, mouse_event -> {
+        cli_text_area.addEventFilter(MouseEvent.ANY, mouse_event -> {
             mouse_event.consume();
         });
 
@@ -98,8 +95,11 @@ public class DeviceController extends Thread{
         cmd = cmd.replace(device.get_prompt(), "");
         cmd = cmd.replace("\n", "");
         device.execute_command(cmd, true);
-        cli_text_area.setText(device.get_monitor() + device.get_prompt());
-        cli_text_area.positionCaret(cli_text_area.getText().length());
+        if (!device.is_input_blocked()){
+            cli_text_area.setText(device.get_monitor() + device.get_prompt());
+            cli_text_area.positionCaret(cli_text_area.getText().length());
+        }
+        cli_text_area.setScrollTop(Double.MAX_VALUE);
     }
 
     @FXML
@@ -111,15 +111,19 @@ public class DeviceController extends Thread{
     public void run() {
         NetworkDevice device = Topology.get_topology().get_device(device_name);
         while (true){
-            // System.out.println("Thread");
-            cli_text_area.setEditable(!device.is_input_blocked());
             // update monitor
             if(!device.get_monitor().equals(old_monitor)){
                 old_monitor = device.get_monitor();
-                if (cli_text_area.isEditable()){
+                if (device.is_input_blocked()){
+                    cli_text_area.setText(device.get_monitor());
+                    cli_text_area.setEditable(false);
+                    // cli_text_area.setStyle("-fx-display-caret: false;");
+                }else{
                     cli_text_area.setText(device.get_monitor() + device.get_prompt());
                     cli_text_area.positionCaret(cli_text_area.getText().length());
+                    cli_text_area.setEditable(true);
                 }
+                cli_text_area.setScrollTop(Double.MAX_VALUE);
             }
             try {
                 Thread.sleep(500);

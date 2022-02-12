@@ -194,6 +194,7 @@ public class Topology {
         try {
             ObjectInputStream input_stream = new ObjectInputStream(new FileInputStream(path));
             devices = (ArrayList<NetworkDevice>) input_stream.readObject();
+            links = (ArrayList<Link>) input_stream.readObject();
             // turn on devices
             for (NetworkDevice device : devices){
                 device.turn_on();
