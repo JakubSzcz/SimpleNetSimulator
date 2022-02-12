@@ -321,4 +321,15 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     public String get_prompt(){
         return cli.get_prompt();
     }
+
+    // input block
+    public void block_cmd(){
+        cli.block();
+    }
+    public void unblock_cmd(){
+        cli.unblock();
+    }
+    public boolean is_input_blocked(){
+        return cli.is_input_blocked();
+    }
 }

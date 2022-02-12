@@ -48,6 +48,7 @@ public class Ping extends Application{
     // run
     @Override
     public void run() {
+        parent_router.block_cmd();
         parent_router.add_line_to_monitor("Pinging with 32 bytes of data:");
         long start;
         long stop;
@@ -96,6 +97,7 @@ public class Ping extends Application{
             parent_router.add_line_to_monitor(String.format("Minimum = %dms, Maximum = %dms, Average = %dms\n",
                     times.get(0), times.get(times.size() - 1), average));
         }
+        parent_router.unblock_cmd();
         parent_router.remove_application(identifier);
     }
 }

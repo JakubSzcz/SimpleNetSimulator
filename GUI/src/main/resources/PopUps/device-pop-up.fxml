@@ -8,7 +8,7 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="550.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PopUps.DeviceController">
   <tabs>
-    <Tab text="Command Line Interface">
+    <Tab fx:id="cli_tab" onClosed="#cli_on_close" text="Command Line Interface">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -20,7 +20,7 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab text="Graphical User Interface">
+    <Tab fx:id="gui_tab" text="Graphical User Interface">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
       </content>

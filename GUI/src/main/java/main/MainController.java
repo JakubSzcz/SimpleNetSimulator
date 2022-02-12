@@ -87,6 +87,7 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.setAlwaysOnTop(true);
         stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
         stage.showAndWait();
 
         refresh();
@@ -107,6 +108,7 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.setAlwaysOnTop(true);
         stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
         stage.showAndWait();
 
         refresh();
@@ -127,6 +129,7 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.setAlwaysOnTop(true);
         stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
         stage.showAndWait();
 
         refresh();
@@ -152,6 +155,7 @@ public class MainController {
             stage.setScene(new Scene(root));
             stage.setAlwaysOnTop(true);
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
             stage.showAndWait();
 
             refresh();
@@ -166,6 +170,18 @@ public class MainController {
     private void map_right_click(){
         map.setCursor(Cursor.DEFAULT);
         add_device_clicked = false;
+    }
+
+    // save
+    @FXML
+    private void save(){
+        // TODO
+    }
+
+    // open
+    @FXML
+    private void open(){
+        // TODO
     }
 
     // refresh map

@@ -61,6 +61,7 @@ public class DeviceButton extends Button {
             stage.setScene(new Scene(root));
             stage.setAlwaysOnTop(true);
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
             stage.showAndWait();
         });
 

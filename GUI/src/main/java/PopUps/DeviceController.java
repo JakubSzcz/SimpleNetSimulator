@@ -4,9 +4,12 @@ import Devices.Devices.NetworkDevice;
 import Topology.Topology;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public class DeviceController extends Thread{
     /////////////////////////////////////////////////////////
@@ -24,6 +27,12 @@ public class DeviceController extends Thread{
 
     @FXML
     public TextArea cli_text_area;
+
+    @FXML
+    public Tab cli_tab;
+
+    @FXML
+    public Tab gui_tab;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -60,7 +69,6 @@ public class DeviceController extends Thread{
                     event.consume();
                 }
             }
-
             // start cli
             if (cli_text_area.getText().equals("")){
                 event.consume();
@@ -69,6 +77,16 @@ public class DeviceController extends Thread{
                 start();
                 cli_text_area.getScene().getWindow().setOnCloseRequest(close_event -> interrupt());
             }
+        });
+
+        // mouse disable
+        cli_scroll_pane.addEventFilter(MouseEvent.ANY, mouse_event -> {
+            mouse_event.consume();
+        });
+
+        // cli open
+        cli_tab.setOnSelectionChanged(event ->{
+            // TODO
         });
     }
 
@@ -84,14 +102,24 @@ public class DeviceController extends Thread{
         cli_text_area.positionCaret(cli_text_area.getText().length());
     }
 
+    @FXML
+    public void cli_on_close(){
+        interrupt();
+    }
+
     @Override
     public void run() {
         NetworkDevice device = Topology.get_topology().get_device(device_name);
         while (true){
+            // System.out.println("Thread");
+            cli_text_area.setEditable(!device.is_input_blocked());
+            // update monitor
             if(!device.get_monitor().equals(old_monitor)){
                 old_monitor = device.get_monitor();
-                cli_text_area.setText(device.get_monitor() + device.get_prompt());
-                cli_text_area.positionCaret(cli_text_area.getText().length());
+                if (cli_text_area.isEditable()){
+                    cli_text_area.setText(device.get_monitor() + device.get_prompt());
+                    cli_text_area.positionCaret(cli_text_area.getText().length());
+                }
             }
             try {
                 Thread.sleep(500);

@@ -17,6 +17,9 @@ public abstract class NetworkDeviceCLI {
     // cli mode
     protected CLIModes mode;
 
+    // application block input
+    protected boolean application_block_input;
+
     // disable mode commands
     protected ArrayList<String> disable_commands;
     protected HashMap<String, String> disable_commands_info;
@@ -161,6 +164,7 @@ public abstract class NetworkDeviceCLI {
         this.mode = CLIModes.DISABLE;
         this.device = device;
         this.active_interface = -1;
+        this.application_block_input = false;
     }
 
     /////////////////////////////////////////////////////////
@@ -316,6 +320,19 @@ public abstract class NetworkDeviceCLI {
     // return cli mode
     public CLIModes get_mode() {
         return mode;
+    }
+
+    // block cmd
+    public void block(){
+        application_block_input = true;
+    }
+
+    public void unblock(){
+        application_block_input = false;
+    }
+
+    public boolean is_input_blocked() {
+        return application_block_input;
     }
 
     /////////////////////////////////////////////////////////
