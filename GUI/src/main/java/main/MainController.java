@@ -15,9 +15,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MainController {
@@ -175,13 +177,34 @@ public class MainController {
     // save
     @FXML
     private void save(){
-        // TODO
+        FileChooser file_chooser = new FileChooser();
+        file_chooser.setTitle("Save project");
+        file_chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Simple Net Simulator", "*.sns"));
+        File file = file_chooser.showSaveDialog(map.getScene().getWindow());
+        if (file != null){
+            String path = file.getAbsolutePath();
+            if (path.endsWith(".sns")){
+                Topology.get_topology().save(path);
+            }else{
+                Topology.get_topology().save(path + ".sns");
+            }
+        }
     }
 
     // open
     @FXML
     private void open(){
-        // TODO
+        FileChooser file_chooser = new FileChooser();
+        file_chooser.setTitle("Open project");
+        file_chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Simple Net Simulator", "*.sns"));
+        File file = file_chooser.showOpenDialog(map.getScene().getWindow());
+        if (file != null){
+            String path = file.getAbsolutePath();
+            Topology.get_topology().open(path);
+            refresh();
+        }
     }
 
     // refresh map

@@ -90,12 +90,16 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // turns on the device
     public void turn_on(){
         applications.add(new Trash());
+        if (!currentThread().isAlive()){
+            start();
+        }
         turned_on = true;
     }
 
     // turns off the device
     public void turn_of(){
         kill_all_applications();
+        interrupt();
         turned_on = false;
     }
 

@@ -4,6 +4,7 @@ import Devices.Devices.NetworkDevice;
 import Devices.Devices.Router;
 import Devices.Link;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,10 +29,10 @@ public class Topology {
     public final static int MIN_NAME_CHARACTERS = 1;
 
     // links in topology
-    private final ArrayList<Link> links;
+    private ArrayList<Link> links;
 
     // routers in topology
-    private final ArrayList<NetworkDevice> devices;
+    private ArrayList<NetworkDevice> devices;
 
     // topology_map
     // name: device_name
@@ -146,6 +147,7 @@ public class Topology {
     public void delete_link(int link_id){
         for (Link link : links){
             if (link.get_id() == link_id){
+                link.interrupt();
                 links.remove(link);
                 break;
             }
@@ -160,7 +162,52 @@ public class Topology {
                 delete_link(link_id);
             }
         }
+        get_device(device_name).interrupt();
         devices.remove(get_device(device_name));
+    }
+
+    // save topology
+    public void save(String path){
+        // new output stream object
+        try {
+            ObjectOutputStream output_stream = new ObjectOutputStream(new FileOutputStream(path));
+            // kill all applications and stop thread
+            for (NetworkDevice device : devices){
+                device.turn_of();
+            }
+            // stop link thread
+            for (Link link : links){
+                link.interrupt();
+            }
+            // add to file
+            output_stream.writeObject(devices);
+            output_stream.writeObject(links);
+        } catch (IOException e) {
+            // TODO
+            e.printStackTrace();
+        }
+    }
+
+    // open topology
+    public void open(String path){
+        // new input stream object
+        try {
+            ObjectInputStream input_stream = new ObjectInputStream(new FileInputStream(path));
+            devices = (ArrayList<NetworkDevice>) input_stream.readObject();
+            // turn on devices
+            for (NetworkDevice device : devices){
+                device.turn_on();
+            }
+
+            // start link
+            for (Link link : links){
+                link.start();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            // TODO
+            e.printStackTrace();
+        }
+
     }
 
     /////////////////////////////////////////////////////////

@@ -4,9 +4,10 @@ import Devices.Devices.NetworkDevice;
 import Protocols.Packets.IPv4;
 import Protocols.Packets.IPv4MessageTypes;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class NetworkDeviceCLI {
+public abstract class NetworkDeviceCLI implements Serializable {
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

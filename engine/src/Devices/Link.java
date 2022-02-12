@@ -69,7 +69,7 @@ public class Link extends Thread implements Serializable {
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
         }
     }
