@@ -205,11 +205,12 @@ public abstract class NetworkDeviceCLI implements Serializable {
         String single_command;
 
         if (!commands_list.isEmpty()){
+            single_command = commands_list.get(0);
+            commands_list.remove(single_command);
             // check cli mode
             switch (mode){
                 case DISABLE -> {
-                    single_command = commands_list.get(0);
-                    commands_list.remove(single_command);
+                    single_command = autocomplete(single_command, disable_commands);
                     if (disable_commands.contains(single_command)){
                         switch (single_command) {
                             case "enable" -> mode = CLIModes.ENABLE;
@@ -221,8 +222,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
                     }
                 }
                 case ENABLE -> {
-                    single_command = commands_list.get(0);
-                    commands_list.remove(single_command);
+                    single_command = autocomplete(single_command, enable_commands);
                     if (enable_commands.contains(single_command)){
                         switch (single_command) {
                             case "configure" -> configure(commands_list);
@@ -236,8 +236,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
                     }
                 }
                 case CONFIG -> {
-                    single_command = commands_list.get(0);
-                    commands_list.remove(single_command);
+                    single_command = autocomplete(single_command, config_commands);
                     if (config_commands.contains(single_command)){
                         switch (single_command) {
                             case "do" -> do$(commands_list);
@@ -253,8 +252,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
                     }
                 }
                 case CONFIG_IF -> {
-                    single_command = commands_list.get(0);
-                    commands_list.remove(single_command);
+                    single_command = autocomplete(single_command, config_if_commands);
                     if (config_if_commands.contains(single_command)) {
                         switch (single_command) {
                             case "do" -> do$(commands_list);
@@ -348,6 +346,23 @@ public abstract class NetworkDeviceCLI implements Serializable {
         return history;
     }
 
+    // input autocomplete
+    public String autocomplete(String command, ArrayList<String> commands_list){
+        int fit_counter = 0;
+        String completed_command = null;
+        for (String command_in_list : commands_list){
+            if (command_in_list.startsWith(command)){
+                completed_command = command_in_list;
+                fit_counter++;
+            }
+        }
+        if (fit_counter == 1){
+            return completed_command;
+        }else{
+            return command;
+        }
+    }
+
 
     /////////////////////////////////////////////////////////
     //                    help functions                   //
@@ -380,7 +395,9 @@ public abstract class NetworkDeviceCLI implements Serializable {
     // # configure ...
     private void configure(ArrayList<String> commands_list){
         if (commands_list.size() == 1){
-            switch (commands_list.get(0)) {
+            String single_command = commands_list.get(0);
+            single_command = autocomplete(single_command, configure_commands);
+            switch (single_command) {
                 case "terminal" -> mode = CLIModes.CONFIG;
                 case "?" -> question_mark(configure_commands, configure_commands_info);
                 default -> wrong_command();
@@ -398,6 +415,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
         if (commands_list.size() > 0){
             single_command = commands_list.get(0);
             commands_list.remove(single_command);
+            single_command = autocomplete(single_command, show_commands);
             if (show_commands.contains(single_command)){
                 switch (single_command){
                     case "ip" -> show_ip(commands_list);
@@ -419,6 +437,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
         if (commands_list.size() > 0){
             single_command = commands_list.get(0);
             commands_list.remove(single_command);
+            single_command = autocomplete(single_command, show_ip_commands);
             if (show_ip_commands.contains(single_command)){
                 if ("?".equals(single_command)) {
                     question_mark(show_ip_commands,  show_ip_commands_info);
@@ -545,6 +564,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
         if (commands_list.size() > 0){
             String single_command = commands_list.get(0);
             commands_list.remove(single_command);
+            single_command = autocomplete(single_command, config_commands);
             if (config_commands.contains(single_command)){
                 switch (single_command) {
                     case "interface" -> interface$(commands_list);
@@ -579,6 +599,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
         if (commands_list.size() > 0){
             String single_command = commands_list.get(0);
             commands_list.remove(single_command);
+            single_command = autocomplete(single_command, interface_ip_commands);
             if (interface_ip_commands.contains(single_command)) {
                 switch (single_command) {
                     case "address" -> interface_ip_address(commands_list);
@@ -597,6 +618,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
         if (commands_list.size() > 0){
             String single_command = commands_list.get(0);
             commands_list.remove(single_command);
+            single_command = autocomplete(single_command, interface_ip_commands);
             if (interface_ip_commands.contains(single_command)) {
                 switch (single_command) {
                     case "address" -> interface_no_ip_address(commands_list);
@@ -667,6 +689,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
         if (commands_list.size() > 0){
             String single_command = commands_list.get(0);
             commands_list.remove(single_command);
+            single_command = autocomplete(single_command, config_if_no_commands);
             if (config_if_no_commands.contains(single_command)){
                 switch (single_command) {
                     case "ip" -> interface_no_ip(commands_list);
