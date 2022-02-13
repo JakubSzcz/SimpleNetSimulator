@@ -102,7 +102,9 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // turns off the device
     public void turn_of(){
         kill_all_applications();
-        interrupt();
+        if (isAlive()){
+            interrupt();
+        }
         turned_on = false;
     }
 
@@ -339,5 +341,10 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     }
     public boolean is_input_blocked(){
         return cli.is_input_blocked();
+    }
+
+    // commands history
+    public ArrayList<String> get_commands_history(){
+        return cli.get_history();
     }
 }

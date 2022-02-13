@@ -21,6 +21,9 @@ public abstract class NetworkDeviceCLI implements Serializable {
     // application block input
     protected boolean application_block_input;
 
+    // commands history
+    protected ArrayList<String> history;
+
     // disable mode commands
     protected ArrayList<String> disable_commands;
     protected HashMap<String, String> disable_commands_info;
@@ -166,6 +169,7 @@ public abstract class NetworkDeviceCLI implements Serializable {
         this.device = device;
         this.active_interface = -1;
         this.application_block_input = false;
+        this.history = new ArrayList<>();
     }
 
     /////////////////////////////////////////////////////////
@@ -180,6 +184,9 @@ public abstract class NetworkDeviceCLI implements Serializable {
         // add to monitor
         if (add_command_to_monitor){
             device.add_line_to_monitor(get_prompt() + command);
+            if (!command.equals("")){
+                history.add(command);
+            }
         }
 
         // command trimmed
@@ -335,6 +342,12 @@ public abstract class NetworkDeviceCLI implements Serializable {
     public boolean is_input_blocked() {
         return application_block_input;
     }
+
+    // history getter
+    public ArrayList<String> get_history() {
+        return history;
+    }
+
 
     /////////////////////////////////////////////////////////
     //                    help functions                   //

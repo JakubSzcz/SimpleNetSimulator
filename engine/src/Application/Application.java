@@ -1,9 +1,10 @@
 package Application;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 
-public abstract class Application extends Thread{
+public abstract class Application extends Thread implements Serializable{
     /////////////////////////////////////////////////////////
     //                 variables and objects               //
     /////////////////////////////////////////////////////////

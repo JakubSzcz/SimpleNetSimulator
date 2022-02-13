@@ -37,7 +37,7 @@ public class Topology {
     // topology_map
     // name: device_name
     // int_number: link_id or -1
-    private final ArrayList<HashMap<Object, Object>> topology_map;
+    private ArrayList<HashMap<Object, Object>> topology_map;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -171,17 +171,11 @@ public class Topology {
         // new output stream object
         try {
             ObjectOutputStream output_stream = new ObjectOutputStream(new FileOutputStream(path));
-            // kill all applications and stop thread
-            for (NetworkDevice device : devices){
-                device.turn_of();
-            }
-            // stop link thread
-            for (Link link : links){
-                link.interrupt();
-            }
+
             // add to file
             output_stream.writeObject(devices);
             output_stream.writeObject(links);
+            output_stream.writeObject(topology_map);
         } catch (IOException e) {
             // TODO
             e.printStackTrace();
@@ -193,10 +187,24 @@ public class Topology {
         // new input stream object
         try {
             ObjectInputStream input_stream = new ObjectInputStream(new FileInputStream(path));
+            // delete devices from topology
+            while (Topology.get_topology().get_devices().size() != 0){
+                Topology.get_topology().delete_device(Topology.get_topology().get_devices().get(0).get_name());
+            }
+
+            // delete links from topology
+            while (Topology.get_topology().get_links().size() != 0){
+                Topology.get_topology().delete_link(Topology.get_topology().get_links().get(0).get_id());
+            }
+
+            // add devices to topology
             devices = (ArrayList<NetworkDevice>) input_stream.readObject();
             links = (ArrayList<Link>) input_stream.readObject();
+            topology_map = (ArrayList<HashMap<Object, Object>>) input_stream.readObject();
+
             // turn on devices
             for (NetworkDevice device : devices){
+                device.turn_of();
                 device.turn_on();
             }
 

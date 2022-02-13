@@ -3,13 +3,13 @@ package PopUps;
 import Devices.Devices.NetworkDevice;
 import Topology.Topology;
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+
+import java.util.ArrayList;
 
 public class DeviceController extends Thread{
     /////////////////////////////////////////////////////////
@@ -21,6 +21,9 @@ public class DeviceController extends Thread{
 
     // old monitor
     private String old_monitor = new String();
+
+    // commands history
+    private int commands_history_pointer = 0;
 
     @FXML
     public TextArea cli_text_area;
@@ -44,8 +47,41 @@ public class DeviceController extends Thread{
             }
         });
 
-        // key filter
+        // key filter key, released
+        cli_text_area.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+            // device
+            NetworkDevice device = Topology.get_topology().get_device(device_name);
+
+            // down and up arrows assign to history
+            KeyCode code = event.getCode();
+            boolean is_arrow_key = code == KeyCode.UP || code == KeyCode.DOWN;
+            ArrayList<String> commands_history = device.get_commands_history();
+            if (is_arrow_key){
+                if (!device.is_input_blocked()){
+                    if (code == KeyCode.UP){
+                        if (commands_history.size() + commands_history_pointer - 1 >= 0){
+                            commands_history_pointer--;
+                            cli_text_area.setText(device.get_monitor() + device.get_prompt()
+                                    + commands_history.get(commands_history.size() + commands_history_pointer));
+                            cli_text_area.positionCaret(cli_text_area.getText().length());
+                        }
+                    }else{
+                        if (commands_history.size() + commands_history_pointer + 1 < commands_history.size()){
+                            commands_history_pointer++;
+                            cli_text_area.setText(device.get_monitor() + device.get_prompt()
+                                    + commands_history.get(commands_history.size() + commands_history_pointer));
+                            cli_text_area.positionCaret(cli_text_area.getText().length());
+                        }
+                    }
+                }
+            }
+        });
+
+        // key filter, key any
         cli_text_area.addEventFilter(KeyEvent.ANY, event -> {
+            // device
+            NetworkDevice device = Topology.get_topology().get_device(device_name);
+
             // disable down and up arrows
             KeyCode code = event.getCode();
             boolean is_arrow_key = code == KeyCode.UP || code == KeyCode.DOWN;
@@ -57,7 +93,6 @@ public class DeviceController extends Thread{
             code = event.getCode();
             boolean is_left_arrow_or_backspace_key = code == KeyCode.LEFT || code == KeyCode.BACK_SPACE;
             if (is_left_arrow_or_backspace_key) {
-                NetworkDevice device = Topology.get_topology().get_device(device_name);
                 String monitor_old = device.get_monitor();
                 String after_caret = cli_text_area.getText().substring(cli_text_area.getCaretPosition());
                 String cmd = cli_text_area.getText().replace(after_caret, "");
@@ -72,9 +107,10 @@ public class DeviceController extends Thread{
                 cli_text_area.setText(Topology.get_topology().get_device(device_name).get_monitor()
                         + Topology.get_topology().get_device(device_name).get_prompt());
                 cli_text_area.positionCaret(cli_text_area.getText().length());
-                if (!currentThread().isAlive()){
+                if (!isAlive()){
                     start();
                 }
+                cli_text_area.setScrollTop(Double.MAX_VALUE);
                 cli_text_area.getScene().getWindow().setOnCloseRequest(close_event -> interrupt());
             }
         });
@@ -106,6 +142,7 @@ public class DeviceController extends Thread{
             cli_text_area.setEditable(false);
         }
         cli_text_area.setScrollTop(Double.MAX_VALUE);
+        commands_history_pointer = 0;
     }
 
     @FXML
@@ -117,6 +154,7 @@ public class DeviceController extends Thread{
     public void run() {
         NetworkDevice device = Topology.get_topology().get_device(device_name);
         while (true){
+            // System.out.println("monitor");
             // update monitor
             if(!device.get_monitor().equals(old_monitor)){
                 old_monitor = device.get_monitor();
