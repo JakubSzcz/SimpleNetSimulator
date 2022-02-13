@@ -69,9 +69,12 @@ public class DeviceController extends Thread{
             // start cli
             if (cli_text_area.getText().equals("")){
                 event.consume();
-                cli_text_area.setText(Topology.get_topology().get_device(device_name).get_prompt());
+                cli_text_area.setText(Topology.get_topology().get_device(device_name).get_monitor()
+                        + Topology.get_topology().get_device(device_name).get_prompt());
                 cli_text_area.positionCaret(cli_text_area.getText().length());
-                start();
+                if (!currentThread().isAlive()){
+                    start();
+                }
                 cli_text_area.getScene().getWindow().setOnCloseRequest(close_event -> interrupt());
             }
         });
@@ -95,9 +98,12 @@ public class DeviceController extends Thread{
         cmd = cmd.replace(device.get_prompt(), "");
         cmd = cmd.replace("\n", "");
         device.execute_command(cmd, true);
+        old_monitor = device.get_monitor();
         if (!device.is_input_blocked()){
             cli_text_area.setText(device.get_monitor() + device.get_prompt());
             cli_text_area.positionCaret(cli_text_area.getText().length());
+        }else{
+            cli_text_area.setEditable(false);
         }
         cli_text_area.setScrollTop(Double.MAX_VALUE);
     }

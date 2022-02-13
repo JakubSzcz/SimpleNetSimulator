@@ -38,6 +38,7 @@ public class Ping extends Application{
         this.destination_address = destination_address;
         this.wait_time = wait_time;
         this.how_many = 4;
+        parent_router.block_cmd();
         start();
     }
 
@@ -48,7 +49,6 @@ public class Ping extends Application{
     // run
     @Override
     public void run() {
-        parent_router.block_cmd();
         parent_router.add_line_to_monitor("Pinging with 32 bytes of data:");
         long start;
         long stop;

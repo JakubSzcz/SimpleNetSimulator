@@ -59,6 +59,7 @@ public class Link extends Thread implements Serializable {
 
     public void run(){
         while (true){
+            // System.out.println(id);
             if (!end_1.is_out_empty()){
                 end_2.handle_frame(end_1.get_frame());
             }

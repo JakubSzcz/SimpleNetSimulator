@@ -47,6 +47,9 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     private double pos_x;
     private double pos_y;
 
+    // test
+    private boolean test;
+
     /////////////////////////////////////////////////////////
     //                     functions                       //
     /////////////////////////////////////////////////////////
@@ -81,17 +84,17 @@ public abstract class NetworkDevice extends Thread implements Serializable {
         this.cli = null;
         this.pos_x = pos_x;
         this.pos_y = pos_y;
+        this.test = test;
         turn_on();
-        if (!test){
-            start();
-        }
     }
 
     // turns on the device
     public void turn_on(){
         applications.add(new Trash());
-        if (!currentThread().isAlive()){
-            start();
+        if (!test){
+            if (!isAlive()){
+                start();
+            }
         }
         turned_on = true;
     }
@@ -111,6 +114,7 @@ public abstract class NetworkDevice extends Thread implements Serializable {
     // checks if there are frames in buffer
     public void run(){
         while (true){
+            // System.out.println(name);
             if (!net_card.is_buffer_empty()){
                 handle_frame(net_card.get_frame_from_buffer());
             }
