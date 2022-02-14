@@ -1,6 +1,8 @@
 package PopUps;
 
 import Devices.Devices.NetworkDevice;
+import Devices.Devices.NetworkInterface;
+import MapObjects.InterfaceInfo;
 import Topology.Topology;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
@@ -8,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,9 @@ public class DeviceController extends Thread{
 
     @FXML
     public Tab gui_tab;
+
+    @FXML
+    public VBox gui_vbox;
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -124,6 +130,12 @@ public class DeviceController extends Thread{
         cli_tab.setOnSelectionChanged(event ->{
             // TODO
         });
+
+        // gui vbox add
+        for (int i = 0; i < Topology.get_topology().get_device(device_name).get_int_number(); i++){
+            gui_vbox.getChildren().add(
+                    new InterfaceInfo(device_name, i));
+        }
     }
 
     @FXML

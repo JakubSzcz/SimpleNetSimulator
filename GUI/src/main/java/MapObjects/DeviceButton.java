@@ -48,6 +48,7 @@ public class DeviceButton extends Button {
 
         // on click
         setOnAction(event -> {
+            DeviceController.device_name = name;
             FXMLLoader fxmlLoader = new FXMLLoader(AddDeviceController.class.getResource("device-pop-up.fxml"));
             Parent root = null;
             try {
@@ -55,7 +56,6 @@ public class DeviceButton extends Button {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            DeviceController.device_name = name;
             Stage stage = new Stage();
             stage.setTitle(name);
             stage.setScene(new Scene(root));
