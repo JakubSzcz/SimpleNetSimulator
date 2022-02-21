@@ -1,11 +1,10 @@
 package PopUps;
 
 import Devices.Devices.NetworkDevice;
+import Protocols.Packets.IPv4;
 import Topology.Topology;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -51,6 +50,15 @@ public class DeviceController {
     @FXML
     public VBox gui_vbox;
 
+    @FXML
+    ComboBox interface_to_configure;
+
+    @FXML
+    TextField ip_address;
+
+    @FXML
+    TextField mask;
+
     // interface h box
     @FXML
     HBox int0;
@@ -91,6 +99,66 @@ public class DeviceController {
 
     Button[] int_states;
 
+    // ip address
+    @FXML
+    Label int0_ip_address;
+    @FXML
+    Label int1_ip_address;
+    @FXML
+    Label int2_ip_address;
+    @FXML
+    Label int3_ip_address;
+    @FXML
+    Label int4_ip_address;
+    @FXML
+    Label int5_ip_address;
+    @FXML
+    Label int6_ip_address;
+    @FXML
+    Label int7_ip_address;
+
+    Label[] int_ip_addresses;
+
+    // masks
+    @FXML
+    Label int0_mask;
+    @FXML
+    Label int1_mask;
+    @FXML
+    Label int2_mask;
+    @FXML
+    Label int3_mask;
+    @FXML
+    Label int4_mask;
+    @FXML
+    Label int5_mask;
+    @FXML
+    Label int6_mask;
+    @FXML
+    Label int7_mask;
+
+    Label[] int_masks;
+
+    // links
+    @FXML
+    Label int0_link;
+    @FXML
+    Label int1_link;
+    @FXML
+    Label int2_link;
+    @FXML
+    Label int3_link;
+    @FXML
+    Label int4_link;
+    @FXML
+    Label int5_link;
+    @FXML
+    Label int6_link;
+    @FXML
+    Label int7_link;
+
+    Label[] int_links;
+
 
     /////////////////////////////////////////////////////////
     //                     functions                       //
@@ -98,6 +166,9 @@ public class DeviceController {
 
     @FXML
     public void initialize(){
+        // device
+        NetworkDevice device = Topology.get_topology().get_device(device_name);
+
         // init
 
         // int states
@@ -109,10 +180,29 @@ public class DeviceController {
             int_states[i].setOnAction(event -> change_int_state(finalI));
         }
 
-        ints = new HBox[]{int0, int1, int2, int3, int4, int5, int6, int7};
+        // ip address
+        int_ip_addresses = new Label[]{int0_ip_address, int1_ip_address, int2_ip_address,
+        int3_ip_address, int4_ip_address, int5_ip_address, int6_ip_address, int7_ip_address};
 
-        // device
-        NetworkDevice device = Topology.get_topology().get_device(device_name);
+        // masks
+        int_masks = new Label[]{int0_mask, int1_mask, int2_mask,
+                int3_mask, int4_mask, int5_mask, int6_mask, int7_mask};
+
+        // links
+        int_links = new Label[]{int0_link, int1_link, int2_link,
+                int3_link, int4_link, int5_link, int6_link, int7_link};
+
+        // add interfaces to configure combo box
+        ints = new HBox[]{int0, int1, int2, int3, int4, int5, int6, int7};
+        for (int i = 0; i < device.get_int_number(); i++){
+            interface_to_configure.getItems().add("int " + i);
+        }
+        interface_to_configure.setValue("int " + 0);
+
+        // rest
+        for (int i = device.get_int_number(); i < Topology.MAX_INT_NUMBER; i++){
+            int_links[i].setText("disabled");
+        }
 
         // key ENTER
         cli_text_area.setOnKeyPressed(keyEvent -> {
@@ -302,11 +392,23 @@ public class DeviceController {
             }else{
                 int_states[i].setStyle("-fx-background-color: red");
             }
-        }
 
-        // rest
-        for (int i = device.get_int_number(); i < Topology.MAX_INT_NUMBER; i++){
-            ints[i].setVisible(false);
+            if (device.get_interface(i).is_ip_set()){
+                int_ip_addresses[i].setText(IPv4.parse_to_string(
+                        device.get_interface(i).get_ip_address().get("address")));
+                int_masks[i].setText(IPv4.parse_mask_to_string_short(
+                        device.get_interface(i).get_ip_address().get("mask")));
+            }else{
+                int_ip_addresses[i].setText(" ");
+                int_masks[i].setText(" ");
+            }
+
+            if ((Integer) Topology.get_topology().get_device_from_topology_map(device).get(i) == -1){
+                int_links[i].setText("unconnected");
+            }else{
+                int_links[i].setText("link " +
+                        Topology.get_topology().get_device_from_topology_map(device).get(i));
+            }
         }
     }
 
@@ -318,6 +420,20 @@ public class DeviceController {
         }else{
             device.up_interface(int_number);
         }
+        gui_refresh();
+    }
+
+    // configure ip apply
+    @FXML
+    public void conf_ip_apply(){
+        String int_number_string = ((String) interface_to_configure.getValue()).
+                replace("int ", "");
+        String ip_address_string = ip_address.getText();
+        String mask_string = mask.getText();
+        int int_number = Integer.parseInt(int_number_string);
+        Topology.get_topology().get_device(device_name).set_interface_ip(int_number,
+                IPv4.parse_to_long(ip_address_string),
+                IPv4.parse_mask_to_long(mask_string));
         gui_refresh();
     }
 }
